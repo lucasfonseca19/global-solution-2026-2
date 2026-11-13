@@ -1,0 +1,71 @@
+# Execução em 13/11/2026 15:54 - psql (PostgreSQL) 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
+
+$ psql -v ON_ERROR_STOP=1 -f 01_schema.sql
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+(código de saída: 0)
+
+$ psql -v ON_ERROR_STOP=1 -f 02_carga_inicial.sql
+INSERT 0 1
+INSERT 0 2
+INSERT 0 2
+INSERT 0 6
+INSERT 0 11
+(código de saída: 0)
+
+$ psql -v ON_ERROR_STOP=1 -f 03_consultas.sql
+ id | data_servico | tipo_refeicao | sobra_kg | resto_prato_kg | total_kg |  status  
+----+--------------+---------------+----------+----------------+----------+----------
+  5 | 2026-11-12   | Almoço        |    3.000 |          2.000 |    5.000 | COMPLETO
+  6 | 2026-11-12   | Lanche        |    1.000 |                |    1.000 | PENDENTE
+  4 | 2026-11-11   | Almoço        |    0.000 |          1.700 |    1.700 | COMPLETO
+  3 | 2026-11-10   | Almoço        |    4.400 |          2.500 |    6.900 | COMPLETO
+  1 | 2026-11-09   | Almoço        |    3.200 |          1.800 |    5.000 | COMPLETO
+  2 | 2026-11-09   | Lanche        |    0.800 |          0.600 |    1.400 | COMPLETO
+(6 rows)
+
+      codigo      |                      descricao                       | qtd_pesagens | total_kg | media_kg_por_servico 
+------------------+------------------------------------------------------+--------------+----------+----------------------
+ SOBRA_DESCARTADA | Alimento preparado e não servido que será descartado |            6 |   12.400 |                2.067
+ RESTO_PRATO      | Restos comestíveis devolvidos nos pratos             |            5 |    8.600 |                1.720
+(2 rows)
+
+ tipo_refeicao | qtd_servicos | total_kg | media_kg_por_servico 
+---------------+--------------+----------+----------------------
+ Almoço        |            4 |   18.600 |                4.650
+ Lanche        |            2 |    2.400 |                1.200
+(2 rows)
+
+ data_servico | tipo_refeicao | total_kg 
+--------------+---------------+----------
+ 2026-11-10   | Almoço        |    6.900
+(1 row)
+
+ data_servico | tipo_refeicao | categoria_aguardando 
+--------------+---------------+----------------------
+ 2026-11-12   | Lanche        | RESTO_PRATO
+(1 row)
+
+ codigo_rfid  |            descricao            |    categoria     | tara_kg | qtd_pesagens | media_bruto_kg 
+--------------+---------------------------------+------------------+---------+--------------+----------------
+ RFID-SIM-001 | Lixeira da cozinha              | SOBRA_DESCARTADA |   1.000 |            6 |          3.067
+ RFID-SIM-002 | Lixeira de devolução dos pratos | RESTO_PRATO      |   1.500 |            5 |          3.220
+(2 rows)
+
+           nome           | servicos_registrados | pesagens_confirmadas |     ultima_confirmacao     
+--------------------------+----------------------+----------------------+----------------------------
+ Operador de demonstração |                    6 |                   11 | 2026-11-13 18:54:09.502463
+(1 row)
+
+(código de saída: 0)
+

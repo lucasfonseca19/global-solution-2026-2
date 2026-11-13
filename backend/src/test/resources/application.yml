@@ -1,0 +1,30 @@
+# Configuração usada só pelos testes automatizados: banco H2 em memória,
+# assim "mvn test" roda sem precisar do PostgreSQL.
+spring:
+  datasource:
+    url: jdbc:h2:mem:merenda;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  jackson:
+    generator:
+      write-bigdecimal-as-plain: true
+
+merenda:
+  jwt:
+    segredo: segredo-somente-para-testes-automatizados-123456
+    validade-horas: 1
+  login:
+    max-tentativas: 5
+    bloqueio-minutos: 5
+  alerta:
+    limite-total-kg: 5.0
+  cors:
+    origens: http://localhost:*

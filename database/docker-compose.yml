@@ -1,0 +1,15 @@
+# Sobe um PostgreSQL já com as tabelas e a carga inicial.
+# Uso: docker compose up -d   (dentro da pasta database/)
+services:
+  postgres:
+    image: postgres:16
+    container_name: merenda-postgres
+    environment:
+      POSTGRES_DB: merenda
+      POSTGRES_USER: merenda
+      POSTGRES_PASSWORD: merenda
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./02_carga_inicial.sql:/docker-entrypoint-initdb.d/02_carga_inicial.sql:ro

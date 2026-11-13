@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  error:
+    # Nunca expor detalhes internos em respostas de erro.
+    include-stacktrace: never
+    include-message: never
+
+spring:
+  application:
+    name: merenda-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/merenda}
+    username: ${DB_USER:merenda}
+    password: ${DB_PASSWORD:merenda}
+  jpa:
+    # As tabelas são criadas pelos scripts da pasta database/.
+    # A API só confere se as entidades batem com o banco.
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  jackson:
+    generator:
+      write-bigdecimal-as-plain: true
+
+merenda:
+  jwt:
+    # Em produção, definir JWT_SECRET com pelo menos 32 caracteres.
+    segredo: ${JWT_SECRET:troque-este-segredo-de-demonstracao-merenda-2026}
+    validade-horas: 8
+  login:
+    max-tentativas: 5
+    bloqueio-minutos: 5
+  alerta:
+    # Acima deste total (kg) por serviço, a API devolve um alerta.
+    limite-total-kg: 5.0
+  cors:
+    # Origens do app web (Expo). App nativo no celular não usa CORS.
+    origens: ${CORS_ORIGENS:http://localhost:*,http://127.0.0.1:*}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

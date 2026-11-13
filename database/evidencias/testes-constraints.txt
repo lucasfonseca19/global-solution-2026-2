@@ -1,0 +1,30 @@
+# Testes de integridade - 13/11/2026 15:54
+--- T1: serviço duplicado (mesma data e refeição) ---
+psql:evidencias/testes-constraints.sql:3: ERROR:  duplicate key value violates unique constraint "uk_servico_data_tipo"
+DETAIL:  Key (data_servico, tipo_refeicao)=(2026-11-12, Almoço) already exists.
+--- T2: segunda pesagem da mesma categoria no mesmo serviço ---
+psql:evidencias/testes-constraints.sql:5: ERROR:  duplicate key value violates unique constraint "uk_pesagem_servico_categoria"
+DETAIL:  Key (servico_id, categoria_id)=(5, 1) already exists.
+--- T3: peso bruto menor que a tara ---
+psql:evidencias/testes-constraints.sql:7: ERROR:  new row for relation "pesagem" violates check constraint "ck_pesagem_bruto"
+DETAIL:  Failing row contains (13, 6, 2, 2, 1.000, 1.500, -0.500, 2026-11-13 18:54:09.592303).
+--- T4: categoria diferente da lixeira usada (lixeira da cozinha como resto de prato) ---
+psql:evidencias/testes-constraints.sql:9: ERROR:  insert or update on table "pesagem" violates foreign key constraint "fk_pesagem_lixeira_categoria"
+DETAIL:  Key (lixeira_id, categoria_id)=(1, 2) is not present in table "lixeira".
+--- T5: senha sem hash ---
+psql:evidencias/testes-constraints.sql:11: ERROR:  new row for relation "usuario" violates check constraint "ck_usuario_hash"
+DETAIL:  Failing row contains (2, Teste, teste, senha123, 2026-11-13 18:54:09.594143).
+--- T6: excluir serviço remove as pesagens (ON DELETE CASCADE) - deve FUNCIONAR ---
+BEGIN
+ pesagens_do_servico_3_antes 
+-----------------------------
+                           2
+(1 row)
+
+DELETE 1
+ pesagens_do_servico_3_depois 
+------------------------------
+                            0
+(1 row)
+
+ROLLBACK
