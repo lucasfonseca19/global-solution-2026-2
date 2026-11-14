@@ -8,6 +8,8 @@ Repositório privado do grupo: [lucasfonseca19/global-solution-2026-2](https://g
 
 Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abertas e como trabalhar em paralelo.
 
+Para arquitetar e executar a parte de Lucas na próxima sessão, use o [roteiro de orquestração](docs/execucao-lucas.md) e os tickets 09 a 12 nele indicados.
+
 | Parte | Local | Situação |
 | --- | --- | --- |
 | App mobile | [mobile/](mobile/README.md) | React Native com Expo e suporte web; implementação ainda não iniciada |

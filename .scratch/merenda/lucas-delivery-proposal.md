@@ -1,8 +1,8 @@
 # Proposta: quatro entregas para a parte de Lucas
 
-Status: needs-triage
+Status: ready-for-human
 
-14/11/2026. Proposta para revisão de Lucas, ainda sem novos tickets individuais publicados. Não autoriza implementação nesta conversa. Complementa a [especificação](spec.md) e o [planejamento do app](app-planning.md).
+14/11/2026. Divisão em quatro entregas aprovada por Lucas; tickets 09 a 12 publicados no índice de `issues/`. Não autoriza implementação nesta conversa; arquitetura e execução ficam para a nova sessão. Complementa a [especificação](spec.md) e o [planejamento do app](app-planning.md).
 
 ## Resultado desejado
 
@@ -96,3 +96,5 @@ Esses são requisitos do prompt futuro, não seleção de modelos já realizada 
 ### 14/11/2026
 
 Criada proposta de quatro entregas após Lucas pedir poucos tickets e um prompt posterior para arquitetura e execução orquestrada em outra sessão. A granularidade, dependências e definições pendentes serão revisadas com Lucas antes de publicar os novos tickets. Nenhum código foi escrito.
+
+Lucas aprovou as quatro entregas. Publicados tickets 09 a 12, preservando as decisões pendentes e bloqueadores. Roteiro para a outra sessão em [docs/execucao-lucas.md](../../docs/execucao-lucas.md), com arquitetura antes de código e orquestração por subagentes/modelos sujeitos à disponibilidade real.
