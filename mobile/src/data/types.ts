@@ -22,6 +22,8 @@ export type Servico = {
 export type Sessao = { token: string; usuario: { id: number; nome: string } };
 /** Fronteira assíncrona do adaptador demonstrativo; contrato provisório. */
 export interface DataAccess {
+  excluir(token: string, id: number): Promise<void>;
+  restaurarExemplos(token: string): Promise<void>;
   avaliar(token: string, leitura: Leitura): Promise<Previa>;
   criar(token: string, entrada: EntradaServico): Promise<Servico>;
   atualizar(token: string, id: number, entrada: EntradaServico): Promise<Servico>;

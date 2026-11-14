@@ -33,10 +33,17 @@ test('registro: prévia, erros, confirmação, continuidade, zero e consulta', a
  await page.getByLabel('Data do serviço').fill('2026-11-15');
  await page.getByRole('button',{name:'Procurar serviço'}).click();
  await page.getByRole('button',{name:'Simular: Pratos sem descarte'}).click();
- await page.getByRole('button',{name:'Confirmar pesagem'}).click();
+ await page.getByRole('button',{name:'Atualizar pesagem'}).click();
  await expect(page.getByText('Total confirmado: 3,00 kg',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Ver detalhes do serviço'}).click();
  await expect(page.getByText('0,00 kg',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Voltar ao histórico'}).click();
  await expect(page.getByRole('button',{name:/15\/11\/2026.*Total: 3,00 kg/})).toHaveCount(1);
+});
+
+// Cada teste começa com armazenamento próprio vazio; recargas dentro do teste preservam dados.
+test.beforeEach(async ({page}) => {
+ await page.goto('/');
+ await page.evaluate(() => localStorage.clear());
+ await page.reload();
 });

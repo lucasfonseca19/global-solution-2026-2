@@ -11,7 +11,7 @@ Aprovado em 14/11/2026; especificação: spec.md, seção de arquitetura aprovad
 ## Sequência
 - [x] 09: login/histórico/detalhes; interface de dados e exemplos; testes de sucesso/erro/consulta; executar web.
 - [x] 10: registro, prévia/confirmação e cenários IoT compartilhados; testes de cálculo, total, zero, erros e unicidade.
-- [ ] 11: correção/exclusão/persistência/restauração; verificar preservação dos demais serviços e cancelamentos.
+- [x] 11: correção/exclusão/persistência/restauração; verificar preservação dos demais serviços e cancelamentos.
 - [ ] 12: fluxos web e nativos reais, evidências individuais, READMEs, relatório, guia e pitch.
 
 Cada implementador recebe contexto novo, ticket, spec e limites de edição. Revisão objetiva de requisitos e qualidade por entrega; orquestrador verifica e faz commits. Sem agentes editando simultaneamente os mesmos arquivos. Testes red/green nas fronteiras aprovadas; sem testes espelhando componentes.
@@ -29,3 +29,5 @@ Cada implementador recebe contexto novo, ticket, spec e limites de edição. Rev
 09 verificado: cinco testes de dados, dois fluxos web e typecheck; revisão acessível corrigida. Próximo: 10.
 
 10 verificado: nove testes, três fluxos web e CLI. Mobile nativo bloqueado por ENOSPC, documentado em docs/evidencias/12/mobile-impedimento.txt; continuar demais entregas.
+
+11 verificado: 15 testes, cinco fluxos web, typecheck, compatibilidade Expo. Corrigidos navegação obsoleta e versão do armazenamento.

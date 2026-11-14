@@ -1,4 +1,4 @@
-# Merenda — app demonstrativo (tickets 09 e 10)
+# Merenda — app demonstrativo (tickets 09 a 11)
 
 Expo SDK 58, React Native, TypeScript e React Navigation com stack nativa. Login, histórico, registro e detalhes funcionam com dados fictícios locais. Sem backend, banco ou autenticação real.
 
@@ -12,7 +12,7 @@ npm ci
 npm run web
 ```
 
-Abrir o endereço indicado pelo Expo. Login fictício: `demo`; senha fictícia: `merenda-demo`. A senha aparece no código porque é uma comparação demonstrativa pública, não uma conta segura. Não usar dados pessoais. Nenhuma credencial ou sessão é persistida. Recarregar encerra a sessão. Sair recria o adaptador em memória.
+Abrir o endereço indicado pelo Expo. Login fictício: `demo`; senha fictícia: `merenda-demo`. A senha aparece no código porque é uma comparação demonstrativa pública, não uma conta segura. Não usar dados pessoais. Nenhuma credencial ou sessão é persistida. Recarregar encerra a sessão. Sair encerra a sessão e preserva os serviços.
 
 Para celular/simulador: `npm start`, usando um cliente compatível com SDK 58; `npm run ios` abre o simulador e `npm run android` usa emulador/dispositivo Android configurado. A documentação Expo consultada em 14/11/2026 informa transição do Expo Go físico para SDK 58; conferir a compatibilidade do cliente antes de testar. Estes caminhos nativos ainda não foram executados nesta entrega; a comprovação nativa pertence à verificação final.
 
@@ -30,12 +30,12 @@ Os testes usam Google Chrome instalado (`channel: chrome`), com perfil isolado; 
 ## Organização e continuidade
 
 - `src/data/types.ts`: formatos do contrato provisório e interface assíncrona de leitura.
-- `src/data/demo.ts`: login/listagem/detalhe em memória, respostas independentes dos exemplos e erros com código/mensagem.
+- `src/data/demo.ts`: operações simuladas com persistência opcional injetada, respostas independentes dos exemplos e erros com código/mensagem.
 - `src/data/fixtures.ts`: completo 5 kg, pendente 3 kg e zero confirmado.
 - `App.tsx`: stack e telas; estado React, carregamento, erro, repetição e lista vazia. Datas são formatadas sem conversão de fuso; total parcial vem do adaptador.
 - `src/data/adapter.test.ts` e `e2e/consulta.spec.ts`: verificações de comportamento.
 
-Registro está em `src/Registro.tsx`; componentes visuais compartilhados estão em `src/ui.tsx`. A leitura e o cálculo puros são compartilhados com `../iot/shared.ts`; Metro observa essa pasta sem monorepo. Em 11, implementar persistência e restauração conforme a arquitetura. Não existem operações falsas ou botões de registro antecipados. O contrato ainda deve ser revisado com o colega antes da integração.
+Registro está em `src/Registro.tsx`; componentes visuais compartilhados estão em `src/ui.tsx`. A leitura e o cálculo puros são compartilhados com `../iot/shared.ts`; Metro observa essa pasta sem monorepo. A persistência usa AsyncStorage em web/native; os testes do adaptador injetam armazenamento fake pela mesma interface. Não existem operações falsas ou botões de registro antecipados. O contrato ainda deve ser revisado com o colega antes da integração.
 
 Aplicadas as regras pertinentes da skill React Native: stack nativa, Pressable, texto em Text, StyleSheet, scroll com ajuste nativo e estado mínimo. Lista de três exemplos não exige FlashList. Interface Craft orientou hierarquia, espaçamento, feedback e consistência; nenhuma animação ou dependência de ajuste visual foi adicionada. Revisão estrutural: tarefa rotineira de consulta, uma coluna limitada a 640 px, alvos de 48 px e status escrito além da cor; validação visual e nativa ainda devem compor a revisão final.
 
@@ -49,4 +49,14 @@ Codex auxiliou a implementação, testes e documentação. Lucas deve revisar e 
 
 Entrar → Registrar descarte → informar data em AAAA-MM-DD e tipo → Procurar serviço → Abrir simulação. Simular a cozinha mostra 3 kg, sem gravar; Confirmar cria o serviço pendente. Simular os pratos e confirmar conclui 5 kg. Procurar novamente a mesma data/tipo continua o serviço. Zero confirma ausência de descarte; erros invalidam a leitura. Nova confirmação substitui a categoria e envia ambas no PUT.
 
-Sem persistência: recarregar ou sair perde as alterações (ticket 11). CLI e instruções em [IoT](../iot/README.md). Evidências em [ticket 10](../docs/evidencias/10/README.md). Nenhuma execução iOS foi feita neste ticket.
+Os serviços persistem ao sair e recarregar (ticket 11). CLI e instruções em [IoT](../iot/README.md). Evidências em [ticket 10](../docs/evidencias/10/README.md). Nenhuma execução iOS foi feita neste ticket.
+
+## Corrigir, excluir e repetir (ticket 11)
+
+Histórico → serviço → Corrigir pesagens abre o registro com a mesma data, tipo e pesagens. Uma leitura de categoria já confirmada mostra **Atualizar pesagem** e informa a substituição; a outra categoria permanece no PUT completo. O último peso substitui o anterior, sem somar nem duplicar o serviço.
+
+Nos detalhes, Excluir serviço pede confirmação: Cancelar preserva; Confirmar exclusão remove somente aquele serviço e suas pesagens. No histórico, a ação secundária Restaurar exemplos também pede confirmação; confirmar substitui todos os serviços pelos três exemplos originais. Não há recuperação dessas ações.
+
+Somente serviços são persistidos na chave `merenda.servicos.v1` do AsyncStorage (localStorage na web). Sessão, senha e prévia ficam em memória. O adaptador carrega o armazenamento antes de usar exemplos; uma lista vazia existente é preservada. Gravações são serializadas dentro da instância e aguardadas antes de publicar estado ou sucesso. Falhas mantêm os serviços anteriores e permitem tentar novamente. Não há coordenação entre abas simultâneas ou garantia de segurança real.
+
+Verificação: [evidências e comandos do ticket 11](../docs/evidencias/11/README.md). iOS não foi executado neste ticket: impedimento ENOSPC já registrado em [mobile-impedimento.txt](../docs/evidencias/12/mobile-impedimento.txt).

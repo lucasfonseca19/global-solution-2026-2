@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Page, ErrorText, styles, peso, data, message } from "./src/ui";
 import { Registro } from "./src/Registro";
 import { useIsFocused } from "@react-navigation/native";
@@ -24,7 +25,7 @@ type Routes = {
   Login: undefined;
   Historico: undefined;
   Detalhes: { id: number };
-  Registro: undefined;
+  Registro: { servico?: Servico } | undefined;
 };
 const Stack = createNativeStackNavigator<Routes>();
 function Login({
@@ -143,6 +144,16 @@ function History({
   navigation: NativeStackScreenProps<Routes, "Historico">["navigation"];
   logout: () => void;
 }) {
+  const [reset, setReset] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState("");
+  async function restore() {
+    if (busy) return;
+    setBusy(true); setActionError("");
+    try { await api.restaurarExemplos(session.token); setReset(false); retry(); }
+    catch(e) { setActionError(message(e)); }
+    finally { setBusy(false); }
+  }
   const focused = useIsFocused();
   const { value, error, retry } = useData(
     () => api.listar(session.token),
@@ -154,7 +165,7 @@ function History({
         Histórico
       </Text>
       <Text style={styles.text}>
-        Serviços de alimentação · exemplos fictícios
+        Serviços de alimentação · dados simulados locais
       </Text>
       {error ? (
         <>
@@ -190,6 +201,13 @@ function History({
         ))
       )}
       <Button title="Registrar descarte" onPress={() => navigation.navigate("Registro")} />
+      {actionError ? <ErrorText text={actionError} /> : null}
+      {reset ? <View style={styles.notice}>
+        <Text style={styles.strong}>Substituir todos os serviços pelos exemplos?</Text>
+        <Text style={styles.text}>As alterações serão removidas, sem recuperação.</Text>
+        <Button title="Cancelar" disabled={busy} onPress={() => setReset(false)} />
+        <Button title="Confirmar restauração" disabled={busy} onPress={restore} />
+      </View> : <Button secondary title="Restaurar exemplos" onPress={() => setReset(true)} />}
       <Button title="Sair da demonstração" onPress={logout} />
     </Page>
   );
@@ -203,13 +221,24 @@ function Details({
   Routes,
   "Detalhes"
 >) {
+  const [deleting, setDeleting] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const focused = useIsFocused();
+  async function remove() {
+    if (busy) return;
+    setBusy(true); setActionError("");
+    try { await api.excluir(session.token, route.params.id); navigation.popTo("Historico"); }
+    catch(e) { setActionError(message(e)); }
+    finally { setBusy(false); }
+  }
   const {
     value: s,
     error,
     retry,
   } = useData<Servico>(
     () => api.detalhar(session.token, route.params.id),
-    [api, session.token, route.params.id],
+    [api, session.token, route.params.id, focused],
   );
   return (
     <Page>
@@ -270,18 +299,26 @@ function Details({
               </View>
             );
           })}
+          <Button title="Corrigir pesagens" disabled={busy || deleting} onPress={() => navigation.navigate("Registro", {servico: s})} />
+          {actionError ? <ErrorText text={actionError} /> : null}
+          {deleting ? <View style={styles.notice}>
+            <Text style={styles.strong}>Excluir este serviço e suas pesagens?</Text>
+            <Text style={styles.text}>Esta ação não pode ser desfeita.</Text>
+            <Button title="Cancelar" disabled={busy} onPress={() => setDeleting(false)} />
+            <Button title="Confirmar exclusão" disabled={busy} onPress={remove} />
+          </View> : <Button secondary title="Excluir serviço" onPress={() => setDeleting(true)} />}
         </>
       )}
-      <Button title="Voltar ao histórico" onPress={() => navigation.popTo("Historico")} />
+      <Button title="Voltar ao histórico" disabled={busy} onPress={() => navigation.popTo("Historico")} />
     </Page>
   );
 }
 export default function App() {
-  const [api, setApi] = useState<DataAccess>(() => createDemoData());
+  const [api] = useState<DataAccess>(() => createDemoData(undefined, AsyncStorage));
   const [session, setSession] = useState<Sessao>();
   function logout() {
     setSession(undefined);
-    setApi(createDemoData());
+
   }
   return (
     <SafeAreaProvider>
@@ -307,7 +344,7 @@ export default function App() {
                 )}
               </Stack.Screen>
               <Stack.Screen name="Registro" options={{ title: "Registrar descarte" }}>
-                {(props) => <Registro api={api} session={session} onDetails={(id) => props.navigation.navigate("Detalhes", {id})} />}
+                {(props) => <Registro key={props.route.params?.servico?.id ?? "novo"} initialService={props.route.params?.servico} api={api} session={session} onDetails={(id) => props.navigation.replace("Detalhes", {id})} />}
               </Stack.Screen>
               <Stack.Screen
                 name="Detalhes"

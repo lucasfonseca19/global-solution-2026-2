@@ -4,8 +4,33 @@ import { exemplos } from "./fixtures";
 import { DataError, type DataAccess, type Servico } from "./types";
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 /** Simulação local, sem rede, hash de senha ou garantia de segurança real. */
-export function createDemoData(seed: Servico[] = exemplos): DataAccess {
-  const servicos = copy(seed);
+export type ServiceStorage = {
+  getItem(key: string): Promise<string | null>;
+  setItem(key: string, value: string): Promise<unknown>;
+};
+export const SERVICE_STORAGE_KEY = "merenda.servicos.v1";
+export function createDemoData(seed: Servico[] = exemplos, storage?: ServiceStorage): DataAccess {
+  let servicos = copy(seed);
+  let loaded = !storage;
+  let queue: Promise<unknown> = Promise.resolve();
+  // Serializa leitura inicial e operações; só publica o estado após escrita bem-sucedida.
+  function run<T>(operation: () => Promise<T> | T): Promise<T> {
+    const result = queue.then(async () => {
+      if (!loaded && storage) {
+        const saved = await storage.getItem(SERVICE_STORAGE_KEY);
+        if (saved !== null) servicos = JSON.parse(saved);
+        else await storage.setItem(SERVICE_STORAGE_KEY, JSON.stringify(servicos));
+        loaded = true;
+      }
+      return operation();
+    });
+    queue = result.catch(() => undefined);
+    return result;
+  }
+  async function persist(next: Servico[]) {
+    if (storage) await storage.setItem(SERVICE_STORAGE_KEY, JSON.stringify(next));
+    servicos = next;
+  }
   let activeToken: string | undefined;
   function authorize(token: string) {
     if (!activeToken || token !== activeToken)
@@ -31,20 +56,35 @@ export function createDemoData(seed: Servico[] = exemplos): DataAccess {
     return result;
   }
   return {
+    async restaurarExemplos(token) {
+      authorize(token);
+      return run(() => persist(copy(exemplos)));
+    },
+    async excluir(token, id) {
+      authorize(token);
+      return run(async () => {
+        if (!servicos.some(s => s.id === id)) throw new DataError("SERVICO_NAO_ENCONTRADO", "Serviço não encontrado.");
+        await persist(servicos.filter(s => s.id !== id));
+      });
+    },
     async avaliar(token, leitura) { authorize(token); return avaliar(leitura); },
     async criar(token, entrada) {
       authorize(token);
+      return run(async () => {
       const result = prepare(entrada, Math.max(0, ...servicos.map(s => s.id)) + 1);
-      servicos.push(result);
+      await persist([...servicos, result]);
       return copy(result);
+      });
     },
     async atualizar(token, id, entrada) {
       authorize(token);
+      return run(async () => {
       const index = servicos.findIndex(s => s.id === id);
       if (index < 0) throw new DataError("SERVICO_NAO_ENCONTRADO", "Serviço não encontrado.");
       const result = prepare(entrada, id);
-      servicos[index] = result;
+      await persist(servicos.map(s => s.id === id ? result : s));
       return copy(result);
+      });
     },
     async login(credentials) {
       if (credentials.login !== "demo" || credentials.senha !== "merenda-demo")
@@ -57,12 +97,13 @@ export function createDemoData(seed: Servico[] = exemplos): DataAccess {
     },
     async listar(token) {
       authorize(token);
-      return copy(servicos).sort(
+      return run(() => copy(servicos).sort(
         (a, b) => b.data.localeCompare(a.data) || b.id - a.id,
-      );
+      ));
     },
     async detalhar(token, id) {
       authorize(token);
+      return run(() => {
       const servico = servicos.find((s) => s.id === id);
       if (!servico)
         throw new DataError(
@@ -70,6 +111,7 @@ export function createDemoData(seed: Servico[] = exemplos): DataAccess {
           "Serviço não encontrado.",
         );
       return copy(servico);
+      });
     },
   };
 }

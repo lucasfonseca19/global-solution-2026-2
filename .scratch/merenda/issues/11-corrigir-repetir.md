@@ -1,6 +1,6 @@
 # 11 — Corrigir, excluir e repetir a demonstração
 
-Status: ready-for-agent
+Status: done
 Responsável: Lucas, com execução por subagentes na próxima sessão após aprovação da arquitetura
 Blocked by: 10 — Registrar descarte
 
@@ -12,11 +12,11 @@ Referências: [especificação](../spec.md), [contrato provisório](../api-contr
 
 ## Critérios de aceite
 
-- [ ] Nova confirmação da mesma categoria substitui o valor anterior e atualiza totais, sem duplicar.
-- [ ] Excluir pede confirmação; cancelar preserva dados; confirmar remove serviço e pesagens, preservando os demais serviços.
-- [ ] Implementar a política de duração dos dados escolhida por Lucas; não presumir que persistência ao reiniciar já foi aprovada.
-- [ ] Restaurar dados de exemplo é uma proposta a revisar junto dessa política, sem criar uma tela de configurações.
-- [ ] Documentar e verificar correção, exclusão e repetição dos cenários.
+- [x] Nova confirmação da mesma categoria substitui o valor anterior e atualiza totais, sem duplicar.
+- [x] Excluir pede confirmação; cancelar preserva dados; confirmar remove serviço e pesagens, preservando os demais serviços.
+- [x] Implementar a política de duração dos dados escolhida por Lucas; não presumir que persistência ao reiniciar já foi aprovada.
+- [x] Restaurar dados de exemplo é uma proposta a revisar junto dessa política, sem criar uma tela de configurações.
+- [x] Documentar e verificar correção, exclusão e repetição dos cenários.
 
 ## Dependências e limites
 
@@ -33,3 +33,7 @@ Ticket publicado após Lucas aprovar a granularidade das quatro entregas. Ainda 
 ### 14/11/2026 — Execução autorizada
 
 Arquitetura, política de dados e fronteiras de testes aprovadas por Lucas nesta sessão. Ver spec.md e execution-plan.md. Dependências entre tickets permanecem.
+
+### Verificação da entrega 11
+
+Orquestrador reexecutou 15 testes de dados, typecheck e cinco fluxos web. Persistência, falhas de leitura/escrita, exclusão/restauração e cancelamentos verificados. Revisão apontou formulários antigos na stack que poderiam restaurar valores obsoletos; ao abrir detalhes, registro agora é substituído, descartando o formulário. Regressão web red/green registrada. AsyncStorage ajustado via expo install para 2.2.0, compatível com SDK58; expo install --check passou. Evidências em docs/evidencias/11/.

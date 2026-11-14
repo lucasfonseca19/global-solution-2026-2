@@ -52,3 +52,10 @@ test("desktop mantém conteúdo legível e recarregar encerra sessão", async ({
   await page.reload();
   await expect(page.getByText("Login simulado")).toBeVisible();
 });
+
+// Cada teste começa com armazenamento próprio vazio; recargas dentro do teste preservam dados.
+test.beforeEach(async ({page}) => {
+ await page.goto('/');
+ await page.evaluate(() => localStorage.clear());
+ await page.reload();
+});

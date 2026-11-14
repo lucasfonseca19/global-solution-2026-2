@@ -5,11 +5,11 @@ import type { DataAccess, Sessao, Servico, Previa, Leitura } from './data/types'
 import { Button, Page, ErrorText, styles, peso, message } from './ui';
 const categories = ['SOBRA_DESCARTADA', 'RESTO_PRATO'] as const;
 const label = (c: string) => c === 'SOBRA_DESCARTADA' ? 'Sobra descartada' : 'Resto comestível do prato';
-export function Registro({api, session, onDetails}: {api: DataAccess; session: Sessao; onDetails: (id: number) => void}) {
- const [date,setDate] = useState('');
- const [tipo,setTipo] = useState('Almoço');
- const [ready,setReady] = useState(false);
- const [service,setService] = useState<Servico>();
+export function Registro({api, session, onDetails, initialService}: {initialService?: Servico; api: DataAccess; session: Sessao; onDetails: (id: number) => void}) {
+ const [date,setDate] = useState(initialService?.data ?? '');
+ const [tipo,setTipo] = useState(initialService?.tipoRefeicao ?? 'Almoço');
+ const [ready,setReady] = useState(!!initialService);
+ const [service,setService] = useState<Servico | undefined>(initialService);
  const [preview,setPreview] = useState<Previa>();
  const [panel,setPanel] = useState(false);
  const [busy,setBusy] = useState(false);
@@ -75,7 +75,8 @@ export function Registro({api, session, onDetails}: {api: DataAccess; session: S
     <Text style={styles.title}>{peso(preview.pesoLiquidoKg)}</Text>
     <Text style={styles.text}>Alimento · ainda não gravado</Text>
     <Text style={styles.caption}>{preview.codigoRfid} · Bruto {peso(preview.pesoBrutoKg)} − Tara {peso(preview.taraKg)}</Text>
-    <Button title="Confirmar pesagem" disabled={busy} onPress={confirm}/>
+    {service?.pesagens[preview.categoria] ? <Text style={styles.text}>Esta confirmação substituirá o peso anterior desta categoria.</Text> : null}
+    <Button title={service?.pesagens[preview.categoria] ? "Atualizar pesagem" : "Confirmar pesagem"} disabled={busy} onPress={confirm}/>
    </View> : <Text style={styles.text}>Aguardando leitura da lixeira na balança.</Text>}
    <Button title={panel ? 'Recolher simulação' : 'Abrir simulação'} onPress={()=>setPanel(v=>!v)} disabled={busy}/>
    {panel ? <View style={styles.card}>

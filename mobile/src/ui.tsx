@@ -14,10 +14,12 @@ export function Button({
   title,
   onPress,
   disabled = false,
+  secondary = false,
 }: {
   title: string;
   onPress: () => void;
   disabled?: boolean;
+  secondary?: boolean;
 }) {
   return (
     <Pressable
@@ -27,10 +29,11 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
+        secondary ? styles.secondary : undefined,
         { opacity: disabled || pressed ? 0.6 : 1 },
       ]}
     >
-      <Text style={styles.buttonText}>{title}</Text>
+      <Text style={secondary ? styles.link : styles.buttonText}>{title}</Text>
     </Pressable>
   );
 }
@@ -110,6 +113,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderCurve: "continuous",
   },
+  secondary: { backgroundColor: "transparent", borderWidth: 1, borderColor: "#758679" },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
   error: { color: "#9e2525", fontSize: 16, lineHeight: 24 },
   link: { color: "#245b46", fontSize: 16, fontWeight: "600" },

@@ -1,0 +1,30 @@
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/lucas/FIAP/global-solution-2026-2/mobile
+
+ ❯ src/data/persistence.test.ts (3 tests | 1 failed) 5ms
+   × restaurar substitui alterações pelos exemplos e sobrevive a reabrir 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/data/persistence.test.ts > restaurar substitui alterações pelos exemplos e sobrevive a reabrir
+TypeError: a.restaurarExemplos is not a function
+ ❯ src/data/persistence.test.ts:29:38
+     27| test('restaurar substitui alterações pelos exemplos e sobrevive a reab…
+     28|  const disk=storage(); const a=createDemoData([],disk); const {token}=…
+     29|  await a.criar(token,input); await a.restaurarExemplos(token);
+       |                                      ^
+     30|  const b=createDemoData([],disk); const session=await b.login(credenti…
+     31|  expect((await b.listar(session.token)).map(s=>s.id)).toEqual([103,102…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 11 passed (12)
+   Start at  18:25:19
+   Duration  101ms (transform 40%, tests 28%, import 24%, worker 8%)
+
