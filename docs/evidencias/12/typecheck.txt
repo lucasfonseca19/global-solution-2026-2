@@ -1,0 +1,8 @@
+$ npm run typecheck
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 typecheck
+> tsc --noEmit
+
+
+Exit: 0

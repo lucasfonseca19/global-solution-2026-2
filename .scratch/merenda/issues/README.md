@@ -17,14 +17,14 @@ Os arquivos individuais são a fonte do status e dos bloqueadores. `ready-for-hu
 
 ## Entregas aprovadas da parte de Lucas
 
-| Ticket | Situação inicial | Bloqueado por |
+| Ticket | Situação atual | Bloqueado por |
 | --- | --- | --- |
-| [09 — Entrar e consultar](09-entrar-consultar.md) | `needs-info`: fechar arquitetura e definições mínimas | Arquitetura aprovada e verificação alinhada |
-| [10 — Registrar e simular](10-registrar-simular.md) | `ready-for-agent`, aguardando dependência | 09 |
-| [11 — Corrigir e repetir](11-corrigir-repetir.md) | `needs-info`: política de dados pendente | 10 e decisão de persistência/restauração |
-| [12 — Verificar e documentar](12-verificar-documentar.md) | `ready-for-agent`, aguardando dependências | 09, 10 e 11 |
+| [09 — Entrar e consultar](09-entrar-consultar.md) | `done`: verificado e versionado | Nenhum |
+| [10 — Registrar e simular](10-registrar-simular.md) | `done`: verificado e versionado | Nenhum |
+| [11 — Corrigir e repetir](11-corrigir-repetir.md) | `done`: verificado e versionado | Nenhum |
+| [12 — Verificar e documentar](12-verificar-documentar.md) | `ready-for-human`: documentos e verificações automáticas consolidados | Execução nativa impedida por ENOSPC |
 
-09 a 12 são a divisão em quatro entregas aprovada por Lucas. Os tickets 01 a 08 continuam como mapa das responsabilidades do grupo; não executá-los novamente como uma segunda implementação do mesmo app.
+09 a 12 são a divisão aprovada por Lucas. Os tickets 01 a 08 permanecem como mapa das responsabilidades do grupo, sem fechamento automático por esta implementação. A arquitetura e a execução foram aprovadas em 14/11/2026.
 
 ## Ordem de trabalho da nova sessão
 
@@ -33,4 +33,4 @@ Os arquivos individuais são a fonte do status e dos bloqueadores. `ready-for-hu
 3. Executar 09 → 10 → 11 → 12 com subagentes, revisão independente e evidências reais, conforme a autorização na nova sessão.
 4. Integrar API real apenas se estiver disponível e acordada; sua ausência não bloqueia a entrega simulada de Lucas.
 
-Nenhum desses tickets começou a ser implementado nesta conversa. Criar tickets não equivale a concluir os critérios; os arquivos individuais são a fonte de status e bloqueadores.
+Atualização em 14/11/2026: 09–11 implementados e verificados; 12 com documentação/verificações consolidadas e impedimento real da execução nativa. Os arquivos individuais e as evidências são a fonte de status e bloqueadores.

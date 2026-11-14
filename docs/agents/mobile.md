@@ -27,6 +27,6 @@ Ler o `SKILL.md` e as regras relacionadas à mudança antes de implementar. Usar
 
 As regras não autorizam ampliar o produto, instalar bibliotecas sem necessidade ou acrescentar animações, galeria de imagens, infraestrutura de monorepo ou otimizações para listas grandes que não existam neste MVP. Quando uma orientação não se aplicar ao nosso recorte, registrar a razão relevante na decisão ou revisão.
 
-## Antes de código
+## Estado da execução em 14/11/2026
 
-Ainda faltam as decisões descritas em [app-planning.md](../../.scratch/merenda/app-planning.md): interação das telas, persistência dos dados simulados e como verificar o comportamento. Consolidar a especificação e revisar a divisão em entregas pequenas antes de implementar. A instalação da skill não altera o status pendente do escopo geral do app.
+Arquitetura e execução aprovadas por Lucas; decisões consolidadas na seção final de [spec.md](../../.scratch/merenda/spec.md). Tickets 09–11 implementados e verificados. Documentação e verificações automáticas de 12 consolidadas; execução nativa impedida por ENOSPC durante instalação do Expo Go, conforme [evidências finais](../evidencias/12/README.md). Manter 12 em ready-for-human até verificar o fluxo nativo. O bundle iOS compilou, sem comprovar execução. O contrato continua provisório para integração com o colega.

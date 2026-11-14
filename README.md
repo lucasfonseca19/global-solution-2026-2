@@ -1,59 +1,43 @@
-# Global Solution 2026/2
+# Global Solution 2026/2 — descarte da merenda
 
-MVP acadêmico para medir o descarte da merenda escolar. Escopo funcional definido com Lucas; contrato, tecnologias e divisão de trabalho em revisão conjunta. Ainda não há código de aplicação.
+MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. A parte de Lucas tem um app demonstrativo React Native/Expo (web local), persistência local e simulador independente de RFID e balança. A API, o banco e a segurança real não fazem parte desta implementação; o contrato entre as partes permanece provisório.
 
-Repositório privado do grupo: [lucasfonseca19/global-solution-2026-2](https://github.com/lucasfonseca19/global-solution-2026-2).
+## Executar localmente
 
-## Para o grupo
+Requer Node.js compatível com Expo (ambiente registrado: Node 22.17.1 e npm 10.9.2). Na raiz:
 
-Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abertas e como trabalhar em paralelo.
+```sh
+cd mobile
+npm ci
+npm run web
+```
 
-Para arquitetar e executar a parte de Lucas na próxima sessão, use o [roteiro de orquestração](docs/execucao-lucas.md) e os tickets 09 a 12 nele indicados.
+Abra o endereço local indicado pelo Expo. Credenciais fictícias: usuário `demo`, senha `merenda-demo`. Os dados dos serviços ficam no armazenamento local do navegador. A sessão não é persistida: recarregar volta ao login, mantendo os serviços.
 
-| Parte | Local | Situação |
-| --- | --- | --- |
-| App mobile | [mobile/](mobile/README.md) | React Native com Expo e suporte web; implementação ainda não iniciada |
-| Backend | [backend/](backend/README.md) | Tecnologia e detalhes internos para proposta do colega |
-| Banco | [database/](database/README.md) | Modelo e tecnologia para revisão |
-| Simulação IoT | [iot/](iot/README.md) | Balança e RFID simulados, sem hardware |
+O app tem quatro telas funcionais: Login, Histórico, Registro e Detalhes. O simulador pode ser usado pela interface de Registro ou pela CLI independente em [iot/README.md](iot/README.md). Passos e resultados esperados estão em [docs/guia-testes-lucas.md](docs/guia-testes-lucas.md).
 
-## Base para revisão
+## O que está comprovado
 
-- [Especificação do MVP](.scratch/merenda/spec.md): comportamento e critérios de aceite.
-- [Contrato proposto](.scratch/merenda/api-contract.md): operações, exemplos e pontos para combinar entre front e back.
-- [Tickets locais](.scratch/merenda/issues/README.md): responsáveis, critérios de aceite e dependências; app com dados simulados pode avançar sem esperar o backend.
-- [Plano inicial](.scratch/merenda/tickets-proposal.md): referência da divisão discutida.
-- [Glossário](GLOSSARY.md): termos usados por todas as partes.
-- [Enunciado](ENUNCIADO.md): requisitos da faculdade e critérios de avaliação.
-- [Orientações de desenvolvimento mobile](docs/agents/mobile.md): execução local e skill de React Native solicitada por Lucas.
+Os tickets 09, 10 e 11 foram concluídos e verificados; commit de referência: `7b67860`. Logs e capturas reais estão em [evidências 09](docs/evidencias/09/README.md), [evidências 10](docs/evidencias/10/README.md) e [evidências 11](docs/evidencias/11/README.md). Há testes unitários do adaptador e fluxos web executados com o Chrome já instalado; não é necessário baixar um navegador para a execução descrita.
 
-As regras aprovadas por Lucas estão distinguidas das propostas técnicas. O colega pode revisar a solução; mudanças no contrato precisam ser combinadas para preservar a consistência do app e da API.
+A documentação e as verificações finais estão consolidadas nas [evidências 12](docs/evidencias/12/README.md): 15 testes do adaptador, dois da CLI e cinco fluxos web passaram, além de TypeScript, exportação web e compatibilidade Expo. A execução nativa não foi comprovada: a instalação do Expo Go falhou por falta de espaço (`ENOSPC`), conforme [registro do impedimento](docs/evidencias/12/mobile-impedimento.txt). O bundle iOS gerado só comprova compilação/exportação. Portanto, o critério mobile nativo continua pendente e o ticket 12 não deve ser marcado como concluído.
 
-## Começar ou retomar
+## Materiais do grupo ainda pendentes
 
-1. Leia [CONTEXTO.md](CONTEXTO.md): objetivo, decisões e pendências.
-2. Consulte [ENUNCIADO.md](ENUNCIADO.md): requisitos da faculdade.
-3. Use o [glossário](GLOSSARY.md) e o [mapa de acompanhamento](.scratch/merenda/map.md).
+- PDF acadêmico final, incluindo o [relatório de implementação de Lucas](docs/relatorio-implementacao-lucas.md) como contribuição parcial.
+- TXT exigido para a entrega final.
+- Link público do pitch do grupo (limite de três minutos; o [roteiro de Lucas](docs/roteiro-demonstracao-lucas.md) cobre aproximadamente 45–60 segundos).
+- Backend/API e banco reais, implementação e revisão do colega, contrato conjunto e eventual integração. Não há resultado ou link de integração a declarar.
+- Verificação nativa pendente e revisão final do grupo.
 
-## Organização
+O pacote final previsto no enunciado também requer código e README de execução; confira o [enunciado](ENUNCIADO.md) e a [especificação do MVP](.scratch/merenda/spec.md). A organização de responsabilidades está em [guia da equipe](docs/guia-equipe.md).
 
-- `docs/agents/`: configuração dos fluxos de documentação e acompanhamento local.
-- `GLOSSARY.md`: termos do domínio já esclarecidos.
-- `docs/adr/`: decisões que justifiquem um registro próprio, quando surgirem.
-- `.scratch/merenda/map.md`: estado da discussão e decisões pendentes.
-- `.scratch/merenda/spec.md`: rascunho da especificação para revisão conjunta.
-- `.scratch/merenda/api-contract.md`: proposta de comunicação e exemplos compartilhados.
-- `.scratch/merenda/tickets-proposal.md`: proposta de divisão antes da criação dos tickets.
-- `.scratch/merenda/issues/`: oito tickets publicados em Markdown local, com índice e dependências.
+## Documentos e ferramentas
 
-## Fluxo previsto
+- [Guia de testes de Lucas](docs/guia-testes-lucas.md), [plano de testes](docs/plano-testes-lucas.md) e [relatório de implementação](docs/relatorio-implementacao-lucas.md).
+- [Orientações mobile](docs/agents/mobile.md), [READMEs do app](mobile/README.md) e da [IoT simulada](iot/README.md).
+- O disco temporário no SSD foi um contorno local durante as verificações por falta de espaço. Não é pré-requisito: os comandos acima são padrão.
 
-Esclarecer o escopo com `grill-with-docs` e registrar termos com `domain-modeling`. Consolidar a conversa com `to-spec`. Revisar a especificação e usar `to-tickets` para propor unidades de trabalho e dependências. Implementar os tickets aprovados e atualizar seu andamento.
+## Uso de IA
 
-Os documentos são criados conforme houver conteúdo para registrar; não é necessário criar todos de uma vez. Ainda não existe código de aplicação nem uma especificação técnica aprovada.
-
-## Entrega
-
-Planejar integração entre as partes, preservando demonstração independente caso o prazo não permita integrá-las. O acompanhamento continua em Markdown local, que pode ser versionado neste repositório, sem depender de GitHub Issues.
-
-Prazo: **19/11/2026, às 23h55**. Entrega em ZIP com código, README de execução, PDF, TXT e link público do pitch de até três minutos. Os comandos de execução e a declaração de uso de IA serão acrescentados conforme a implementação acontecer; esta estrutura ainda não é a entrega final.
+Codex, executado no T3 Code, auxiliou o planejamento, a implementação, os testes e a documentação. Subagentes gpt-6.1-sol/medium implementaram as entregas; gpt-6.1-sol/high revisou; gpt-6-luna/high consolidou documentos. O orquestrador conferiu resultados e integrou correções. Lucas deve revisar e compreender o material antes da entrega acadêmica. Detalhes e limites estão no [relatório](docs/relatorio-implementacao-lucas.md).

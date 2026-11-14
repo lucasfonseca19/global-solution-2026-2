@@ -31,3 +31,5 @@ Cada implementador recebe contexto novo, ticket, spec e limites de edição. Rev
 10 verificado: nove testes, três fluxos web e CLI. Mobile nativo bloqueado por ENOSPC, documentado em docs/evidencias/12/mobile-impedimento.txt; continuar demais entregas.
 
 11 verificado: 15 testes, cinco fluxos web, typecheck, compatibilidade Expo. Corrigidos navegação obsoleta e versão do armazenamento.
+
+12: documentação e verificações automáticas concluídas; execução nativa impedida por ENOSPC e registrada, status ready-for-human. npm ci reproduzido, 15 testes de adaptador e cinco fluxos web passaram; CLI com dois testes, builds web/iOS e compatibilidade Expo passaram. Guia/relatório/roteiro e evidências finais em docs/. Não marcar execução nativa ou ticket12 como concluídos.

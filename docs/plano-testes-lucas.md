@@ -1,25 +1,27 @@
 # Plano de testes da parte de Lucas
 
-Versão simulada; execução e evidências serão acrescentadas conforme verificadas. Nenhum caso desta tabela está executado apenas por estar planejado.
+Status atualizado pelas evidências de 09–12. A conferência final repetiu 15 testes do adaptador, dois da CLI e cinco fluxos web; veja [12](evidencias/12/README.md). “Executado” identifica a fronteira realmente verificada: adaptador, CLI ou interface web. Isso não implica execução nativa nem API/banco reais. Há pelo menos oito casos planejados e mais de cinco execuções com referência individual.
 
-| ID | Cenário/entrada | Resultado esperado | Estado inicial |
+| ID | Cenário e entrada | Resultado esperado | Estado e evidência individual |
 | --- | --- | --- | --- |
-| CT01 | Login fictício correto | Abrir histórico; sinalização de simulação | Planejado |
-| CT02 | Senha incorreta | Mensagem de erro; permanecer no login | Planejado |
-| CT03 | Abrir exemplo completo e voltar | Categorias e total coerentes, retorno ao histórico | Planejado |
-| CT04 | RFID-SIM-001 e bruto 4 kg, somente prévia | Líquido 3 kg; nenhum peso confirmado alterado | Planejado |
-| CT05 | Confirmar sobra 3 kg e restos 2 kg | Serviço completo, total 5 kg | Planejado |
-| CT06 | RFID-SIM-999, bruto 4 kg | Lixeira desconhecida; confirmação bloqueada | Planejado |
-| CT07 | RFID-SIM-001, bruto 0,5 kg | Peso abaixo da tara; confirmação bloqueada | Planejado |
-| CT08 | RFID-SIM-002, bruto 1,5 kg | Zero válido e confirmado; diferente de pendência | Planejado |
-| CT09 | Reutilizar mesma data/tipo | Continuar serviço existente, sem duplicação | Planejado |
-| CT10 | Corrigir restos para bruto 4 kg | Restos 2,5 kg; total 5,5 kg; sobra preservada | Planejado |
-| CT11 | Excluir: primeiro cancelar, depois confirmar | Cancelar preserva; confirmar remove apenas alvo | Planejado |
-| CT12 | Confirmar dados e reiniciar app | Dados confirmados preservados, nova sessão de login | Planejado |
-| CT13 | Restaurar exemplos: cancelar/confirmar | Cancelar preserva; confirmar repõe exemplos | Planejado |
-| CT14 | Executar CLI de RFID/balança | Leituras de ambos dispositivos e cálculo/validação observáveis | Planejado |
-| CT15 | Fluxos nas quatro telas em iOS nativo | Navegação, feedback e pesagem funcionais fora do navegador | Planejado |
+| CT01 | Login `demo` / `merenda-demo` | Abrir histórico com sessão fictícia | Executado — adaptador: `login fictício retorna usuário sem senha`, `adapter-final.txt`; web: `login inválido, consulta, retorno e saída`, `web-green.txt`; [09](evidencias/09/README.md) |
+| CT02 | Senha incorreta | Mensagem genérica e permanecer no login | Executado — adaptador: `credenciais incorretas são rejeitadas com mensagem genérica`; web: `login inválido, consulta, retorno e saída`; [adapter-invalid-green.txt](evidencias/09/adapter-invalid-green.txt), [web-green.txt](evidencias/09/web-green.txt) |
+| CT03 | Abrir exemplo completo e voltar | Categorias e total coerentes, retorno ao histórico | Executado — adaptador: `consulta retorna exemplos completos, pendentes e zero confirmado sem confundi-los`; web: `login inválido, consulta, retorno e saída`; [adapter-query-green.txt](evidencias/09/adapter-query-green.txt), [web-green.txt](evidencias/09/web-green.txt) |
+| CT04 | RFID-SIM-001, bruto 4 kg, somente prévia | Líquido 3 kg, sem confirmação | Executado no adaptador — `prévia identifica e calcula sem criar serviço`; log [green-adaptador.txt](evidencias/10/green-adaptador.txt). Fluxo web correlato: `registro: prévia, erros, confirmação, continuidade, zero e consulta`, [e2e.txt](evidencias/10/e2e.txt) |
+| CT05 | Confirmar sobra 3 kg e restos 2 kg | Serviço completo, total 5 kg | Executado — adaptador: `confirmar cria pendente, PUT completo conclui e correção substitui preservando sobra`; web: `registro: prévia, erros, confirmação, continuidade, zero e consulta`; [10](evidencias/10/README.md) |
+| CT06 | RFID-SIM-999, bruto 4 kg | Rejeitar leitura sem gravação | Executado — adaptador: `salvar revalida e rejeita atomicamente RFID, peso, duplicação e data inválida`; CLI com saída 1 e `RFID_DESCONHECIDO`, [cli.txt](evidencias/10/cli.txt); web: fluxo nomeado de registro no `e2e.txt` de 10 |
+| CT07 | RFID-SIM-001, bruto 0,5 kg | Rejeitar peso abaixo da tara sem gravar | Executado — mesmos teste nomeado do adaptador e fluxo web `registro: prévia, erros, confirmação, continuidade, zero e consulta`; CLI retorna `PESO_INVALIDO`, [cli.txt](evidencias/10/cli.txt) |
+| CT08 | RFID-SIM-002, bruto 1,5 kg | Zero válido confirmado, distinto de pendência | Executado — adaptador: `zero confirmado completa serviço e PUT omisso deixa categoria pendente`; consulta `consulta retorna exemplos completos, pendentes e zero confirmado sem confundi-los`; web de registro em [e2e.txt](evidencias/10/e2e.txt) |
+| CT09 | Reutilizar mesma data/tipo | Continuar o mesmo serviço, sem duplicar | Executado — adaptador: `confirmar cria pendente, PUT completo conclui e correção substitui preservando sobra` e `salvar revalida e rejeita atomicamente RFID, peso, duplicação e data inválida`; web: teste de registro em [e2e.txt](evidencias/10/e2e.txt) |
+| CT10 | Corrigir restos para bruto 4 kg | Restos 2,5 kg; total 5,5 kg; preservar sobra | Executado — adaptador: `confirmar cria pendente, PUT completo conclui e correção substitui preservando sobra`, [green-adaptador.txt](evidencias/10/green-adaptador.txt); a web verifica uma correção distinta, para zero, no teste `corrigir por detalhes persiste; sair, excluir e restaurar respeitam confirmação`, [orquestrador-web.txt](evidencias/11/orquestrador-web.txt) |
+| CT11 | Excluir: cancelar e depois confirmar | Cancelar preserva; confirmar remove apenas alvo | Executado na web: `corrigir por detalhes persiste; sair, excluir e restaurar respeitam confirmação`, registrado em [orquestrador-web.txt](evidencias/11/orquestrador-web.txt). Adaptador: `excluir remove somente alvo e pesagens e persiste inclusive lista vazia`, [orquestrador-tests.txt](evidencias/11/orquestrador-tests.txt) |
+| CT12 | Salvar e recarregar | Serviços persistem; sessão retorna ao login | Executado — adaptador: `reabrir carrega serviços existentes antes de exemplos`; web: `desktop mantém conteúdo legível e recarregar encerra sessão`; [orquestrador-tests.txt](evidencias/11/orquestrador-tests.txt), [orquestrador-web.txt](evidencias/11/orquestrador-web.txt) |
+| CT13 | Restaurar exemplos: cancelar e confirmar | Cancelar preserva; confirmar substitui pelos exemplos | Executado na web: `corrigir por detalhes persiste; sair, excluir e restaurar respeitam confirmação`, [orquestrador-web.txt](evidencias/11/orquestrador-web.txt); adaptador: `restaurar substitui alterações pelos exemplos e sobrevive a reabrir`, [orquestrador-tests.txt](evidencias/11/orquestrador-tests.txt) |
+| CT14 | CLI RFID/balança | Mostrar dados brutos, associação, cálculo e erros | Executado — comandos individuais em [orquestrador-cli.txt](evidencias/10/orquestrador-cli.txt): sobra, restos, zero, desconhecido e abaixo. A suíte Node registrada no README de [10](evidencias/10/README.md) cobre a fronteira CLI |
+| CT15 | Fluxos nas quatro telas em iOS nativo | Navegação e pesagem executam fora do navegador | Pendente — instalação do Expo Go falhou com `ENOSPC`; [mobile-impedimento.txt](evidencias/12/mobile-impedimento.txt). [ios-bundle.txt](evidencias/12/ios-bundle.txt) comprova apenas exportação, não execução |
 
-## Registro de evidência
+## Interpretação das evidências
 
-Para cada execução: indicar ID, ambiente, data, comando ou passos, entrada, esperado, observado, resultado e caminho da evidência. Testes do adaptador demonstram regras; web demonstra fluxo; execução iOS demonstra ambiente nativo. Nenhuma dessas evidências implica API, banco ou segurança real do colega.
+Em 09–11, testes do adaptador cobrem regras de dados/persistência sem interface; a CLI demonstra a simulação independente; Playwright percorre a aplicação web real com Chrome já instalado. As evidências individuais estão em [09](evidencias/09/README.md), [10](evidencias/10/README.md) e [11](evidencias/11/README.md). Os arquivos nomeados acima são logs reais. Não se contam planos, testes vermelhos ou bundle como execução funcional positiva. A recarga testada no navegador prova persistência web, não nativa.
+
+CT15 e inspeção real em celular continuam como verificação manual necessária. O relatório de implementação e o [guia passo a passo](guia-testes-lucas.md) detalham a limitação e como retomá-la. Nenhuma evidência deste plano implica API, banco ou segurança real.

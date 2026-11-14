@@ -103,3 +103,7 @@ Lucas aprovou a divisão em quatro entregas e pediu o prompt para outra sessão.
 ## Execução autorizada em 14/11/2026
 
 Após revisão da arquitetura mínima e confirmação dos modelos, Lucas autorizou iniciar e concluir 09 a 12, com revisão do conjunto ao final. Solicitou conter consumo e cerimônia: equipe pequena, sem exagerar no MVP. Arquitetura aprovada registrada na seção final de `.scratch/merenda/spec.md`; plano em `.scratch/merenda/execution-plan.md`. Backend/banco/segurança real continuam com o colega. A aprovação libera o app e a IoT simulados sem depender da API.
+
+## Resultado da execução em 14/11/2026
+
+Tickets 09–11 implementados, revisados e verificados, com commits locais. App de quatro telas e simulador CLI, persistência demonstrativa, correção/exclusão/restauração. Ticket12 com documentação e verificações automáticas consolidadas, status ready-for-human: instalação do Expo Go falhou por ENOSPC, e o app não chegou a executar nativamente. Bundle iOS compilou, sem comprovar execução. Guia para Lucas em docs/guia-testes-lucas.md; relatório, plano, roteiro e evidências em docs/. Backend/database preservados.

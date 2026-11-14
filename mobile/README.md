@@ -1,10 +1,27 @@
 # Merenda — app demonstrativo (tickets 09 a 11)
 
-Expo SDK 58, React Native, TypeScript e React Navigation com stack nativa. Login, histórico, registro e detalhes funcionam com dados fictícios locais. Sem backend, banco ou autenticação real.
+App React Native com Expo, quatro telas e suporte web local. Login, consulta, registro, simulação, correção, exclusão e restauração de dados de exemplo funcionam com dados fictícios locais. Não há API, banco, autenticação ou segurança reais. O contrato em `.scratch/merenda/api-contract.md` é provisório para integração.
 
-## Executar
+## Versões registradas
 
-Pré-requisito: Node.js LTS compatível com Expo (ambiente verificado: Node 22.17.1 e npm 10.9.2).
+Ambiente das evidências: Node 22.17.1 e npm 10.9.2. `npm ci` instala as versões exatas registradas em `package-lock.json` (lockfile v3). Versões principais travadas no manifesto/lockfile:
+
+| Pacote | Versão |
+| --- | --- |
+| Expo | 58.0.25 |
+| React | 19.3.0 |
+| React Native | 0.88.1 |
+| React Navigation native stack | 7.21.0 |
+| AsyncStorage | 2.2.0 |
+| TypeScript | 6.0.3 |
+| Vitest | 5.1.0 |
+| Playwright | 1.65.1 |
+
+AsyncStorage 2.2.0 foi ajustado com `expo install` para compatibilidade com SDK 58.
+
+## Iniciar no navegador
+
+A partir da raiz do repositório:
 
 ```sh
 cd mobile
@@ -12,51 +29,34 @@ npm ci
 npm run web
 ```
 
-Abrir o endereço indicado pelo Expo. Login fictício: `demo`; senha fictícia: `merenda-demo`. A senha aparece no código porque é uma comparação demonstrativa pública, não uma conta segura. Não usar dados pessoais. Nenhuma credencial ou sessão é persistida. Recarregar encerra a sessão. Sair encerra a sessão e preserva os serviços.
+Abra o endereço informado pelo Expo. Credenciais públicas de demonstração: usuário `demo`, senha `merenda-demo`. Não use dados pessoais. A senha é comparação fictícia no app; não é uma conta ou controle de segurança. Google Chrome já instalado foi usado nos fluxos Playwright; não é preciso baixar navegador para iniciar ou usar o app manualmente.
 
-Para celular/simulador: `npm start`, usando um cliente compatível com SDK 58; `npm run ios` abre o simulador e `npm run android` usa emulador/dispositivo Android configurado. A documentação Expo consultada em 14/11/2026 informa transição do Expo Go físico para SDK 58; conferir a compatibilidade do cliente antes de testar. Estes caminhos nativos ainda não foram executados nesta entrega; a comprovação nativa pertence à verificação final.
+## Telas e persistência
 
-## Verificar
+- **Login:** entra com as credenciais de demonstração. A sessão não sobrevive ao reload.
+- **Histórico:** mostra serviços e totais; permite iniciar registro e restaurar exemplos após confirmação.
+- **Registro:** procura por data e tipo, simula leitura, mostra prévia sem gravar e confirma o peso líquido. RFID define automaticamente categoria e tara.
+- **Detalhes:** mostra categorias, pendências e total; permite corrigir pesagens e excluir o serviço após confirmação.
+
+Serviços são persistidos na chave `merenda.servicos.v1` (localStorage na web e AsyncStorage no nativo). A prévia e a sessão ficam em memória. Recarregar retorna ao login, sem apagar os serviços. Sair também preserva serviços. Restaurar exemplos substitui os registros locais pelos três exemplos iniciais; excluir remove o serviço e suas pesagens, sem recuperação. A lista vazia também é persistida.
+
+## Comandos de verificação registrados
+
+Após `npm ci`, os comandos que produziram as evidências foram:
 
 ```sh
 npm test
 npm run typecheck
-npm run build:web
 npm run test:e2e
+npm run build:web
 ```
 
-Os testes usam Google Chrome instalado (`channel: chrome`), com perfil isolado; instalar Chrome antes de executar. Playwright inicia e encerra seu próprio Expo na porta 8091. Fechar qualquer processo que já use essa porta. Testes Vitest observam o adaptador público, sem React Native ou servidor; testes Playwright percorrem a interface web real. Relatório JSON, traces em falhas e capturas ficam em `test-results/` (ignorado). Logs e relatório do ticket: [evidências 09](../docs/evidencias/09/README.md).
+Playwright usa `channel: chrome`, com perfil isolado, e inicia o Expo na porta 8091. Os fluxos percorrem a aplicação web. Vitest testa o adaptador, incluindo armazenamento injetado. Execute esses comandos para reproduzir as verificações; resultados históricos e cenários estão nos READMEs de [ticket 09](../docs/evidencias/09/README.md), [ticket 10](../docs/evidencias/10/README.md) e [ticket 11](../docs/evidencias/11/README.md). A conferência final após `npm ci` passou com 15 testes do adaptador e cinco fluxos web; veja [evidências finais](../docs/evidencias/12/README.md). O build web não prova execução nativa.
 
-## Organização e continuidade
+Para tentar execução nativa em ambiente disponível: `npm start` e abra no cliente Expo compatível com SDK 58; ou use `npm run ios` / `npm run android` com as ferramentas e dispositivos configurados. A execução nativa desta entrega permanece pendente por `ENOSPC` ao instalar Expo Go; veja [mobile-impedimento.txt](../docs/evidencias/12/mobile-impedimento.txt). O bundle iOS registrado foi compilado/exportado, mas o app não iniciou no simulador. TMPDIR no SSD foi apenas contorno local de espaço e não é necessário nos passos padrão.
 
-- `src/data/types.ts`: formatos do contrato provisório e interface assíncrona de leitura.
-- `src/data/demo.ts`: operações simuladas com persistência opcional injetada, respostas independentes dos exemplos e erros com código/mensagem.
-- `src/data/fixtures.ts`: completo 5 kg, pendente 3 kg e zero confirmado.
-- `App.tsx`: stack e telas; estado React, carregamento, erro, repetição e lista vazia. Datas são formatadas sem conversão de fuso; total parcial vem do adaptador.
-- `src/data/adapter.test.ts` e `e2e/consulta.spec.ts`: verificações de comportamento.
+## Dados de auditoria e limites
 
-Registro está em `src/Registro.tsx`; componentes visuais compartilhados estão em `src/ui.tsx`. A leitura e o cálculo puros são compartilhados com `../iot/shared.ts`; Metro observa essa pasta sem monorepo. A persistência usa AsyncStorage em web/native; os testes do adaptador injetam armazenamento fake pela mesma interface. Não existem operações falsas ou botões de registro antecipados. O contrato ainda deve ser revisado com o colega antes da integração.
+As verificações registraram três alertas moderados transitivos em dependências ligadas a Expo, `@expo/fingerprint` e `minimatch`. Não foi forçada atualização incompatível do SDK. Login, dados, RFID e balança são demonstrativos; sem backend, API, banco ou segurança real. A integração exige revisão do contrato com o colega.
 
-Aplicadas as regras pertinentes da skill React Native: stack nativa, Pressable, texto em Text, StyleSheet, scroll com ajuste nativo e estado mínimo. Lista de três exemplos não exige FlashList. Interface Craft orientou hierarquia, espaçamento, feedback e consistência; nenhuma animação ou dependência de ajuste visual foi adicionada. Revisão estrutural: tarefa rotineira de consulta, uma coluna limitada a 640 px, alvos de 48 px e status escrito além da cor; validação visual e nativa ainda devem compor a revisão final.
-
-Documentação oficial consultada: [Expo](https://docs.expo.dev/get-started/create-a-project/), [stack nativa](https://reactnavigation.org/docs/native-stack-navigator/), [fluxo de autenticação](https://reactnavigation.org/docs/auth-flow/), [TextInput](https://reactnative.dev/docs/textinput), [Vitest](https://vitest.dev/guide/) e [Playwright webServer](https://playwright.dev/docs/test-webserver).
-
-## Uso de IA
-
-Codex auxiliou a implementação, testes e documentação. Lucas deve revisar e compreender o código antes da entrega acadêmica. Este ticket não comprova a rubrica de senha em hash ou segurança da API; essas responsabilidades permanecem no backend do colega.
-
-## Registrar (ticket 10)
-
-Entrar → Registrar descarte → informar data em AAAA-MM-DD e tipo → Procurar serviço → Abrir simulação. Simular a cozinha mostra 3 kg, sem gravar; Confirmar cria o serviço pendente. Simular os pratos e confirmar conclui 5 kg. Procurar novamente a mesma data/tipo continua o serviço. Zero confirma ausência de descarte; erros invalidam a leitura. Nova confirmação substitui a categoria e envia ambas no PUT.
-
-Os serviços persistem ao sair e recarregar (ticket 11). CLI e instruções em [IoT](../iot/README.md). Evidências em [ticket 10](../docs/evidencias/10/README.md). Nenhuma execução iOS foi feita neste ticket.
-
-## Corrigir, excluir e repetir (ticket 11)
-
-Histórico → serviço → Corrigir pesagens abre o registro com a mesma data, tipo e pesagens. Uma leitura de categoria já confirmada mostra **Atualizar pesagem** e informa a substituição; a outra categoria permanece no PUT completo. O último peso substitui o anterior, sem somar nem duplicar o serviço.
-
-Nos detalhes, Excluir serviço pede confirmação: Cancelar preserva; Confirmar exclusão remove somente aquele serviço e suas pesagens. No histórico, a ação secundária Restaurar exemplos também pede confirmação; confirmar substitui todos os serviços pelos três exemplos originais. Não há recuperação dessas ações.
-
-Somente serviços são persistidos na chave `merenda.servicos.v1` do AsyncStorage (localStorage na web). Sessão, senha e prévia ficam em memória. O adaptador carrega o armazenamento antes de usar exemplos; uma lista vazia existente é preservada. Gravações são serializadas dentro da instância e aguardadas antes de publicar estado ou sucesso. Falhas mantêm os serviços anteriores e permitem tentar novamente. Não há coordenação entre abas simultâneas ou garantia de segurança real.
-
-Verificação: [evidências e comandos do ticket 11](../docs/evidencias/11/README.md). iOS não foi executado neste ticket: impedimento ENOSPC já registrado em [mobile-impedimento.txt](../docs/evidencias/12/mobile-impedimento.txt).
+Estrutura: `src/data/` contém tipos, adaptador, fixtures e testes; `src/` contém telas e UI; `../iot/shared.ts` fornece cenários e cálculo compartilhados. Veja o [guia passo a passo](../docs/guia-testes-lucas.md) e o [plano de testes](../docs/plano-testes-lucas.md) para separar evidência automatizada e checagens manuais pendentes.
