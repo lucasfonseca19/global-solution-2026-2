@@ -130,3 +130,18 @@ Esclarecido que a identificação ocorre automaticamente ao colocar a lixeira ju
 Divisão aceita pelo colega segundo Lucas, sem revisão técnica do contrato ainda. React Native confirmado pelo aluno como conteúdo estudado. Criados tickets locais, separando os bloqueios de integração do trabalho independente de Lucas. Nenhum código de aplicação foi implementado.
 
 Revisão de granularidade solicitada por Lucas em 14/11: a versão simulada independe da API, mas ainda não está pronta para codificação. Resolver as [pendências do app](app-planning.md), alinhar testes de comportamento e revisar entregas menores antes de implementação. O ticket 04 volta a `needs-info`; os oito tickets existentes são mapa de frentes, não a decomposição final exigida por `to-tickets`.
+
+## Arquitetura da parte de Lucas aprovada em 14/11/2026
+
+Lucas aprovou a proposta apresentada nesta sessão e autorizou executar 09 → 10 → 11 → 12, com revisão do conjunto ao final e sem microaprovações. Esta aprovação libera a parte simulada; o contrato continua provisório para integração com o colega.
+
+- React Native/Expo/TypeScript, web local e stack nativa de quatro telas. Estado com React, sem biblioteca global adicional.
+- Interface assíncrona de dados para login, listar, detalhar, criar, atualizar, excluir e avaliar leitura. Adaptador simulado local, sem servidor.
+- Uma leitura ativa, líquido em destaque, resumo das categorias, painel recolhível de simulação e feedback textual. Confirmar permanece no registro; ambas confirmadas permitem abrir detalhes.
+- Criar serviço na primeira confirmação; procurar serviço existente por data/tipo antes de criar. Prévia não grava; confirmação revalida; correção substitui e preserva a outra categoria.
+- Persistir serviços simulados com AsyncStorage; carregar armazenamento antes de exemplos e aguardar gravação antes de sucesso. Sessão e prévia em memória. Restaurar exemplos mediante confirmação, sem tela extra.
+- Cenários compartilhados entre CLI IoT e app, emitindo somente RFID/peso. Consumidor identifica, calcula e valida.
+- Testes pelas interfaces públicas do adaptador (Vitest) e fluxos web (Playwright), com verificação nativa separada em simulador iOS. Oito ou mais casos planejados e cinco ou mais executados com evidência individual, incluindo erros.
+- Sem backend paralelo, publicação, PWA, infraestrutura de eventos, animações elaboradas ou bibliotecas sem necessidade.
+
+Decisões operacionais do executor: usar os exemplos do contrato provisório; não persistir credenciais; invalidar leitura ativa ao trocar serviço ou receber erro; rotular total de serviço incompleto como parcial. Preservar conjunto completo no PUT simulado. Não alegar segurança ou integração real.

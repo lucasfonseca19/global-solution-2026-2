@@ -1,8 +1,8 @@
 # 11 — Corrigir, excluir e repetir a demonstração
 
-Status: needs-info
+Status: ready-for-agent
 Responsável: Lucas, com execução por subagentes na próxima sessão após aprovação da arquitetura
-Blocked by: 10 — Registrar descarte; definição da duração dos dados simulados e restauração dos exemplos
+Blocked by: 10 — Registrar descarte
 
 ## Comportamento esperado
 
@@ -29,3 +29,7 @@ Banco, API real e segurança do backend pertencem ao colega. A versão com dados
 ### 14/11/2026
 
 Ticket publicado após Lucas aprovar a granularidade das quatro entregas. Ainda sem implementação. Orquestração e modelos a configurar na outra sessão conforme o [roteiro de execução](../../../docs/execucao-lucas.md).
+
+### 14/11/2026 — Execução autorizada
+
+Arquitetura, política de dados e fronteiras de testes aprovadas por Lucas nesta sessão. Ver spec.md e execution-plan.md. Dependências entre tickets permanecem.

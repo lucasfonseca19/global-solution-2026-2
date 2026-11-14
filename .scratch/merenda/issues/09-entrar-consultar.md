@@ -1,8 +1,8 @@
 # 09 — Entrar e consultar serviços de exemplo
 
-Status: needs-info
+Status: ready-for-agent
 Responsável: Lucas, com execução por subagentes na próxima sessão após aprovação da arquitetura
-Blocked by: arquitetura mínima aprovada, definições remanescentes do app e acordo sobre como verificar o comportamento
+Blocked by: nenhum; arquitetura e verificações aprovadas
 
 ## Comportamento esperado
 
@@ -30,3 +30,7 @@ Banco, API real e segurança do backend pertencem ao colega. A versão com dados
 ### 14/11/2026
 
 Ticket publicado após Lucas aprovar a granularidade das quatro entregas. Ainda sem implementação. Orquestração e modelos a configurar na outra sessão conforme o [roteiro de execução](../../../docs/execucao-lucas.md).
+
+### 14/11/2026 — Execução autorizada
+
+Arquitetura, política de dados e fronteiras de testes aprovadas por Lucas nesta sessão. Ver spec.md e execution-plan.md. Dependências entre tickets permanecem.
