@@ -1,3 +1,7 @@
+import type { Leitura } from "../../../iot/shared";
+export type { Leitura };
+export type Previa = Pesagem & { categoria: Categoria };
+export type EntradaServico = { data: string; tipoRefeicao: string; pesagens: Leitura[] };
 /** Formatos provisórios: revisar com o colega antes de integrar a API. */
 export type Categoria = "SOBRA_DESCARTADA" | "RESTO_PRATO";
 export type Pesagem = {
@@ -16,8 +20,11 @@ export type Servico = {
   totalKg: number;
 };
 export type Sessao = { token: string; usuario: { id: number; nome: string } };
-/** Fronteira de leitura do ticket 09. Escrita e prévia serão acrescentadas em 10. */
+/** Fronteira assíncrona do adaptador demonstrativo; contrato provisório. */
 export interface DataAccess {
+  avaliar(token: string, leitura: Leitura): Promise<Previa>;
+  criar(token: string, entrada: EntradaServico): Promise<Servico>;
+  atualizar(token: string, id: number, entrada: EntradaServico): Promise<Servico>;
   login(credentials: { login: string; senha: string }): Promise<Sessao>;
   listar(token: string): Promise<Servico[]>;
   detalhar(token: string, id: number): Promise<Servico>;

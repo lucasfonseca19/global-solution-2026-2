@@ -1,0 +1,13 @@
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/lucas/FIAP/global-solution-2026-2/mobile
+
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  18:16:52
+   Duration  102ms (transform 54%, import 20%, tests 19%, worker 6%)
+

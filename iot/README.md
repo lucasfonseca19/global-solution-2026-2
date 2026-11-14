@@ -1,11 +1,19 @@
-# Simulação de IoT
+# IoT simulada — RFID e balança
 
-Pasta reservada para a simulação de uma balança de chão e um leitor RFID. Sem hardware físico ou implementação nesta etapa.
+CLI independente, sem React Native, servidor, banco ou hardware. Requer Node 22.17.1 ou compatível com `--experimental-strip-types`. Executar na raiz:
 
-Simular a colocação da lixeira na balança, emitindo código RFID e peso bruto. Identificação da lixeira, categoria, tara, cálculo do peso líquido e validação devem acontecer no sistema, não ser substituídos por resultados prontos do simulador.
+```sh
+node --experimental-strip-types iot/cli.mjs listar
+node --experimental-strip-types iot/cli.mjs emitir sobra
+node --experimental-strip-types iot/cli.mjs avaliar sobra
+node --experimental-strip-types iot/cli.mjs avaliar restos
+node --experimental-strip-types iot/cli.mjs avaliar zero
+node --experimental-strip-types iot/cli.mjs avaliar desconhecido
+node --experimental-strip-types iot/cli.mjs avaliar abaixo
+```
 
-Cenários controlados: duas lixeiras conhecidas, peso válido, zero descarte, etiqueta desconhecida e peso abaixo da tara. Controles de cenário pertencem à demonstração e devem estar identificados como simulados.
+`emitir` produz somente código RFID e peso bruto. `avaliar` demonstra o consumidor local: identifica categoria/tara, calcula o líquido e valida. Saída 0 para sucesso, 1 para leitura inválida e 2 para comando inválido. Os dois últimos comandos devem falhar, com códigos RFID_DESCONHECIDO e PESO_INVALIDO. Sobra resulta em 3 kg; restos em 2 kg; zero em 0 kg.
 
-Referência: [contrato proposto e cenários](../.scratch/merenda/api-contract.md). A linguagem e a forma de conectar as leituras serão combinadas entre os integrantes. Preservar demonstração independente para a alternativa sem integração.
+`shared.ts` contém os mesmos cenários e cálculo usados pelo adaptador do app, sem importar RN ou dependências. Nada é gravado pela CLI. Não há transporte conectado entre CLI e app: são demonstrações independentes com dados coerentes, conforme o contrato provisório, ainda sujeito à revisão do colega.
 
-Acrescentar os comandos reais para acionar e verificar a simulação quando implementada.
+Teste automatizado da fronteira CLI, na raiz: `node --test iot/cli.test.mjs`.

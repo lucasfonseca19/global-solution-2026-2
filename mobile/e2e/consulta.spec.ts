@@ -44,7 +44,7 @@ test("desktop mantém conteúdo legível e recarregar encerra sessão", async ({
   await expect(
     page.getByRole("button", { name: /12\/11\/2026/ }),
   ).toBeVisible();
-  await expect(page.getByRole("button", { name: /Registrar/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Registrar descarte" })).toBeVisible();
   await page.screenshot({
     path: "test-results/historico-desktop.png",
     fullPage: true,

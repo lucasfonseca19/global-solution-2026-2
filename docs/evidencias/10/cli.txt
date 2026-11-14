@@ -1,0 +1,30 @@
+sobra: Lixeira da cozinha
+restos: Lixeira dos pratos
+zero: Pratos sem descarte
+desconhecido: Etiqueta desconhecida
+abaixo: Peso abaixo da tara
+(node:40012) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-001","pesoBrutoKg":4}
+(node:40022) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-001","pesoBrutoKg":4}
+{"codigoRfid":"RFID-SIM-001","lixeiraId":1,"categoria":"SOBRA_DESCARTADA","taraKg":1,"pesoBrutoKg":4,"pesoLiquidoKg":3}
+(node:40025) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-002","pesoBrutoKg":3.5}
+{"codigoRfid":"RFID-SIM-002","lixeiraId":2,"categoria":"RESTO_PRATO","taraKg":1.5,"pesoBrutoKg":3.5,"pesoLiquidoKg":2}
+(node:40027) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-002","pesoBrutoKg":1.5}
+{"codigoRfid":"RFID-SIM-002","lixeiraId":2,"categoria":"RESTO_PRATO","taraKg":1.5,"pesoBrutoKg":1.5,"pesoLiquidoKg":0}
+(node:40031) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-999","pesoBrutoKg":4}
+{"codigo":"RFID_DESCONHECIDO","mensagem":"Lixeira não reconhecida. Repita a leitura."}
+(node:40034) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"codigoRfid":"RFID-SIM-001","pesoBrutoKg":0.5}
+{"codigo":"PESO_INVALIDO","mensagem":"Peso bruto menor que a tara ou inválido. Repita a leitura."}
+(node:40008) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
