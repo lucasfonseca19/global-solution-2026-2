@@ -2,7 +2,7 @@
 
 Status: needs-info
 
-Atualizado em 12/11/2026. Rascunho para revisão de Lucas e do outro integrante. Não autoriza implementação. As decisões refletem a conversa com Lucas; não pressupõem concordância prévia do colega.
+Atualizado em 14/11/2026. Rascunho para revisão de Lucas e do outro integrante. Não autoriza implementação. As decisões refletem a conversa com Lucas; não pressupõem concordância prévia do colega.
 
 Fontes: [enunciado](../../ENUNCIADO.md), [contexto](../../CONTEXTO.md), [glossário](../../GLOSSARY.md) e [mapa de decisões](map.md).
 
@@ -105,12 +105,12 @@ Também identificar os ODS e a contribuição às metas. Tecnologias devem estar
 
 ## Escolhas e pendências
 
-- React Native escolhido para o app; aderência ao conteúdo da disciplina ainda não verificada.
+- React Native confirmado por Lucas em 14/11 como conteúdo abordado até a fase 4.
 - Backend: colega propõe C# com ASP.NET ou Java dentro do conteúdo estudado. Banco e demais detalhes técnicos em aberto.
 - Rever falha de gravação e formato mínimo dos dados compartilhados. Etiqueta desconhecida, peso menor que a tara e distinção entre categoria pendente e zero confirmado já foram esclarecidos.
 - Combinar o transporte dos dados simulados entre as partes, preservando demonstração independente. Cenários prontos acionados por botões já foram aprovados; o detalhe técnico fica para revisão conjunta.
-- Combinar responsabilidades finais entre os integrantes.
-- Revisar esta especificação e, depois, propor a divisão em tickets locais com dependências. Publicar tickets após revisão da divisão por Lucas.
+- Divisão aceita pelo colega segundo Lucas em 14/11: Lucas no app/simulação e colega no banco/API/segurança. Responsáveis finais por documentação, pitch e submissão ainda a combinar.
+- Tickets locais publicados após a aceitação da divisão relatada por Lucas: [índice](issues/README.md). O app com dados simulados e o simulador independente podem avançar usando o contrato provisório; a revisão conjunta do contrato continua necessária para integrar.
 
 ## Comentários
 
@@ -123,3 +123,7 @@ Lucas aprovou bloquear confirmação com etiqueta desconhecida ou peso total men
 Aprovados cenários controlados acionados por botões para identificação das lixeiras, leitura válida e os dois erros definidos. O fluxo principal está consolidado para revisão, sem fechar contratos, tecnologias de backend ou divisão de tickets unilateralmente.
 
 Esclarecido que a identificação ocorre automaticamente ao colocar a lixeira junto ao leitor da balança. Os controles servem à simulação dessa ação e não representam seleção manual de categoria. Discutida separação entre simulador de leituras, API de identificação/cálculo/validação e app de apresentação/confirmação, com detalhes de conexão abertos ao colega.
+
+### 14/11/2026
+
+Divisão aceita pelo colega segundo Lucas, sem revisão técnica do contrato ainda. React Native confirmado pelo aluno como conteúdo estudado. Criados tickets locais, separando os bloqueios de integração do trabalho independente de Lucas. Nenhum código de aplicação foi implementado.

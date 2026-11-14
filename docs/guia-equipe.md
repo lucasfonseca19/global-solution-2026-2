@@ -10,11 +10,11 @@ Quatro telas: login, histórico, registro e detalhes. Lixeiras pré-cadastradas,
 
 ## O que precisamos combinar agora
 
-1. **Tecnologias:** colega propõe backend e banco, respeitando o conteúdo até a fase 4; confirmar React Native no conteúdo permitido.
+1. **Tecnologias:** colega propõe backend e banco, respeitando o conteúdo até a fase 4; React Native já foi confirmado por Lucas como conteúdo até a fase 4.
 2. **Contrato:** revisar [operações e exemplos](../.scratch/merenda/api-contract.md), aceitando ou ajustando os nomes, formatos e comportamentos ainda propostos. Sete operações discutidas: login; listar, detalhar, criar, atualizar e excluir serviços; avaliar leitura sem gravar.
-3. **Divisão:** revisar a [proposta de entregas](../.scratch/merenda/tickets-proposal.md). Lucas prefere o front; as responsabilidades finais precisam ser combinadas.
+3. **Divisão aceita:** Lucas no app e simulação; colega no banco, API e segurança. Acompanhar os [tickets locais](../.scratch/merenda/issues/README.md). Documentação, pitch e submissão ainda precisam de responsáveis.
 
-Não precisamos fechar toda a estrutura interna do backend para começar o app. Após o acordo do contrato, o front pode usar respostas simuladas com os mesmos dados enquanto banco e API são implementados.
+Não precisamos fechar toda a estrutura interna do backend para começar o app. O front pode avançar agora com respostas simuladas baseadas no contrato provisório enquanto banco e API são propostos/implementados. A revisão conjunta do contrato fica necessária para integrar, não para preparar a versão independente do app.
 
 ## Espaço de contribuição
 

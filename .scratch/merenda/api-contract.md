@@ -194,8 +194,8 @@ Esses exemplos apoiam os futuros mocks e testes; não substituem o plano acadêm
 1. Prévia adicional aprovada por Lucas; revisar com o colega as rotas e os formatos propostos.
 2. Revisar os dados e regras propostos, especialmente total parcial e PUT completo. Unicidade de serviço e exclusão com suas pesagens após confirmação foram aprovadas por Lucas.
 3. O colega revisar o contrato e propor linguagem, banco e estrutura interna.
-4. Confirmar React Native e demais tecnologias no conteúdo permitido até a fase 4.
-5. Revisar especificação e divisão dos tickets locais. Não publicar tickets como prontos enquanto houver decisões que afetem seu escopo.
+4. React Native confirmado por Lucas em 14/11 como conteúdo até a fase 4; confirmar as tecnologias de backend/banco propostas pelo colega.
+5. Tickets locais criados após aceitação da divisão. App com respostas simuladas e simulador independente podem avançar com este contrato provisório; revisão conjunta continua necessária para integrar. Não tratar rotas e formatos como aprovados pelo colega.
 
 ## Comentários
 
@@ -208,3 +208,7 @@ Lucas aprovou a operação adicional de prévia, com identificação, cálculo e
 Lucas aprovou um único serviço por data e tipo de refeição. Novas confirmações e correções devem usar o serviço existente, sem duplicá-lo. O status HTTP 409 é proposta técnica para representar o conflito.
 
 Lucas aprovou excluir o serviço e suas pesagens após confirmação na tela, sem recuperação.
+
+### 14/11/2026
+
+Lucas informou aceitação da divisão pelo colega, que ainda não revisou este documento. Usar estes exemplos como base provisória para o front com respostas simuladas, isolando o acesso aos dados para futura adaptação. A aprovação do colega é necessária antes de assumir compatibilidade com a API real, não para preparar a demonstração independente.

@@ -1,6 +1,6 @@
 # Contexto para continuidade
 
-Atualizado em 12/11/2026. Este arquivo registra a conversa de definição; não substitui a especificação nem o enunciado.
+Atualizado em 14/11/2026. Este arquivo registra a conversa de definição; não substitui a especificação nem o enunciado.
 
 ## Objetivo e restrições do aluno
 
@@ -10,7 +10,7 @@ Atualizado em 12/11/2026. Este arquivo registra a conversa de definição; não 
 - Sensores precisam ter função útil no produto. O aluno rejeitou repetir a ideia de monitoramento de chuva usada em trabalhos anteriores.
 - Acompanhamento de trabalho e documentação em arquivos locais. Não publicar issues nem mensagens externas.
 - Em 12/11, Lucas autorizou criar e publicar a documentação em repositório privado no GitHub. Repositório criado: https://github.com/lucasfonseca19/global-solution-2026-2, com Issues desativadas. O acompanhamento continua em Markdown versionado, sem GitHub Issues ou envio de mensagens pelo assistente. O colega ainda não foi convidado.
-- A implementação será feita por Lucas e outro integrante. Lucas prefere frontend; o outro integrante tem mais experiência com backend e banco, segundo Lucas. A divisão detalhada de responsabilidades ainda precisa ser combinada.
+- A implementação será feita por Lucas e outro integrante. Lucas prefere frontend; o outro integrante tem mais experiência com backend e banco, segundo Lucas. Em 14/11, Lucas informou que o colega aceitou a divisão: Lucas no app/simulação; colega em banco/API/segurança. O colega ainda não revisou o contrato ou propôs tecnologias.
 - Preparar uma base de domínio e requisitos para manter a consistência, preservando espaço para o outro integrante revisar e propor mudanças. Não tratar escolhas de backend como unilateralmente aprovadas; tecnologias e detalhes técnicos permanecem abertos à contribuição dele, respeitando o enunciado.
 - Lucas aprovou deixar a tecnologia do backend para o colega propor e continuar a definição do comportamento esperado. A proposta de MVP será apresentada para revisão conjunta; não pressupõe concordância prévia do colega.
 
@@ -18,7 +18,7 @@ Atualizado em 12/11/2026. Este arquivo registra a conversa de definição; não 
 
 O MVP atenderá uma única escola, com um único perfil de usuário que registra pesagens e consulta o histórico.
 
-React Native foi escolhido para o app mobile. A aderência ao conteúdo estudado até a fase 4 ainda precisa ser confirmada; o enunciado não lista os frameworks mobile permitidos.
+React Native escolhido para o app mobile e confirmado por Lucas, em 14/11, como conteúdo abordado até a fase 4. Confirmação baseada no relato do aluno; o enunciado não lista frameworks mobile.
 
 Planejar app, API e simulação de IoT integrados. Se a integração não ficar pronta a tempo, demonstrar as partes separadamente, mantendo o mesmo domínio e dados coerentes. Essa alternativa é permitida pelo enunciado; cada parte precisa continuar demonstrável por conta própria.
 
@@ -70,7 +70,7 @@ Esses itens foram sugeridos, mas não devem ser tratados como arquitetura ou fun
 
 ## Pendências que mudam o projeto
 
-- Confirmar tecnologias mobile, banco e backend dentro do conteúdo permitido.
+- Colega propor banco/backend dentro do conteúdo permitido e revisar o contrato para integração. React Native já foi confirmado por Lucas.
 
 ## Requisitos que devem orientar a futura especificação
 
@@ -83,3 +83,7 @@ Continuar a definição com `grill-with-docs`, usando o mapa local. Fazer pergun
 Rascunho em `.scratch/merenda/spec.md`, ainda com propostas e pendências para revisão. Não é autorização para implementar nem acordo técnico fechado com o outro integrante.
 
 Lucas aprovou definir um contrato mínimo antes dos tickets, usando como ponto de partida login e listar/detalhar/criar/atualizar/excluir serviços. Proposta em `.scratch/merenda/api-contract.md`, incluindo exemplos de dados e cenários compartilhados para permitir desenvolver o front com respostas simuladas. Lucas aprovou a sétima operação de prévia para identificação, cálculo e validação no backend antes da confirmação, sem gravar. Rotas exatas, formatos e os demais detalhes adicionais do contrato ainda precisam de revisão.
+
+## Andamento em 14/11/2026
+
+Criados oito tickets individuais em `.scratch/merenda/issues/`, com índice, critérios de aceite, responsáveis e dependências. Lucas pode avançar no app com respostas simuladas e no simulador independente sem aguardar a revisão do colega. O contrato proposto será a referência provisória, com mudanças concentradas na camada de acesso aos dados; não foi tratado como aprovado pelo colega. Revisão conjunta bloqueia a integração, não as entregas independentes. O plano de testes também pode começar agora. Nenhum código foi implementado; permanece a instrução de não iniciar implementação pelo assistente nesta conversa.

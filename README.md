@@ -10,7 +10,7 @@ Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abert
 
 | Parte | Local | Situação |
 | --- | --- | --- |
-| App mobile | [mobile/](mobile/README.md) | React Native escolhido; confirmar aderência ao conteúdo da disciplina |
+| App mobile | [mobile/](mobile/README.md) | React Native confirmado por Lucas como conteúdo da disciplina |
 | Backend | [backend/](backend/README.md) | Tecnologia e detalhes internos para proposta do colega |
 | Banco | [database/](database/README.md) | Modelo e tecnologia para revisão |
 | Simulação IoT | [iot/](iot/README.md) | Balança e RFID simulados, sem hardware |
@@ -19,7 +19,8 @@ Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abert
 
 - [Especificação do MVP](.scratch/merenda/spec.md): comportamento e critérios de aceite.
 - [Contrato proposto](.scratch/merenda/api-contract.md): operações, exemplos e pontos para combinar entre front e back.
-- [Divisão proposta do trabalho](.scratch/merenda/tickets-proposal.md): entregas e dependências, ainda sem tickets publicados.
+- [Tickets locais](.scratch/merenda/issues/README.md): responsáveis, critérios de aceite e dependências; app com dados simulados pode avançar sem esperar o backend.
+- [Plano inicial](.scratch/merenda/tickets-proposal.md): referência da divisão discutida.
 - [Glossário](GLOSSARY.md): termos usados por todas as partes.
 - [Enunciado](ENUNCIADO.md): requisitos da faculdade e critérios de avaliação.
 
@@ -40,7 +41,7 @@ As regras aprovadas por Lucas estão distinguidas das propostas técnicas. O col
 - `.scratch/merenda/spec.md`: rascunho da especificação para revisão conjunta.
 - `.scratch/merenda/api-contract.md`: proposta de comunicação e exemplos compartilhados.
 - `.scratch/merenda/tickets-proposal.md`: proposta de divisão antes da criação dos tickets.
-- `.scratch/merenda/issues/`: um arquivo por ticket, a criar após revisar a divisão do trabalho.
+- `.scratch/merenda/issues/`: oito tickets publicados em Markdown local, com índice e dependências.
 
 ## Fluxo previsto
 

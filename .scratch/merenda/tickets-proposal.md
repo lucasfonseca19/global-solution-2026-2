@@ -1,8 +1,8 @@
 # Proposta de divisão do trabalho
 
-Status: needs-triage
+Status: ready-for-human
 
-Rascunho para revisão de Lucas, antes de publicar arquivos em `issues/`. Não é plano de implementação aprovado. Responsáveis são sugestões a combinar com o colega; não iniciar código nesta etapa.
+Plano inicial da divisão, aceito pelo colega segundo relato de Lucas em 14/11. Tickets publicados: [índice](issues/README.md). Para status e dependências atuais, usar os arquivos individuais. Não iniciar código pelo assistente nesta etapa; backend e contrato técnico ainda serão revisados com o colega.
 
 Referências: [especificação](spec.md), [contrato proposto](api-contract.md) e [enunciado](../../ENUNCIADO.md).
 
@@ -17,10 +17,10 @@ Cada entrega abaixo atende a uma exigência acadêmica ou ao funcionamento do fl
 | 01 — Revisar a base compartilhada | Contrato e exemplos revisados pelos dois; tecnologias confrontadas com o conteúdo até a fase 4 | Ambos | Nenhuma |
 | 02 — Entregar o banco mínimo | ER com pelo menos 4 entidades normalizadas, SQL com constraints e carga inicial, pelo menos 5 consultas de uso com JOIN e agregação | Colega | 01 |
 | 03 — Entregar API e segurança | Sete operações discutidas, autenticação, regras de pesagem, camadas, validação, status HTTP e Swagger/Postman | Colega | 01 e 02 |
-| 04 — Entregar as quatro telas | Fluxo completo em React Native com respostas simuladas aderentes ao contrato | Lucas | 01 e confirmação de React Native no conteúdo permitido |
-| 05 — Entregar a simulação de IoT | Leituras RFID e peso controladas, cenários válidos/inválidos e demonstração das ações dos dados | Lucas, a combinar | 01 |
+| 04 — Entregar as quatro telas | Fluxo em React Native com respostas simuladas segundo o contrato provisório | Lucas | Nenhuma para a versão independente; React Native confirmado por Lucas |
+| 05 — Entregar a simulação de IoT | Leituras RFID e peso controladas, cenários válidos/inválidos e demonstração das ações dos dados | Lucas | Nenhuma para a versão independente |
 | 06 — Conectar e demonstrar as partes | Fluxo integrado; se faltar tempo, alternativa separada explicitamente documentada e coerente | Ambos | 03, 04 e 05 |
-| 07 — Entregar testes e evidências | Pelo menos 8 casos e 5 execuções evidenciadas, com erros e cálculo/correção dos pesos | Ambos, cada um nas próprias partes | Planejar após 01; executar conforme 03/04/05 ficarem prontos; incluir 06 se integrado |
+| 07 — Entregar testes e evidências | Pelo menos 8 casos e 5 execuções evidenciadas, com erros e cálculo/correção dos pesos | Ambos, cada um nas próprias partes | Planejar agora; executar conforme as partes ficarem prontas; incluir 06 se integrado |
 | 08 — Preparar a entrega acadêmica | README, PDF, TXT, pitch e ZIP conferidos contra o enunciado | Grupo, a combinar | Entregáveis 02 a 07 disponíveis |
 
 ## Critérios para detalhar os futuros tickets
@@ -88,7 +88,7 @@ Cada entrega abaixo atende a uma exigência acadêmica ou ao funcionamento do fl
 
 ## Como trabalhar em paralelo
 
-Após o acordo de 01, Lucas pode avançar no app com respostas simuladas e na simulação enquanto o colega trabalha em banco e API. O plano de testes pode ser preparado no mesmo período. A integração espera as partes, mas não bloqueia a verificação individual.
+Lucas pode avançar no app com respostas simuladas e no simulador independente usando o contrato provisório, sem aguardar 01. O colega pode propor banco e API em paralelo. O plano de testes pode ser preparado no mesmo período. A integração espera as partes, mas não bloqueia a verificação individual.
 
 O ticket 01 não exige fechar toda a implementação do colega: basta um contrato compartilhado, tecnologias permitidas e responsabilidades combinadas. Caso algum trecho ainda esteja pendente, os tickets afetados permanecem `needs-info`, sem impedir documentação ou revisão de partes independentes.
 
@@ -97,3 +97,7 @@ O ticket 01 não exige fechar toda a implementação do colega: basta um contrat
 ### 12/11/2026
 
 Proposta inicial para revisão da divisão por Lucas. Não foram publicados tickets em `issues/`, definidos caminhos de código ou escolhidas tecnologias de backend pelo assistente. Detalhar cada ticket após revisão da divisão e sem transformar propostas do contrato em decisões aprovadas.
+
+### 14/11/2026
+
+Divisão aceita pelo colega segundo Lucas. Publicados oito tickets locais com dependências atualizadas; 01 bloqueia a integração, não a versão independente do app e do simulador. React Native confirmado por Lucas como conteúdo abordado.

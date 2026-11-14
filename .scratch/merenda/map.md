@@ -11,7 +11,7 @@ Status: needs-info
 ## Decisões até aqui
 
 - Foco em medição do descarte na alimentação escolar.
-- React Native escolhido para o app, condicionado à confirmação de aderência ao conteúdo até a fase 4.
+- React Native escolhido e confirmado por Lucas em 14/11 como conteúdo abordado até a fase 4.
 - Atender uma única escola, com um único perfil de usuário que registra pesagens e consulta o histórico.
 - Planejar integração entre app, API e simulação de IoT; se não ficar pronta a tempo, demonstrar as partes separadamente, mantendo coerência de domínio e dados.
 - Não incluir alerta por limite de descarte. Os dados simulados identificam a lixeira e sua categoria, aplicam a tara e atualizam pesos e totais exibidos.
@@ -28,7 +28,7 @@ Status: needs-info
 
 ## Dúvidas em aberto
 
-Consultar a lista de pendências em `CONTEXTO.md`. Ainda não há especificação técnica aprovada nem tickets de implementação publicados.
+Consultar as pendências em `CONTEXTO.md`. O contrato técnico ainda está em revisão conjunta; há oito tickets locais no [índice](issues/README.md), sem implementação iniciada.
 
 Rascunho de consolidação: [spec.md](spec.md). Distingue decisões, propostas e pendências; ainda não está pronto para implementação.
 
@@ -40,7 +40,7 @@ Rascunho de consolidação: [spec.md](spec.md). Distingue decisões, propostas e
 - [ ] Escolher tecnologias dentro do conteúdo da disciplina.
 - [ ] Consolidar e revisar a especificação com critérios de aceite.
 - [ ] Mapear os critérios de avaliação à especificação.
-- [ ] Revisar e publicar tickets com dependências.
+- [x] Publicar tickets locais após aceitação da divisão, preservando pendências técnicas nos tickets afetados.
 - [ ] Implementar, verificar e preparar evidências e pacote final.
 
 ## Comentários
@@ -104,3 +104,7 @@ Aprovado excluir serviço e suas pesagens após confirmação na tela, sem recup
 Lucas propôs estruturar um repositório no GitHub para colaboração. Verificado que a pasta ainda não é um repositório Git. Preparados README atualizado, guia da equipe, pastas documentadas `mobile/`, `backend/`, `database/`, `iot/` e `.gitignore`, sem código ou instalação. Links locais conferidos. Nenhum repositório remoto foi criado; faltam conta/visibilidade. Documentação pronta para compartilhar como proposta de revisão, não como arquitetura unilateralmente aprovada.
 
 Lucas autorizou a opção privada. Criado o repositório https://github.com/lucasfonseca19/global-solution-2026-2 na conta autenticada, com Issues e wiki desativadas. Preparada publicação inicial da documentação e estrutura, sem código de aplicação. Nenhum convite ao colega foi enviado.
+
+### 14/11/2026
+
+Lucas relatou que o colega aceitou a divisão, mas ainda não revisou nem propôs o backend/banco. Confirmou também React Native no conteúdo até a fase 4. Criados oito tickets locais com índice. App com dados simulados, simulador independente e planejamento dos testes podem avançar sem aguardar revisão conjunta do contrato, que bloqueia a integração. Backend continua aberto à contribuição do colega; nenhum código foi implementado.
