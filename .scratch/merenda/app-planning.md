@@ -35,6 +35,8 @@ Os detalhes de rotas e campos ainda podem ser ajustados com o colega, isolados n
 
 ## Sequência de correção
 
+Proposta para revisão da interface: [tela de pesagem](../../docs/pesagem-proposta.md), elaborada após Lucas solicitar Interface Craft Design Critique. Uma leitura ativa, resumo compacto das categorias e controles secundários de demonstração. É crítica da proposta textual, não de screenshot; direção visual e interações ainda não aprovadas. O painel recolhível e a persistência de dados ao fechar o app, sugeridos na rodada anterior, também não devem ser tratados como aprovados.
+
 1. Retomar `grill-with-docs` nas pendências acima, em rodadas curtas.
 2. Consolidar a especificação do app com `to-spec`, usando as respostas e alinhando a verificação do comportamento.
 3. Com `to-tickets`, propor entregas menores que cada uma demonstrem um comportamento completo com dados simulados, em vez de tickets só de componentes ou de configuração.
