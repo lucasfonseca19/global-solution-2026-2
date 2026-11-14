@@ -10,7 +10,7 @@ Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abert
 
 | Parte | Local | Situação |
 | --- | --- | --- |
-| App mobile | [mobile/](mobile/README.md) | React Native confirmado por Lucas como conteúdo da disciplina |
+| App mobile | [mobile/](mobile/README.md) | React Native com Expo e suporte web; implementação ainda não iniciada |
 | Backend | [backend/](backend/README.md) | Tecnologia e detalhes internos para proposta do colega |
 | Banco | [database/](database/README.md) | Modelo e tecnologia para revisão |
 | Simulação IoT | [iot/](iot/README.md) | Balança e RFID simulados, sem hardware |
@@ -23,6 +23,7 @@ Comece pelo [guia da equipe](docs/guia-equipe.md): resumo do MVP, escolhas abert
 - [Plano inicial](.scratch/merenda/tickets-proposal.md): referência da divisão discutida.
 - [Glossário](GLOSSARY.md): termos usados por todas as partes.
 - [Enunciado](ENUNCIADO.md): requisitos da faculdade e critérios de avaliação.
+- [Orientações de desenvolvimento mobile](docs/agents/mobile.md): execução local e skill de React Native solicitada por Lucas.
 
 As regras aprovadas por Lucas estão distinguidas das propostas técnicas. O colega pode revisar a solução; mudanças no contrato precisam ser combinadas para preservar a consistência do app e da API.
 

@@ -14,6 +14,8 @@ Também faltou alinhar com Lucas onde verificar o comportamento do app, como pre
 
 - Escopo acadêmico mínimo, uma escola, um perfil e quatro telas.
 - React Native confirmado por Lucas como conteúdo estudado.
+- Expo com suporte web aprovado por Lucas para facilitar execução local e teste; manter capacidade mobile, sem publicação/hospedagem.
+- Usar `vercel-react-native-skills` no desenvolvimento, conforme [orientações mobile](../../docs/agents/mobile.md). Skill instalada no ambiente de Lucas; nenhum código criado.
 - Identificação automática por RFID, tara, prévia antes de gravar e confirmação por categoria.
 - Categoria pendente diferente de zero, correção sem duplicação e exclusão com confirmação.
 - Simulação controlada e contrato provisório para permitir desenvolver sem API pronta.
@@ -22,7 +24,9 @@ Não reabrir essas decisões sem motivo. Não vincular o fechamento do app às e
 
 ## Pendências a resolver em pequenas rodadas
 
-1. Onde o app será executado e apresentado: dispositivo/emulador e ferramentas mínimas de execução. React Native já está escolhido; Expo ou configuração alternativa ainda não.
+Critério explicitado por Lucas: escolher a forma mais simples de simular, gravar a demonstração e permitir que o avaliador teste seguindo o README. Não acrescentar publicação em loja, hospedagem, instalação PWA ou funcionamento offline sem necessidade. Em 14/11, Lucas perguntou sobre substituir React Native por PWA; ainda não escolheu a substituição. O enunciado não exige publicação do app nem hospedagem, mas exige front-end mobile e não esclarece se PWA/web responsivo atende. React Native permanece a escolha anterior em revisão, não uma decisão nova nesta consulta.
+
+1. Base de execução definida: React Native com Expo e suporte web local. Documentar os passos reais ao implementar e verificar também a execução mobile; não acrescentar uma decisão de hospedagem ou publicação.
 2. Fluxo visível e apresentação das quatro telas: informações principais, navegação, entrada da simulação, estados de espera e retorno após confirmar/corrigir.
 3. Duração dos dados simulados: o que deve permanecer ao trocar de tela, fechar ou reiniciar o app; forma de repetir os cenários da apresentação.
 4. Verificação dos comportamentos: propor testes pelo fluxo e pela interface de acesso aos dados, sem exigir testes de detalhes internos de cada componente. Alinhar com Lucas a forma de verificar.
@@ -46,3 +50,7 @@ Hipótese de divisão para discussão posterior: entrar e consultar histórico; 
 - [grill-with-docs](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)
 
 Versões locais consultadas em `/Users/lucas/FIAP/.agents/skills/`. Não foram modificadas ou reinstaladas.
+
+Comparação de execução consultada em 14/11: [Expo para web](https://docs.expo.dev/workflow/web/), [execução local com Expo](https://docs.expo.dev/get-started/start-developing/) e [requisitos de instalação PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable). React Native com Expo e suporte web é alternativa proposta para manter capacidade mobile e facilitar teste local em navegador; não foi escolhida por Lucas. A presença de suporte web não substitui a verificação mobile. PWA só pode ser tratada como atendimento confirmado ao requisito após esclarecimento do tutor; a orientação anterior dele foi sobre sensores, não sobre formato do app.
+
+Na sequência, Lucas aprovou React Native com Expo e suporte web e solicitou a skill da Vercel. A nota acima registra o momento anterior à decisão; a base de execução deixa de ser uma escolha pendente. Persistem as pendências de interação das telas, dados simulados e forma de verificação, antes da decomposição em tickets menores.

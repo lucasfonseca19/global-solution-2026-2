@@ -106,6 +106,7 @@ Também identificar os ODS e a contribuição às metas. Tecnologias devem estar
 ## Escolhas e pendências
 
 - React Native confirmado por Lucas em 14/11 como conteúdo abordado até a fase 4.
+- React Native com Expo e suporte web escolhido para execução local simples, mantendo verificação mobile. Usar `vercel-react-native-skills` no desenvolvimento conforme [orientações mobile](../../docs/agents/mobile.md), sem ampliar o MVP. Sem publicação em loja/hospedagem.
 - Backend: colega propõe C# com ASP.NET ou Java dentro do conteúdo estudado. Banco e demais detalhes técnicos em aberto.
 - Rever falha de gravação e formato mínimo dos dados compartilhados. Etiqueta desconhecida, peso menor que a tara e distinção entre categoria pendente e zero confirmado já foram esclarecidos.
 - Combinar o transporte dos dados simulados entre as partes, preservando demonstração independente. Cenários prontos acionados por botões já foram aprovados; o detalhe técnico fica para revisão conjunta.
