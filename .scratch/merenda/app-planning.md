@@ -35,6 +35,8 @@ Os detalhes de rotas e campos ainda podem ser ajustados com o colega, isolados n
 
 ## Sequência de correção
 
+Lucas solicitou poucos tickets cobrindo toda a sua parte, seguidos de um prompt para outra sessão arquitetar e implementar por subagentes com modelos adequados, entregando documentação e guia de testes. [Proposta de quatro entregas](lucas-delivery-proposal.md), ainda para revisão antes de publicar novos tickets. A arquitetura e a execução não começam nesta conversa.
+
 Proposta para revisão da interface: [tela de pesagem](../../docs/pesagem-proposta.md), elaborada após Lucas solicitar Interface Craft Design Critique. Uma leitura ativa, resumo compacto das categorias e controles secundários de demonstração. É crítica da proposta textual, não de screenshot; direção visual e interações ainda não aprovadas. O painel recolhível e a persistência de dados ao fechar o app, sugeridos na rodada anterior, também não devem ser tratados como aprovados.
 
 1. Retomar `grill-with-docs` nas pendências acima, em rodadas curtas.
