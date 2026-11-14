@@ -1,0 +1,48 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.1.0 /Users/lucas/FIAP/global-solution-2026-2/mobile
+
+ ❯ src/data/adapter.test.ts (2 tests | 1 failed) 7ms
+   × credenciais incorretas são rejeitadas com mensagem genérica 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/data/adapter.test.ts > credenciais incorretas são rejeitadas com mensagem genérica
+AssertionError: promise resolved "{ token: 'TOKEN_DEMONSTRATIVO', …(1) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "token": "TOKEN_DEMONSTRATIVO",
++   "usuario": {
++     "id": 1,
++     "nome": "Operador de demonstração",
++   },
+  }
+
+ ❯ src/data/adapter.test.ts:10:75
+      8|
+      9| test('credenciais incorretas são rejeitadas com mensagem genérica', as…
+     10|   await expect(createDemoData().login({ login: 'demo', senha: 'errada'…
+       |                                                                           ^
+     11| });
+     12|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  18:05:38
+   Duration  546ms (transform 92%, import 4%, tests 3%, worker 1%)
+

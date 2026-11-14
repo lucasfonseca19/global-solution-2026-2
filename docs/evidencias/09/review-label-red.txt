@@ -1,0 +1,58 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test:e2e
+> playwright test
+
+[WebServer] npm warn Unknown env config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] (node:34675) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:34720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:34855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída (5.9s)
+(node:34993) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 e2e/consulta.spec.ts:36:1 › desktop mantém conteúdo legível e recarregar encerra sessão (742ms)
+
+
+  1) e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída ──────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /12\/11\/2026.*Total: 5,00 kg/ })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: /12\/11\/2026.*Total: 5,00 kg/ }) with timeout 5000ms
+      - waiting for getByRole('button', { name: /12\/11\/2026.*Total: 5,00 kg/ })
+
+
+       9 |   await page.getByLabel("Senha", { exact: true }).fill("merenda-demo");
+      10 |   await page.getByRole("button", { name: "Entrar na demonstração" }).click();
+    > 11 |   await expect(page.getByRole("button", { name: /12\/11\/2026.*Total: 5,00 kg/ })).toBeVisible();
+         |                                                                                    ^
+      12 |   await expect(page.getByRole("button", { name: /13\/11\/2026.*Total parcial: 3,00 kg/ })).toBeVisible();
+      13 |   await page.getByRole("button", { name: /12\/11\/2026/ }).click();
+      14 |   await expect(page.getByText("Total do descarte monitorado")).toBeVisible();
+        at /Users/lucas/FIAP/global-solution-2026-2/mobile/e2e/consulta.spec.ts:11:84
+
+    Error Context: test-results/consulta-login-inválido-consulta-retorno-e-saída/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/consulta-login-inválido-consulta-retorno-e-saída/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/consulta-login-inválido-consulta-retorno-e-saída/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída ───────────────────────────
+  1 passed (10.5s)

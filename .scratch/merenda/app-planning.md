@@ -60,3 +60,7 @@ Comparação de execução consultada em 14/11: [Expo para web](https://docs.exp
 Na sequência, Lucas aprovou React Native com Expo e suporte web e solicitou a skill da Vercel. A nota acima registra o momento anterior à decisão; a base de execução deixa de ser uma escolha pendente. Persistem as pendências de interação das telas, dados simulados e forma de verificação, antes da decomposição em tickets menores.
 
 Lucas aprovou a divisão em quatro entregas em 14/11. Tickets 09 a 12 publicados; [roteiro de orquestração](../../docs/execucao-lucas.md) preparado para outra sessão. A arquitetura mínima e as poucas decisões pendentes serão revisadas antes de implementar, sem reabrir o escopo já decidido. Não há código ou subagentes de implementação iniciados nesta conversa.
+
+## Fechamento em 14/11/2026 — Sessão de execução
+
+Lucas aprovou arquitetura e solicitou começar toda a execução para revisar ao final. As decisões vigentes estão na seção final de spec.md: leitura ativa e painel recolhível, persistência local de serviços e restauração confirmada, testes de comportamento no adaptador e nos fluxos web, verificação nativa separada. As pendências históricas acima estão resolvidas para a parte simulada; a integração continua sujeita à revisão do contrato com o colega.

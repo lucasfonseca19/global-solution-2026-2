@@ -1,0 +1,107 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.1.0 /Users/lucas/FIAP/global-solution-2026-2/mobile
+
+ ❯ src/data/adapter.test.ts (4 tests | 1 failed) 20ms
+   × consulta exige sessão e serviço inexistente tem erro explícito 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/data/adapter.test.ts > consulta exige sessão e serviço inexistente tem erro explícito
+AssertionError: promise resolved "[ { id: 103, …(5) }, …(2) ]" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+[
+  {
+    "data": "2026-11-14",
+    "id": 103,
+    "pesagens": {
+      "RESTO_PRATO": {
+        "codigoRfid": "RFID-SIM-002",
+        "lixeiraId": 2,
+        "pesoBrutoKg": 1.5,
+        "pesoLiquidoKg": 0,
+        "taraKg": 1.5,
+      },
+      "SOBRA_DESCARTADA": {
+        "codigoRfid": "RFID-SIM-001",
+        "lixeiraId": 1,
+        "pesoBrutoKg": 1,
+        "pesoLiquidoKg": 0,
+        "taraKg": 1,
+      },
+    },
+    "status": "COMPLETO",
+    "tipoRefeicao": "Almoço",
+    "totalKg": 0,
+  },
+  {
+    "data": "2026-11-13",
+    "id": 102,
+    "pesagens": {
+      "RESTO_PRATO": null,
+      "SOBRA_DESCARTADA": {
+        "codigoRfid": "RFID-SIM-001",
+        "lixeiraId": 1,
+        "pesoBrutoKg": 4,
+        "pesoLiquidoKg": 3,
+        "taraKg": 1,
+      },
+    },
+    "status": "PENDENTE",
+    "tipoRefeicao": "Almoço",
+    "totalKg": 3,
+  },
+  {
+    "data": "2026-11-12",
+    "id": 101,
+    "pesagens": {
+      "RESTO_PRATO": {
+        "codigoRfid": "RFID-SIM-002",
+        "lixeiraId": 2,
+        "pesoBrutoKg": 3.5,
+        "pesoLiquidoKg": 2,
+        "taraKg": 1.5,
+      },
+      "SOBRA_DESCARTADA": {
+        "codigoRfid": "RFID-SIM-001",
+        "lixeiraId": 1,
+        "pesoBrutoKg": 4,
+        "pesoLiquidoKg": 3,
+        "taraKg": 1,
+      },
+    },
+    "status": "COMPLETO",
+    "tipoRefeicao": "Almoço",
+    "totalKg": 5,
+  },
+]
+
+ ❯ src/data/adapter.test.ts:24:31
+     22| test('consulta exige sessão e serviço inexistente tem erro explícito',…
+     23|   const api = createDemoData();
+     24|   await expect(api.listar('')).rejects.toMatchObject({ codigo: 'NAO_AU…
+       |                               ^
+     25|   await expect(api.detalhar('inventado', 101)).rejects.toMatchObject({…
+     26|   const { token } = await api.login({ login: 'demo', senha: 'merenda-d…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  18:06:22
+   Duration  747ms (transform 89%, tests 7%, import 3%, worker 1%)
+

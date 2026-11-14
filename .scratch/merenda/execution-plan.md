@@ -9,7 +9,7 @@ Aprovado em 14/11/2026; especificação: spec.md, seção de arquitetura aprovad
 - backend/ e database/: preservar, responsabilidade do colega.
 
 ## Sequência
-- [ ] 09: login/histórico/detalhes; interface de dados e exemplos; testes de sucesso/erro/consulta; executar web.
+- [x] 09: login/histórico/detalhes; interface de dados e exemplos; testes de sucesso/erro/consulta; executar web.
 - [ ] 10: registro, prévia/confirmação e cenários IoT compartilhados; testes de cálculo, total, zero, erros e unicidade.
 - [ ] 11: correção/exclusão/persistência/restauração; verificar preservação dos demais serviços e cancelamentos.
 - [ ] 12: fluxos web e nativos reais, evidências individuais, READMEs, relatório, guia e pitch.
@@ -25,3 +25,5 @@ Cada implementador recebe contexto novo, ticket, spec e limites de edição. Rev
 
 ## Registro
 14/11: aprovação recebida, Git limpo, Node 22.17.1/npm 10.9.2; Xcode e runtimes iOS disponíveis, sem dispositivo de simulador criado.
+
+09 verificado: cinco testes de dados, dois fluxos web e typecheck; revisão acessível corrigida. Próximo: 10.

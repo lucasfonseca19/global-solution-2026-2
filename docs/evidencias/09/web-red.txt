@@ -1,0 +1,69 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test:e2e
+> playwright test
+
+[WebServer] npm warn Unknown env config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] (node:24538) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:24694) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída (1ms)
+(node:24713) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 e2e/consulta.spec.ts:27:1 › desktop mantém conteúdo legível e recarregar encerra sessão (1ms)
+
+
+  1) e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída ──────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/lucas/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/consulta-login-inválido-consulta-retorno-e-saída/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/consulta-login-inválido-consulta-retorno-e-saída/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/consulta-login-inválido-consulta-retorno-e-saída/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e/consulta.spec.ts:27:1 › desktop mantém conteúdo legível e recarregar encerra sessão ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/lucas/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/consulta-desktop-mantém-co-d4697-e-recarregar-encerra-sessão/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/consulta-desktop-mantém-co-d4697-e-recarregar-encerra-sessão/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/consulta-desktop-mantém-co-d4697-e-recarregar-encerra-sessão/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída ───────────────────────────
+    e2e/consulta.spec.ts:27:1 › desktop mantém conteúdo legível e recarregar encerra sessão ────────

@@ -1,0 +1,17 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.1.0 /Users/lucas/FIAP/global-solution-2026-2/mobile
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  18:06:21
+   Duration  348ms (transform 56%, tests 17%, import 13%, worker 13%)
+
