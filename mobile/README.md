@@ -11,3 +11,5 @@ Começar com respostas simuladas baseadas nos exemplos do contrato provisório, 
 Acrescentar os comandos reais de execução e verificação quando houver implementação.
 
 Escopo e critérios no [ticket 04](../.scratch/merenda/issues/04-app-mobile.md). O planejamento está disponível para Lucas; nenhum código foi implementado nesta etapa.
+
+Revisão em 14/11: o ticket 04 registra o escopo geral e está em `needs-info`. Primeiro resolver as [decisões pendentes do app](../.scratch/merenda/app-planning.md), alinhar a verificação e revisar a divisão em entregas menores. A confirmação curricular do React Native não fecha ferramentas, interface ou persistência dos dados simulados.

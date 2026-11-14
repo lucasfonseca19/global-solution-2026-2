@@ -87,3 +87,7 @@ Lucas aprovou definir um contrato mínimo antes dos tickets, usando como ponto d
 ## Andamento em 14/11/2026
 
 Criados oito tickets individuais em `.scratch/merenda/issues/`, com índice, critérios de aceite, responsáveis e dependências. Lucas pode avançar no app com respostas simuladas e no simulador independente sem aguardar a revisão do colega. O contrato proposto será a referência provisória, com mudanças concentradas na camada de acesso aos dados; não foi tratado como aprovado pelo colega. Revisão conjunta bloqueia a integração, não as entregas independentes. O plano de testes também pode começar agora. Nenhum código foi implementado; permanece a instrução de não iniciar implementação pelo assistente nesta conversa.
+
+## Correção do planejamento do app em 14/11/2026
+
+Lucas questionou o ticket único para todo o app e o cumprimento das skills de Matt Pocock. A revisão confirmou que as frentes publicadas são amplas demais para execução por `to-tickets`, e faltam decisões do app e alinhamento de verificação de comportamento previsto em `to-spec`. Ticket 04 alterado para `needs-info`; manter como escopo geral. Antes de código, resolver as pendências em `.scratch/merenda/app-planning.md`, consolidar a especificação e propor entregas menores para revisão de Lucas antes da publicação. A confirmação de React Native e a aceitação da divisão pelo colega continuam válidas, mas não liberam sozinhas a implementação. Nenhum código foi escrito.

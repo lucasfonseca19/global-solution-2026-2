@@ -1,12 +1,14 @@
 # 04 — Entregar as quatro telas com dados simulados
 
-Status: ready-for-human
+Status: needs-info
 Responsável: Lucas
-Blocked by: nenhum para a versão com respostas simuladas
+Blocked by: definição mínima do app, revisão de como verificar o comportamento e aprovação da divisão em entregas menores
 
 ## Comportamento esperado
 
 Construir o app React Native do [MVP](../spec.md), inicialmente independente do backend. Usar os exemplos do [contrato provisório](../api-contract.md) por uma camada de acesso aos dados, para adaptar a conexão posteriormente sem reescrever as telas.
+
+Este arquivo registra o escopo geral do app, não uma tarefa única pronta para implementar. Revisão em [app-planning.md](../app-planning.md). Preservar seus critérios como referência ao propor entregas menores por comportamento; publicar essas entregas somente após revisão da divisão por Lucas.
 
 ## Critérios de aceite
 
@@ -26,10 +28,12 @@ Construir o app React Native do [MVP](../spec.md), inicialmente independente do 
 
 React Native confirmado por Lucas como conteúdo abordado até a fase 4. Revisão do colega não bloqueia os dados simulados. Rotas e detalhes do contrato permanecem provisórios: concentrar mudanças na camada de dados e registrar ajustes após 01. A chegada de leituras pode ser simulada nesta versão sem aguardar o ticket 05; a conexão entre as partes pertence a 06.
 
-`ready-for-human` indica escopo disponível para Lucas; não é registro de início ou autorização para o assistente implementar código nesta conversa. Ainda não há implementação.
+Não aguardar o backend para definir a versão simulada. Entretanto, a implementação deve esperar a definição mínima do próprio app e a revisão da divisão em entregas menores. Ainda não há implementação.
 
 ## Comentários
 
 ### 14/11/2026
 
 Lucas confirmou que React Native foi abordado até a fase 4. App com respostas simuladas liberado no planejamento, sem depender da escolha de backend/banco. React Native não implica escolha já aprovada de Expo, bibliotecas de UI ou ferramentas de execução.
+
+Revisão após questionamento de Lucas: ticket amplo demais para uma única execução. Alterado para `needs-info` até definir o app, alinhar a verificação e aprovar entregas menores conforme `to-spec`/`to-tickets`. O relato anterior de liberação no planejamento não equivale a implementação aprovada.

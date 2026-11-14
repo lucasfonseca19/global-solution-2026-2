@@ -127,3 +127,5 @@ Esclarecido que a identificação ocorre automaticamente ao colocar a lixeira ju
 ### 14/11/2026
 
 Divisão aceita pelo colega segundo Lucas, sem revisão técnica do contrato ainda. React Native confirmado pelo aluno como conteúdo estudado. Criados tickets locais, separando os bloqueios de integração do trabalho independente de Lucas. Nenhum código de aplicação foi implementado.
+
+Revisão de granularidade solicitada por Lucas em 14/11: a versão simulada independe da API, mas ainda não está pronta para codificação. Resolver as [pendências do app](app-planning.md), alinhar testes de comportamento e revisar entregas menores antes de implementação. O ticket 04 volta a `needs-info`; os oito tickets existentes são mapa de frentes, não a decomposição final exigida por `to-tickets`.
