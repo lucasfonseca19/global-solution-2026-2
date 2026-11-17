@@ -1,78 +1,114 @@
-# Global Solution 2026/2 — descarte da merenda
+# Merenda — monitoramento do descarte na alimentação escolar
 
-Para a próxima sessão de backend: [passagem atual para integração](docs/continuidade-integracao.md).
+MVP full stack da **Global Solution 2026/2 (CitizenTech — FIAP)**: uma solução para **medir e acompanhar o desperdício de alimentos na merenda escolar**, separando duas categorias — alimento preparado e não servido, e restos comestíveis devolvidos nos pratos. Cada lixeira é identificada por **RFID** e pesada em **balança** (ambos simulados); o sistema desconta a tara automaticamente, calcula o líquido, soma por categoria e consolida um histórico por refeição.
 
-MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. App React Native/Expo, API Java 21/Spring Boot, PostgreSQL e simulador separado de RFID/balança. Integração baseada na contribuição do colega `51957f3`, adaptada às ADRs de pesagens individuais e conclusão explícita. A interface aprovada (Home, Histórico, Allo e pesagem) foi preservada.
+Sem esses dados, a escola não consegue dimensionar nem reduzir as perdas. Com o registro por refeição, o responsável passa a enxergar quanto é descartado ao longo dos dias e tomar decisões apoiadas em números.
 
-## Execução integrada
+## As seis partes do projeto
 
-Requer Node compatível com Expo (ambiente: 22.17.1+), JDK 21, Maven 3.9+ e PostgreSQL 14+ (ou Docker Compose). Seguir [database/README.md](database/README.md) para criar um banco vazio com `01_schema.sql` e `02_carga_inicial.sql`. Essa carga inclui somente conta de avaliação, categorias e lixeiras; não cria histórico fictício. Para banco antigo, revisar a migração documentada antes de executar qualquer script.
+| Parte (pontuação) | Tecnologia | Onde está | Como executar/verificar |
+| --- | --- | --- | --- |
+| 1. Banco de dados (2) | PostgreSQL 16 | [`database/`](database/) | `docker compose up` + [`03_consultas.sql`](database/03_consultas.sql); DER em [`der.png`](database/der.png) |
+| 2. API REST (4) | Java 21 · Spring Boot 3 | [`backend/`](backend/) | `mvn spring-boot:run`; Swagger em `http://localhost:8080/swagger-ui.html` |
+| 3. App mobile (3) | React Native · Expo | [`mobile/`](mobile/) | `npm ci` + `npm run web` (5 telas); ou Expo Go no celular |
+| 4. Simulação de IoT (2) | Node.js (RFID + balança) | [`iot/`](iot/) | `node iot/bridge.mjs`; painel em `http://127.0.0.1:8095` |
+| 5. Segurança (2) | Spring Security + BCrypt/JWT | [`backend/.../security/`](backend/src/main/java/br/com/fiap/merenda/security/) | login `operador`/`merenda123` (senha em hash BCrypt) |
+| 6. Testes (2) | JUnit (H2) + Vitest | `backend/src/test/`, `mobile/src/**/*.test.ts` | `mvn test` e `npm test`; plano e evidências em [`docs/`](docs/) |
 
-Terminal da API:
+## ODS
+
+A solução dialoga com os Objetivos de Desenvolvimento Sustentável da ONU:
+
+- **ODS 12 — Consumo e produção responsáveis**: reduzir o desperdício de alimentos é uma de suas metas centrais.
+- **ODS 2 — Fome zero e agricultura sustentável**: melhor gestão dos alimentos destinados à alimentação escolar.
+- **ODS 4 — Educação de qualidade**: ambiente escolar que passa a gerir a alimentação com dados.
+
+*(Mapeamento proposto; a equipe deve confirmar a redação final.)*
+
+## Pré-requisitos
+
+- **Node.js** compatível com Expo (ambiente registrado: 22.17.1+).
+- **JDK 21** e **Maven 3.9+** (API).
+- **PostgreSQL 14+** — ou **Docker Compose** para subir o banco automaticamente.
+
+## Executando e verificando cada parte
+
+### 1. Banco de dados
+
+```sh
+cd database
+docker compose up -d          # sobe PostgreSQL na porta 55439
+```
+
+Os scripts [`01_schema.sql`](database/01_schema.sql) (tabelas, PK/FK, constraints) e [`02_carga_inicial.sql`](database/02_carga_inicial.sql) (operador, categorias e lixeiras) rodam no primeiro início do volume vazio. As **sete consultas** de uso real (JOIN e agregação) estão em [`03_consultas.sql`](database/03_consultas.sql); o **DER** está em [`der.png`](database/der.png) (editável em `der.mmd`). Detalhes em [`database/README.md`](database/README.md).
+
+### 2. API REST
 
 ```sh
 cd backend
-export JWT_SECRET="segredo-exclusivo-da-sua-demonstracao-local-com-32-caracteres"
+export JWT_SECRET="segredo-exclusivo-da-demonstracao-local-com-32-caracteres"
 mvn spring-boot:run
 ```
 
-Credenciais locais padrão do banco: `merenda`/`merenda`; URL `jdbc:postgresql://localhost:55439/merenda`. Configurações em [backend/README.md](backend/README.md). Swagger: `http://localhost:8080/swagger-ui.html`.
+- Swagger: `http://localhost:8080/swagger-ui.html` · Collection Postman: [`backend/docs/merenda-api.postman_collection.json`](backend/docs/merenda-api.postman_collection.json).
+- **7 endpoints** cobrindo GET, POST, PUT e DELETE, com camadas Controller/Service/Repository separadas. Contrato em [`.scratch/merenda/api-contract.md`](.scratch/merenda/api-contract.md).
 
-Terminal do simulador, na raiz:
-
-```sh
-node --experimental-strip-types iot/bridge.mjs
-```
-
-Abra `http://127.0.0.1:8095`. Terminal do app:
+### 3. App mobile
 
 ```sh
 cd mobile
 npm ci
-EXPO_PUBLIC_DATA_MODE=api EXPO_PUBLIC_API_URL=http://localhost:8080 npm run web -- --port 8094
+npm run web -- --port 8094     # ou: npm start (Expo Go, QR code no celular)
 ```
 
-Abra `http://localhost:8094`. Login de avaliação: **`operador` / `merenda123`**, verificado por BCrypt na API. Entre numa refeição, aguarde “Balança conectada” e envie um cenário no painel separado. O app consulta identificação/tara/líquido na API; somente a confirmação grava no PostgreSQL. Cada novo ciclo soma uma contribuição; correção substitui um registro; conclusão é explícita.
+Abra `http://localhost:8094`. São **5 telas**: Login, Hoje, Histórico, Pesagem e Detalhes.
 
-O botão discreto **Demonstração**, no login/Home/Histórico, abre as mesmas telas com exemplos fictícios, sessão e dados locais separados. Não é necessário reiniciar o Expo para alternar. O modo inclui controles internos de RFID/balança, sem depender da API ou ponte. O modo fica identificado; **Voltar à API** encerra a sessão local e pede login real. A escolha vale para a sessão do app; recarregar retorna ao modo de inicialização. A troca não é oferecida durante a pesagem.
+- **Sem configurar o backend:** toque no botão **Demonstração** — abre as mesmas telas com dados fictícios e sensores simulados dentro do próprio app.
+- **Com o stack completo:** entre com `operador` / `merenda123` e use o painel do simulador (parte 4) para disparar leituras.
 
-As abas Hoje/Histórico usam a barra do sistema em iOS/Android; na web, o navegador de abas da mesma biblioteca. Exclusão e descarte de leitura usam confirmações do sistema no celular. [Decisões e evidências](docs/evidencias/native-navigation/README.md).
-
-API é o modo padrão, sem fallback para dados locais. Sessão/token ficam em memória; recarregar pede login e consulta novamente o banco. Histórico local preexistente não é enviado, apagado nem importado. A ponte Node continua sendo somente o simulador, separado da API acadêmica.
-
-Para executar a demonstração local anterior explicitamente:
+### 4. Simulação de IoT
 
 ```sh
-cd mobile
-EXPO_PUBLIC_DATA_MODE=demo npm run web -- --port 8094
+node --experimental-strip-types iot/bridge.mjs    # painel em http://127.0.0.1:8095
 ```
 
-Nesse modo somente, login `demo` / `merenda-demo` e persistência AsyncStorage em chave própria. O [guia de gravação](docs/guia-simulador-gravacao.md) descreve os fluxos; o [contrato atual](.scratch/merenda/api-contract.md) documenta o HTTP.
+Dois **sensores simulados**: o **leitor RFID** (identifica a lixeira e sua categoria) e a **balança** (peso bruto). O painel emite cenários prontos (cozinha 3 kg, pratos 2 kg, zero, etiqueta desconhecida, peso abaixo da tara). Os dados disparam a identificação, o cálculo do líquido e a atualização dos totais no app. Há também a CLI: `node --experimental-strip-types iot/cli.mjs listar`. Ver [`iot/README.md`](iot/README.md).
 
-Para celular, configurar `EXPO_PUBLIC_API_URL` e `EXPO_PUBLIC_SIMULATOR_URL` com o IP do computador; não usar localhost no telefone. A ponte exige `SIMULATOR_HOST=0.0.0.0` para acesso LAN explícito. No navegador via IP, configurar também as origens em `CORS_ORIGENS` (API) e `SIMULATOR_ALLOWED_ORIGIN` (ponte). O app usa o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo; servidor revalida todas as escritas.
+### 5. Segurança
 
-## Evidências anteriores
+Login com **senha em hash BCrypt** (nunca em texto puro) e token **JWT**. Práticas adicionais: **validação de entrada**, proteção contra **SQL injection** (consultas parametrizadas) e **XSS**, **controle de acesso** (só `/auth/login` é público) e **bloqueio de tentativas** de login. Detalhes e mapeamento em [`backend/README.md`](backend/README.md#segurança).
 
-Os tickets 09, 10 e 11 foram concluídos e verificados; commit de referência: `7b67860`. Logs e capturas reais estão em [evidências 09](docs/evidencias/09/README.md), [evidências 10](docs/evidencias/10/README.md) e [evidências 11](docs/evidencias/11/README.md). Há testes unitários do adaptador e fluxos web executados com o Chrome já instalado; não é necessário baixar um navegador para a execução descrita.
+### 6. Testes e evidências
 
-A documentação e as verificações finais estão consolidadas nas [evidências 12](docs/evidencias/12/README.md): 15 testes do adaptador, dois da CLI e cinco fluxos web passaram, além de TypeScript, exportação web e compatibilidade Expo. A execução nativa não foi comprovada: a instalação do Expo Go falhou por falta de espaço (`ENOSPC`), conforme [registro do impedimento](docs/evidencias/12/mobile-impedimento.txt). O bundle iOS gerado só comprova compilação/exportação. Portanto, o critério mobile nativo continua pendente e o ticket 12 não deve ser marcado como concluído.
+| Comando | O que cobre |
+| --- | --- |
+| `cd backend && mvn test` | 20 testes de API e concorrência (H2) |
+| `cd mobile && npm test` | 45 testes unitários do adaptador/fluxo (Vitest) |
+| `cd mobile && npm run typecheck` | TypeScript |
+| `node --experimental-strip-types --test iot/bridge.test.mjs iot/cli.test.mjs` | simulador e CLI |
 
-## Materiais do grupo ainda pendentes
+Plano de testes em [`docs/plano-testes-lucas.md`](docs/plano-testes-lucas.md); evidências (logs, capturas, relatórios) em [`docs/evidencias/`](docs/evidencias/).
 
-- PDF acadêmico final, incluindo o [relatório de implementação de Lucas](docs/relatorio-implementacao-lucas.md) como contribuição parcial.
-- TXT exigido para a entrega final.
-- Link público do pitch do grupo (limite de três minutos; o [roteiro de Lucas](docs/roteiro-demonstracao-lucas.md) cobre aproximadamente 45–60 segundos).
-- Revisão das alterações de integração pela equipe e consolidação das evidências no PDF final.
-- Verificação nativa pendente e revisão final do grupo.
+## Credenciais
 
-O pacote final previsto no enunciado também requer código e README de execução; confira o [enunciado](ENUNCIADO.md) e a [especificação do MVP](.scratch/merenda/spec.md). A organização de responsabilidades está em [guia da equipe](docs/guia-equipe.md).
+| Contexto | Usuário | Senha |
+| --- | --- | --- |
+| API / app (avaliação) | `operador` | `merenda123` |
+| Demonstração local (sem backend) | `demo` | `merenda-demo` |
+| PostgreSQL (Compose) | `merenda` | `merenda` |
 
-## Documentos e ferramentas
+## Entregáveis (ZIP de submissão)
 
-- [Guia de testes de Lucas](docs/guia-testes-lucas.md), [plano de testes](docs/plano-testes-lucas.md) e [relatório de implementação](docs/relatorio-implementacao-lucas.md).
-- [Orientações mobile](docs/agents/mobile.md), [READMEs do app](mobile/README.md) e da [IoT simulada](iot/README.md).
-- O disco temporário no SSD foi um contorno local durante as verificações por falta de espaço. Não é pré-requisito: os comandos acima são padrão.
+O enunciado pede um único `.zip` com: **código** (este repositório, incluindo os scripts `.sql` e a documentação da API), **README de execução** (este arquivo), um **PDF** com integrantes e entregáveis de cada parte (diagrama ER, plano de testes, evidências) e um **`.txt`** com grupo/RM/nome dos integrantes e o **link público do vídeo pitch** (até 3 min).
+
+> 🔗 **Link do vídeo pitch:** `[INSERIR LINK PÚBLICO AQUI]`
 
 ## Uso de IA
 
-Codex, executado no T3 Code, auxiliou o planejamento, a implementação, os testes e a documentação. Subagentes gpt-6.1-sol/medium implementaram as entregas; gpt-6.1-sol/high revisou; gpt-6-luna/high consolidou documentos. O orquestrador conferiu resultados e integrou correções. Lucas deve revisar e compreender o material antes da entrega acadêmica. Detalhes e limites estão no [relatório](docs/relatorio-implementacao-lucas.md).
+IA generativa (Codex e OpenCode, com revisão de subagentes) auxiliou no planejamento, na implementação, nos testes e na documentação. Todo o material foi revisado e validado pelos integrantes antes da entrega. Detalhes e limites em [`docs/relatorio-implementacao-lucas.md`](docs/relatorio-implementacao-lucas.md).
+
+## Documentação de apoio
+
+- [Enunciado](ENUNCIADO.md) · [especificação do MVP](.scratch/merenda/spec.md) · [contrato da API](.scratch/merenda/api-contract.md)
+- [Guia de testes](docs/guia-testes-lucas.md) · [plano de testes](docs/plano-testes-lucas.md) · [guia de gravação](docs/guia-simulador-gravacao.md)
+- [README do banco](database/README.md) · [README da API](backend/README.md) · [README do app](mobile/README.md) · [README da IoT](iot/README.md)
