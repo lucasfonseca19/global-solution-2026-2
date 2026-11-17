@@ -1,0 +1,264 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/guava-33.2.1-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------------< br.com.fiap:merenda-api >-----------------------
+[INFO] Building merenda-api 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- resources:3.3.1:resources (default-resources) @ merenda-api ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO]
+[INFO] --- compiler:3.14.0:compile (default-compile) @ merenda-api ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ merenda-api ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO]
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ merenda-api ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+[INFO]
+[INFO] --- surefire:3.5.4:test (default-test) @ merenda-api ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running br.com.fiap.merenda.MerendaApiTest
+14:30:57.066 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration br.com.fiap.merenda.MerendaApiApplication for test class br.com.fiap.merenda.MerendaApiTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-11-17T14:30:57.228-03:00  INFO 19982 --- [           main] br.com.fiap.merenda.MerendaApiTest       : Starting MerendaApiTest using Java 25 with PID 19982 (started by lucas in /Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/backend)
+2026-11-17T14:30:57.228-03:00  INFO 19982 --- [           main] br.com.fiap.merenda.MerendaApiTest       : No active profile set, falling back to 1 default profile: "default"
+2026-11-17T14:30:57.548-03:00  INFO 19982 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-17T14:30:57.573-03:00  INFO 19982 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 5 JPA repository interfaces.
+2026-11-17T14:30:57.776-03:00  INFO 19982 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-11-17T14:30:57.798-03:00  INFO 19982 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-11-17T14:30:57.810-03:00  INFO 19982 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-11-17T14:30:57.911-03:00  INFO 19982 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-17T14:30:57.921-03:00  INFO 19982 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-17T14:30:58.028-03:00  INFO 19982 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:merenda user=SA
+2026-11-17T14:30:58.028-03:00  INFO 19982 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-17T14:30:58.054-03:00  INFO 19982 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-17T14:30:58.433-03:00  INFO 19982 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-17T14:30:58.458-03:00  INFO 19982 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-17T14:30:58.975-03:00  INFO 19982 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-17T14:30:58.975-03:00  INFO 19982 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-17T14:30:58.975-03:00  INFO 19982 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-11-17T14:30:58.998-03:00  INFO 19982 --- [           main] br.com.fiap.merenda.MerendaApiTest       : Started MerendaApiTest in 1.882 seconds (process running for 2.369)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/Users/lucas/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /auth/login
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"41"]
+             Body = {"login":"operador","senha":"merenda123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.com.fiap.merenda.controller.AuthController
+           Method = br.com.fiap.merenda.controller.AuthController#login(LoginRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"token":"eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZXJlbmRhLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3OTQ5NDAyNTksImxvZ2luIjoib3BlcmFkb3IiLCJpYXQiOjE3OTQ5MzY2NTl9.f742PnKnZVhxLNhaPBwI1Zc18GyjRvnEIvEeLSo-LmQ","usuario":{"id":1,"nome":"Operador de demonstração"}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /pesagens
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Authorization:"Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZXJlbmRhLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3OTQ5NDAyNTksImxvZ2luIjoib3BlcmFkb3IiLCJpYXQiOjE3OTQ5MzY2NTl9.f742PnKnZVhxLNhaPBwI1Zc18GyjRvnEIvEeLSo-LmQ", Content-Length:"123"]
+             Body = {"data":"2026-11-17","tipoRefeicao":"Almoço","cicloId":"excluido","leitura":{"codigoRfid":"RFID-SIM-001","pesoBrutoKg":2}}
+    Session Attrs = {}
+
+Handler:
+             Type = br.com.fiap.merenda.controller.PesagemController
+           Method = br.com.fiap.merenda.controller.PesagemController#confirmar(ConfirmacaoPesagem, Jwt)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"id":2,"data":"2026-11-17","tipoRefeicao":"Almoço","status":"PENDENTE","pesagens":{"SOBRA_DESCARTADA":{"lixeiraId":1,"codigoRfid":"RFID-SIM-001","taraKg":1,"pesoBrutoKg":2,"pesoLiquidoKg":1},"RESTO_PRATO":null},"totalKg":1,"registros":[{"id":"3","categoria":"SOBRA_DESCARTADA","lixeiraId":1,"codigoRfid":"RFID-SIM-001","taraKg":1,"pesoBrutoKg":2,"pesoLiquidoKg":1}]}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /servicos/2
+       Parameters = {}
+          Headers = [Authorization:"Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZXJlbmRhLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3OTQ5NDAyNTksImxvZ2luIjoib3BlcmFkb3IiLCJpYXQiOjE3OTQ5MzY2NTl9.f742PnKnZVhxLNhaPBwI1Zc18GyjRvnEIvEeLSo-LmQ"]
+             Body = null
+    Session Attrs = {}
+
+Handler:
+             Type = br.com.fiap.merenda.controller.ServicoController
+           Method = br.com.fiap.merenda.controller.ServicoController#excluir(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 204
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = null
+             Body =
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /pesagens
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Authorization:"Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZXJlbmRhLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3OTQ5NDAyNTksImxvZ2luIjoib3BlcmFkb3IiLCJpYXQiOjE3OTQ5MzY2NTl9.f742PnKnZVhxLNhaPBwI1Zc18GyjRvnEIvEeLSo-LmQ", Content-Length:"123"]
+             Body = {"data":"2026-11-17","tipoRefeicao":"Almoço","cicloId":"excluido","leitura":{"codigoRfid":"RFID-SIM-001","pesoBrutoKg":2}}
+    Session Attrs = {}
+
+Handler:
+             Type = br.com.fiap.merenda.controller.PesagemController
+           Method = br.com.fiap.merenda.controller.PesagemController#confirmar(ConfirmacaoPesagem, Jwt)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"id":3,"data":"2026-11-17","tipoRefeicao":"Almoço","status":"PENDENTE","pesagens":{"SOBRA_DESCARTADA":{"lixeiraId":1,"codigoRfid":"RFID-SIM-001","taraKg":1,"pesoBrutoKg":2,"pesoLiquidoKg":1},"RESTO_PRATO":null},"totalKg":1,"registros":[{"id":"4","categoria":"SOBRA_DESCARTADA","lixeiraId":1,"codigoRfid":"RFID-SIM-001","taraKg":1,"pesoBrutoKg":2,"pesoLiquidoKg":1}]}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.618 s <<< FAILURE! -- in br.com.fiap.merenda.MerendaApiTest
+[ERROR] br.com.fiap.merenda.MerendaApiTest.replayAposExcluirNaoRessuscitaServico -- Time elapsed: 0.563 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<200>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:61)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:128)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$9(StatusResultMatchers.java:640)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at br.com.fiap.merenda.MerendaApiTest.replayAposExcluirNaoRessuscitaServico(MerendaApiTest.java:287)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[INFO]
+[INFO] Results:
+[INFO]
+[ERROR] Failures:
+[ERROR]   MerendaApiTest.replayAposExcluirNaoRessuscitaServico:287 Status expected:<409> but was:<200>
+[INFO]
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.181 s
+[INFO] Finished at: 2026-11-17T14:30:59-03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.4:test (default-test) on project merenda-api: There are test failures.
+[ERROR]
+[ERROR] See /Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/backend/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

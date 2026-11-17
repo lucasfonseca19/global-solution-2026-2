@@ -17,6 +17,9 @@ export interface WeighingDataAccess extends DataAccess {
   confirmarPesagem(token: string, entrada: ConfirmacaoPesagem): Promise<Servico>;
   concluirServico(token: string, id: number): Promise<Servico>;
 }
+/** Operações do fluxo aprovado; CRUD/restauração antigos pertencem só ao cliente legado. */
+export type AppDataAccess = Pick<WeighingDataAccess,
+  'login' | 'listar' | 'detalhar' | 'excluir' | 'avaliar' | 'confirmarPesagem' | 'concluirServico'>;
 export type Servico = {
   id: number;
   data: string;

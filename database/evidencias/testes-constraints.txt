@@ -1,0 +1,13 @@
+PostgreSQL 16.4 real isolado — 17/11/2026
+NOTICE:  T1 PASS: serviço normalizado único
+NOTICE:  T2 PASS: mesma categoria contém contribuições 3+1=4
+NOTICE:  T3 PASS: contagem não conclui serviço
+NOTICE:  T4 PASS: bruto abaixo da tara rejeitado
+NOTICE:  T5 PASS: categoria incoerente rejeitada
+NOTICE:  T6 PASS: senha sem formato BCrypt rejeitada
+NOTICE:  T7 PASS: zero confirmado aceito
+NOTICE:  T8 PASS: ciclo global único
+NOTICE:  T9 PASS: correção preserva conclusão persistida
+NOTICE:  T10 PASS: exclusão remove contribuições e preserva ciclo/hash sem serviço
+NOTICE:  T11 PASS: replay após exclusão mantém ciclo reservado
+ROLLBACK executado, nenhum dado de teste persistido.

@@ -1,3 +1,17 @@
+# App Merenda — execução atual
+
+A interface aprovada usa API por padrão. Banco/API e instruções completas no [README da raiz](../README.md). `npm ci` e `npm run web -- --port 8094` abrem o app; API padrão `http://localhost:8080`, configurável por `EXPO_PUBLIC_API_URL`. Login real de avaliação `operador` / `merenda123`.
+
+Sensores em `EXPO_PUBLIC_SIMULATOR_URL` (padrão `http://127.0.0.1:8095`). API e ponte são processos separados. No celular, usar o IP do computador nas duas URLs e configurar acesso LAN/origens conforme o README. App e API usam o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo.
+
+`EXPO_PUBLIC_DATA_MODE=demo` ativa explicitamente a demonstração local (login `demo` / `merenda-demo`, AsyncStorage próprio). `EXPO_PUBLIC_LEGACY_APP=1` preserva o cliente antigo. Não há fallback silencioso, migração de dados locais ou token persistido.
+
+Ver [contrato](../.scratch/merenda/api-contract.md) e [evidências da integração](../docs/evidencias/backend-integration/README.md). `npm test`, `npm run typecheck`, `npm run test:e2e` (cliente legado) e `node integration-qa.cjs` (API/banco isolados e app/simulador ativos nas portas documentadas).
+
+---
+
+## Registro histórico da entrega demonstrativa
+
 # Merenda — app de pesagem
 
 App React Native com Expo, cinco telas na interface aprovada e suporte web local. Login, consulta, registro, simulação, correção, exclusão e restauração de dados de exemplo funcionam com dados fictícios locais. Não há API, banco, autenticação ou segurança reais. O contrato em `.scratch/merenda/api-contract.md` é provisório para integração.

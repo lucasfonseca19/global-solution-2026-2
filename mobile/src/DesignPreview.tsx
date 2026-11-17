@@ -3,9 +3,9 @@ import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from 'rea
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createNativeStackNavigator, type NativeStackScreenProps } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createApprovedData } from './data/approvedData';
+import { createAppData } from './data/appData';
 import { individualRecords } from './data/weighing';
-import type { DataAccess, Sessao } from './data/types';
+import type { AppDataAccess, Sessao } from './data/types';
 import type { Servico } from './data/types';
 import { Text } from './rnr/text';
 import { useServiceDay } from './useServiceDay';
@@ -19,9 +19,9 @@ import { Action, CATEGORIES, COLORS, Chevron, ErrorNotice, Field, Header, Loadin
 type Routes={Login:undefined;Home:undefined;Historico:undefined;Registro:{servico?:Servico;context?:{data:string;tipoRefeicao:string}}|undefined;Detalhes:{id:number}};
 const Stack=createNativeStackNavigator<Routes>();
 
-/** Interface aprovada: instalação vazia, persistência própria e sensores externos simulados. */
+/** Interface aprovada: API por padrão, demo explícita e sensores externos simulados. */
 export function DesignPreview() {
- const [api]=useState(()=>createApprovedData(AsyncStorage));
+ const [api]=useState(()=>createAppData(AsyncStorage));
  const [session,setSession]=useState<Sessao>();
  return <>
   <NavigationContainer>
@@ -37,7 +37,7 @@ export function DesignPreview() {
  </>;
 }
 
-function Login({api,onLogin}: {api:DataAccess;onLogin:(session:Sessao)=>void}) {
+function Login({api,onLogin}: {api:AppDataAccess;onLogin:(session:Sessao)=>void}) {
  const [login,setLogin]=useState('');
  const [password,setPassword]=useState('');
  const [busy,setBusy]=useState(false);
@@ -79,7 +79,7 @@ function useResource<T>(load:()=>Promise<T>,dependencies:unknown[]) {
  return {value,error,retry:()=>setAttempt(n=>n+1)};
 }
 
-function History({api,session,navigation,onLogout}: {api:DataAccess;session:Sessao;onLogout:()=>void}&NativeStackScreenProps<Routes,'Historico'>) {
+function History({api,session,navigation,onLogout}: {api:AppDataAccess;session:Sessao;onLogout:()=>void}&NativeStackScreenProps<Routes,'Historico'>) {
  const focused=useIsFocused();
  const {value,error,retry}=useResource(()=>api.listar(session.token),[api,session.token,focused]);
  const today=useServiceDay();
@@ -90,7 +90,7 @@ function History({api,session,navigation,onLogout}: {api:DataAccess;session:Sess
  </Shell>;
 }
 
-function Details({api,session,route,navigation}: {api:DataAccess;session:Sessao}&NativeStackScreenProps<Routes,'Detalhes'>) {
+function Details({api,session,route,navigation}: {api:AppDataAccess;session:Sessao}&NativeStackScreenProps<Routes,'Detalhes'>) {
  const today=useServiceDay();
  const focused=useIsFocused();
  const {value:service,error,retry}=useResource(()=>api.detalhar(session.token,route.params.id),[api,session.token,route.params.id,focused]);

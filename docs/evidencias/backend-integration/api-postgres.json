@@ -1,0 +1,62 @@
+{
+  "result": "PASS",
+  "fronteira": "HTTP real Java/PostgreSQL isolado",
+  "evidence": [
+    {
+      "cenario": "Consulta sem token bloqueada",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Login BCrypt real em PostgreSQL",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Concorrência real: 3+1+2=6 kg e replay simultâneo não duplica",
+      "status": "PASS",
+      "details": {
+        "totalKg": 6,
+        "registros": 3
+      }
+    },
+    {
+      "cenario": "Mesmo ciclo com payload diferente rejeitado",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Correção substitui só 3 por 2,5 kg: total 5,5",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Correção com lixeira diferente rejeitada",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Conclusão explícita bloqueia nova contribuição",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Replay de correção mantém total/conclusão",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Data passada recusada pelo servidor",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Leituras inválidas não alteram confirmado",
+      "status": "PASS"
+    },
+    {
+      "cenario": "CORS permite app local e rejeita origem externa",
+      "status": "PASS"
+    },
+    {
+      "cenario": "OpenAPI disponível: 7 operações em 6 caminhos",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Exclusão seguida de replay não ressuscita serviço",
+      "status": "PASS"
+    }
+  ]
+}

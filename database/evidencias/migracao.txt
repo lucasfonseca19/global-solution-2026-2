@@ -1,0 +1,9 @@
+PostgreSQL 16.4 em 127.0.0.1:55439, banco isolado merenda_migration
+Origem: 51957f39da4bdf987a88e313a6a6f504481222b4
+Antes/depois: (11, Decimal('21.000')) / (11, Decimal('21.000'))
+PASS: quantidade e soma preservadas
+PASS: nenhuma conclusão inferida no legado
+PASS: contribuição adicional da mesma categoria aceita após migração
+Nenhum banco preexistente foi acessado.
+PASS: colisão normalizada no legado aborta a migração, preserva 7 serviços e reverte alterações de esquema.
+PASS: após migração, exclusão preserva ciclo/hash com serviço nulo (teste revertido).

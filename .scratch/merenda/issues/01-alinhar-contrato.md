@@ -1,6 +1,6 @@
 # 01 — Revisar o contrato e as escolhas do backend
 
-Status: needs-info
+Status: ready-for-human
 Responsáveis: Lucas e colega
 Blocked by: revisão e proposta do colega
 
@@ -25,3 +25,7 @@ Este alinhamento é necessário para a integração. Não bloqueia o app com res
 ### 14/11/2026
 
 Lucas informou que o colega aceitou a divisão, mas ainda não revisou os documentos nem propôs tecnologias. Não aguardar esta revisão para iniciar as entregas independentes de Lucas.
+
+## Atualização de integração — 17/11/2026
+
+Lucas aprovou importar e adequar a contribuição `51957f3`, preservando as ADRs atuais. Implementação técnica e verificações em [evidências de integração](../../../docs/evidencias/backend-integration/README.md) e [contrato vigente](../api-contract.md). Os critérios históricos de PUT completo por categoria/conclusão automática acima foram substituídos por contribuição individual, ciclo idempotente, correção por ID e conclusão explícita. API Java/Spring Boot e PostgreSQL foram mantidos. A equipe ainda deve revisar a alteração antes da entrega acadêmica; PDF/pitch e execução nativa permanecem separados. Não houve push.

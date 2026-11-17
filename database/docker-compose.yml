@@ -1,0 +1,16 @@
+name: merenda-academico
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: merenda
+      POSTGRES_USER: merenda
+      POSTGRES_PASSWORD: merenda
+    ports:
+      - "127.0.0.1:${MERENDA_DB_PORT:-55439}:5432"
+    volumes:
+      - merenda_data:/var/lib/postgresql/data
+      - ./01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./02_carga_inicial.sql:/docker-entrypoint-initdb.d/02_carga_inicial.sql:ro
+volumes:
+  merenda_data:

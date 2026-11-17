@@ -1,0 +1,55 @@
+{
+  "result": "PASS",
+  "fronteira": "Expo web → Java → PostgreSQL; ponte RFID/balança separada",
+  "evidence": [
+    {
+      "cenario": "Login real inválido rejeitado",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Banco novo sem histórico fictício",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Entrada não reproduz evento antigo do simulador",
+      "status": "PASS"
+    },
+    {
+      "cenario": "RFID e tara validados na API sem gravação",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Resposta perdida após commit: retry mantém um registro e mesmo ciclo",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Contribuições individuais somam e ambas categorias não concluem automaticamente",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Conclusão explícita persistida",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Correção individual preserva outras contribuições e conclusão",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Recarga encerra sessão e preserva registros no PostgreSQL",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Zero confirmado nas duas categorias conclui; ausência bloqueia",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Exclusão confirmada remove serviço e contribuições",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Nenhum erro JavaScript de página",
+      "status": "PASS"
+    }
+  ],
+  "pageErrors": []
+}

@@ -34,3 +34,7 @@ Os arquivos individuais são a fonte do status e dos bloqueadores. `ready-for-hu
 4. Integrar API real apenas se estiver disponível e acordada; sua ausência não bloqueia a entrega simulada de Lucas.
 
 Atualização em 14/11/2026: 09–11 implementados e verificados; 12 com documentação/verificações consolidadas e impedimento real da execução nativa. Os arquivos individuais e as evidências são a fonte de status e bloqueadores.
+
+## Integração autorizada em 17/11/2026
+
+01/02/03/06 em `ready-for-human`: contribuição real localizada, importada seletivamente, adequada às ADRs e verificada em PostgreSQL/HTTP/web. Revisão da equipe e consolidação acadêmica pendentes. [Plano](../integration-plan.md), [contrato](../api-contract.md), [evidências](../../../docs/evidencias/backend-integration/README.md). As tabelas anteriores registram o planejamento histórico. Ticket12 continua pendente de runtime nativo.

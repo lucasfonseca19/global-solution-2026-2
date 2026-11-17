@@ -1,103 +1,44 @@
-# Passagem para integrar o backend ao Merenda
+# Continuidade — integração real do Merenda
 
-Estado conferido em 17/11/2026. Este é o ponto de entrada atual; os documentos de prévia antigos descrevem etapas históricas e não substituem este arquivo.
+Atualizado em 17/11/2026 após autorização de Lucas para executar a integração. Este documento substitui a passagem anterior de somente análise. Não fazer push/PR nem enviar mensagens a pessoas sem autorização explícita.
 
-## Diretório e checkpoint
+## Worktree e proveniência
 
-Trabalhar na worktree existente:
+Trabalhar em `/Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8`, branch `t3/rnr-weighing-preview`. Base aprovada `dbaa3c6`; backend/banco do colega localizados em `origin/back-banco-api`, SHA `51957f39da4bdf987a88e313a6a6f504481222b4`, confirmado no remoto. Importados somente backend/ e database/; documentação/UI posterior preservada. Conferir git log/status antes de retomar. Não recomeçar de main nem substituir a worktree.
 
-`/Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8`
+Diretórios não rastreados preexistentes `.agents/`, `.taste-skill/` e evidências agentation-preview/motion-preview/taste-preview foram preservados e não fazem parte da integração.
 
-Branch: `t3/rnr-weighing-preview`. O checkpoint local preparado nesta passagem reúne o app aprovado e seu simulador. Conferir `git log -1`, `git status --short` e alterações adicionais antes de agir. Não recomeçar de `main` nem substituir esta worktree. Arquivos de experimentos, skills locais e bundles exportados podem continuar não rastreados; preservar esses arquivos, sem adicioná-los indiscriminadamente. Não dar push, abrir PR/Issue ou enviar mensagem a pessoas sem autorização explícita de Lucas.
+## Leitura e regras
 
-Lucas informou que o outro integrante já produziu backend e quer analisá-lo e integrá-lo na próxima sessão. A origem dessa entrega (branch, repositório, ZIP ou diretório) ainda não foi identificada nesta sessão. `backend/` e `database/` desta worktree contêm documentação de reserva, não a entrega do colega. Não concluir que o trabalho dele inexiste. Não importar/mesclar código às cegas; localizar e ler primeiro.
+Ler ENUNCIADO.md, CONTEXTO.md, GLOSSARY.md, .scratch/merenda/spec.md, [ADR0001](adr/0001-pesagens-individuais-conclusao-explicita.md), [ADR0002](adr/0002-pesagens-somente-no-dia-atual.md), [contrato atual](../.scratch/merenda/api-contract.md) e [plano/decisões](../.scratch/merenda/integration-plan.md). Trechos históricos de substituição por categoria e conclusão automática não prevalecem.
 
-## O que o app atual faz
+- Preservar Home, Histórico, Allo, pesagem e simulador separado.
+- Contribuições individuais com ID; várias da mesma categoria somam. RFID identifica lixeira. Correção por ID usa a mesma lixeira e preserva demais contribuições/conclusão.
+- Ciclos aleatórios entre aparelhos; replay idêntico não grava; payload diferente conflita. Ciclo/hash sobrevivem à exclusão e impedem recriar serviço por retry antigo.
+- Conclusão explícita exige ambas as categorias; zero confirmado é válido. Prévia precisa ser confirmada/descartada antes de concluir no app.
+- Data fixa, somente hoje, usando America/Sao_Paulo no app e no servidor. Revalidar nas escritas e na virada; histórico de outro dia, inclusive pendente, é consulta.
+- API identifica lixeira/tara, calcula líquido e valida novamente na confirmação. Falhas não alteram confirmado nem geram sucesso visual.
+- Sensores só em ciclo aguardando na pesagem ativa; reconexão não reaproveita eventos antigos. Transmitir não equivale a gravar.
+- Médias/comparações somente concluídos, sem produção pesada ou porcentagem da produção. Sem histórico fictício automático.
 
-- Interface aprovada abre por padrão com `npm run web`. `DesignPreview` é o nome interno da raiz atual, não um modo que precisa de flag.
-- Login, Hoje/Home, Histórico, Pesagem e Detalhes. Branco/roxo e Allo, Home e Histórico aprovados: preservar composição, navegação e comportamento.
-- Primeiro acesso vazio. Dados confirmados ficam em AsyncStorage na chave `merenda.servicos.aprovado.v1`; não existem exemplos iniciais, toolbar, restauração ou botões de teste nas telas atuais.
-- Cliente antigo apenas com `EXPO_PUBLIC_LEGACY_APP=1`, e armazenamento anterior em `merenda.servicos.v1`. Não importar/apagar automaticamente registros dessa chave. Não confundir testes antigos com a interface atual.
-- Login atual `demo` / `merenda-demo` é fictício, comparado localmente. Não é autenticação real nem comprovação de senha com hash. Na integração, usar as credenciais públicas de avaliação que o backend realmente fornecer e documentá-las, sem expor senhas pessoais.
-- Painel separado de RFID/balança: `iot/bridge.mjs` + `iot/simulator.html`. Porta 8095, sem dependência extra. Transmite código RFID e peso bruto dos cenários de `iot/shared.ts`.
-- O app identifica, aplica tara, valida e mostra a leitura sem salvar; confirmação manual salva. Régua e peso animados juntos, identificação discreta e detalhes recolhidos. A ponte local não é a API acadêmica, nem autenticação/banco reais.
+## Estado implementado
 
-## Regras aprovadas a preservar na integração
+API Java21/Spring Boot e PostgreSQL, sete operações com GET/POST/PUT/DELETE, camadas, Swagger/Postman. Login BCrypt, JWT, validação, ORM parametrizado, erros genéricos e bloqueio de tentativas. JWT_SECRET obrigatório. Seis entidades, DER e sete consultas. Schema para banco vazio; migração não destrutiva revisável para entrega antiga; fixture histórica opcional. Não foi aplicada migração em banco pessoal.
 
-1. Um serviço por dia/refeição; a data não é editável. Novas pesagens, correções e exclusões só no dia atual. Outros dias são consulta, inclusive pendentes; revalidar também na virada do dia.
-2. Várias pesagens individuais por serviço e categoria somam contribuições, com identidade própria para cada pesagem. RFID identifica uma lixeira; não identifica uma pesagem única.
-3. Novo ciclo explícito; repetir o mesmo ciclo não soma novamente. Correção seleciona um registro e substitui só essa contribuição, preservando as demais; mesma lixeira na correção.
-4. Conclusão é explícita e exige registros das duas categorias. Zero confirmado é válido; ausência de informação não é zero. Uma prévia precisa ser confirmada ou descartada antes de concluir.
-5. Corrigir um serviço concluído no mesmo dia mantém a conclusão e recalcula o total. A interface atual não adiciona novas contribuições a concluído: permite selecionar uma correção. Não criar reabertura/auditoria/versionamento sem decisão de Lucas.
-6. RFID desconhecido e bruto abaixo da tara bloqueiam confirmação. Falhas não podem produzir sucesso visual ou alterar o confirmado. Tara/categoria/peso líquido precisam ser calculados/validados na fronteira confiável da integração.
-7. A escuta de sensores só aceita leitura nova na pesagem ativa e em ciclo aguardando. Entrada/retomada/reconexão não reaproveitam eventos antigos. Na web, trocar para a aba do simulador mantém a escuta. A transmissão do sensor não equivale a gravar a pesagem.
-8. Histórico utiliza os registros efetivamente confirmados; gráficos/médias/comparação consideram serviços concluídos. Não carregar dados fictícios para inventar uma tendência. Não há produção pesada, contagem de refeições ou porcentagem da produção.
+App usa `createAppData`/adaptador HTTP por padrão, sem fallback. Interface AppDataAccess separada das operações legadas. API recebe confirmação individual e conclusão; registros/ID preservados nas respostas. Token em memória, sem persistência; recarga pede login e consulta banco. AsyncStorage preexistente não é importado nem apagado.
 
-ADRs 0001/0002 e revisões mais recentes da especificação prevalecem sobre trechos históricos do contrato antigo.
+`EXPO_PUBLIC_DATA_MODE=demo` ativa explicitamente adaptador local vazio, login demo/merenda-demo e chave `merenda.servicos.aprovado.v1`. `EXPO_PUBLIC_LEGACY_APP=1` mantém cliente anterior e chave antiga. Não confundir essas demonstrações com API acadêmica.
 
-## Onde integrar e o que comparar
+## Executar
 
-Arquivos principais:
+Seguir [README raiz](../README.md), [database](../database/README.md), [backend](../backend/README.md) e [guia do simulador](guia-simulador-gravacao.md). Banco padrão do Compose/API: localhost:55439, merenda/merenda. API localhost:8080. Configurar JWT_SECRET, iniciar banco e API antes de entrar com **operador / merenda123**. Painel Node localhost:8095 e app web localhost:8094. API e ponte têm URLs independentes: EXPO_PUBLIC_API_URL e EXPO_PUBLIC_SIMULATOR_URL. Para celular, usar IP do computador e acesso LAN explícito da ponte; para web via IP, configurar origens das duas partes. Usar vercel-react-native-skills para alterações mobile.
 
-- `mobile/App.tsx`: raiz/fontes e escolha explícita do cliente legado.
-- `mobile/src/DesignPreview.tsx`: raiz aprovada, inicializa o adaptador; login, Histórico e Detalhes.
-- `mobile/src/data/types.ts`: interfaces locais `DataAccess` e `WeighingDataAccess`, sessão e formatos. Não são contrato HTTP fechado.
-- `mobile/src/data/approvedData.ts`: início vazio e chave de persistência própria.
-- `mobile/src/data/demo.ts`: adaptador local que hoje substitui a API. `confirmarPesagem` e `concluirServico` são métodos locais, não endpoints implementados.
-- `mobile/src/data/weighing.ts`: contribuições individuais; `Servico.pesagens` é uma projeção agregada por categoria para compatibilidade. `registros` contém os IDs/contribuições reais do fluxo novo.
-- `mobile/src/preview/PreviewRegistro.tsx`: estado da pesagem, confirmação/correção/conclusão e proteção de saída.
-- `mobile/src/iot/scaleSource.ts` e `useScaleSimulator.ts`: leitura de eventos da ponte com cursor e ciclo; `EXPO_PUBLIC_SIMULATOR_URL` configura o endereço do simulador. Ainda não existe uma configuração de URL de API real.
-- `iot/shared.ts`, `bridge.mjs`, `simulator.html`: cenários, cálculo demonstrativo e painel externo.
+## Verificações e limites
 
-Comparar a entrega do colega com o app: execução/migrations/carga inicial, login/hash/token, entidades, rotas e verbos HTTP, payloads, IDs, categorias, unidades/tara, estados, agregações, erros, idempotência, conclusão e proteção temporal com data/fuso confiáveis do servidor. Verificar também CORS e endereço de API para web/celular.
+[Evidências atuais](evidencias/backend-integration/README.md): 20 testes API/H2 com JDK21, 50 testes app, oito casos calendário sob UTC, quatro IoT, seis fluxos web legados, 20 cenários demo, 12 cenários UI integrada real e 13 verificações HTTP/PostgreSQL. SQL real: onze verificações de integridade, sete consultas e migração com preservação/rollback. Revisão independente realizada; achados de fuso e identidade de ciclo corrigidos. Bundle iOS passou.
 
-O contrato em `.scratch/merenda/api-contract.md` é provisório e ainda tem exemplos antigos de PUT por categoria e conclusão automática. Não adaptar o app cegamente a esses exemplos nem assumir que o backend adotou as revisões. Produzir uma tabela de compatibilidade com evidências antes de decidir alterações mínimas.
+Runtime nativo continua sem comprovação: simctl não possui runtimes/dispositivos disponíveis. Docker indisponível nesta máquina; Compose não executado. PostgreSQL real rodou isolado em diretório temporário, sem instalação global; processos temporários encerrados após testes, sem parar app/simulador preexistentes. Dados temporários preservados.
 
-A interface local ainda herda operações legadas (`criar`, `atualizar`, `restaurarExemplos`): isso não obriga a criar endpoints correspondentes no backend. Se necessário, separar o contrato usado pelo app atual dos métodos exclusivos do cliente antigo. Não colocar um CRUD desnecessário para satisfazer uma abstração local.
+## Próximos passos da equipe
 
-Não usar fallback silencioso para os dados simulados quando a API falhar, nem enviar o histórico local para o backend sem mapear os formatos e obter autorização para a carga. Definir como alternar explicitamente demonstração local e integração, caso seja necessário manter ambos.
-
-## Enunciado: conferir as partes completas
-
-Ler `ENUNCIADO.md`; não limitar a integração ao login:
-
-- Banco: quatro ou mais entidades, DER normalizado com PK/FK/cardinalidades, SQL/constraints/carga inicial executável e cinco ou mais SELECTs com JOIN/agregação.
-- API Java ou C# com ASP.NET, dentro do conteúdo estudado: seis ou mais endpoints, GET/POST/PUT/DELETE, Controller/Service/Repository, validações/status e Swagger/Postman.
-- Segurança: senha com hash e três ou mais práticas verificáveis. Dados mockados não eliminam a exigência de hash.
-- App: quatro ou mais telas funcionais, navegação e usabilidade; dados mockados permitidos. Integração é diferencial, não motivo para ampliar o MVP.
-- Testes: oito ou mais casos planejados, cinco ou mais executados, evidências individuais; atualizar com o comportamento integrado.
-- Dois sensores simulados com uso dos dados e explicação; não apresentar a ponte Node como backend acadêmico.
-- PDF com integrantes e entregáveis não executáveis; TXT com grupo, RM/nomes e link público; código/README no ZIP; vídeo funcionando de até três minutos; cidadão beneficiado e contribuição aos ODS/metas.
-- Grupo não individual, até cinco integrantes, entrega única até 19/11/2026 às 23h55.
-
-## Verificação já realizada e limites
-
-Nesta passagem, repetidos: TypeScript, 36 testes de unidade do app e quatro testes de IoT (ponte + CLI), todos passaram. Evidências da última rodada completa: `docs/evidencias/separate-simulator/` — UI integrada com 20 cenários, seis fluxos do cliente legado e exportação iOS. A execução nativa continua sem comprovação. Não anunciar integração real ou conformidade completa com base no adaptador, em typecheck ou no bundle.
-
-Execução:
-
-```sh
-# Terminal 1, raiz
-node --experimental-strip-types iot/bridge.mjs
-
-# Terminal 2, mobile
-npm run web -- --port 8094
-```
-
-Testes na raiz:
-
-```sh
-npm --prefix mobile run typecheck
-npm --prefix mobile test
-node --experimental-strip-types --test iot/bridge.test.mjs iot/cli.test.mjs
-node mobile/simulator-qa.cjs
-npm --prefix mobile run test:e2e
-```
-
-O roteiro integrado exige app 8094 + simulador 8095 ativos e usa contexto de navegador isolado. Login `demo` / `merenda-demo`. Os roteiros antigos com botões internos e fixtures são históricos, não o fluxo atual.
-
-Ler também `docs/guia-simulador-gravacao.md`, `docs/ux/cobertura-enunciado-pesagem.md`, `docs/agents/mobile.md` e o plano de testes. Usar `vercel-react-native-skills`; aplicar Interface Craft e Impeccable se houver alterações de interface, preservando o desenho aprovado.
-
-## Primeiro passo da próxima sessão
-
-Somente inspeção e planejamento: confirmar esta worktree/checkpoint, localizar a entrega real do colega e executar a análise de compatibilidade com o enunciado. Se não for possível localizar o backend, pedir sua origem a Lucas. Ao final, apresentar o estado encontrado, incompatibilidades, decisões pendentes e plano mínimo por entregas verificáveis. Aguardar aprovação de Lucas para importar/alterar/integrar código. Não reabrir decisões de UI/domínio já aprovadas por mera conveniência do backend.
+Revisar as alterações locais com o colega, verificar runtime mobile em ambiente disponível e consolidar PDF/TXT/ZIP/pitch. Integração é diferencial; não declarar conformidade acadêmica completa apenas pelos testes. PDF inclui DER, plano/evidências individuais e integrantes; TXT e README exigem link público do pitch de até três minutos, conforme enunciado. Confirmar tecnologias dentro da fase4. Não iniciar publicação/envio sem autorização.

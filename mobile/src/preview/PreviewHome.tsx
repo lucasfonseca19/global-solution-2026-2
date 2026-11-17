@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 import { Text } from '../rnr/text';
-import type { DataAccess, Servico, Sessao } from '../data/types';
+import type { AppDataAccess, Servico, Sessao } from '../data/types';
 import { COLORS, ErrorNotice, Loading, kg } from './PreviewUi';
 import { allo } from '../typography';
 import { useServiceDay } from '../useServiceDay';
@@ -17,7 +17,7 @@ export function HomeNavigation({active,onHome,onHistory}: {active:'home'|'histor
   <Text style={[h.tabLabel,active===tab?h.active:undefined]}>{tab==='home'?'Hoje':'Histórico'}</Text>
  </Pressable>)}</View>;
 }
-export function PreviewHome({api,session,onMeal,onHistory}: {api:DataAccess;session:Sessao;onMeal:(date:string,meal:string,service?:Servico)=>void;onHistory:()=>void}) {
+export function PreviewHome({api,session,onMeal,onHistory}: {api:AppDataAccess;session:Sessao;onMeal:(date:string,meal:string,service?:Servico)=>void;onHistory:()=>void}) {
  const focused=useIsFocused();
  const iso=useServiceDay();
  const date=new Date(iso+'T12:00:00');

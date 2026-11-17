@@ -2,29 +2,50 @@
 
 Para a próxima sessão de backend: [passagem atual para integração](docs/continuidade-integracao.md).
 
-MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. A parte de Lucas tem um app demonstrativo React Native/Expo (web local), persistência local e simulador separado de RFID e balança conectado ao app, além da CLI independente. A API, o banco e a segurança real não fazem parte desta implementação; o contrato entre as partes permanece provisório.
+MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. App React Native/Expo, API Java 21/Spring Boot, PostgreSQL e simulador separado de RFID/balança. Integração baseada na contribuição do colega `51957f3`, adaptada às ADRs de pesagens individuais e conclusão explícita. A interface aprovada (Home, Histórico, Allo e pesagem) foi preservada.
 
-## App atual: vazio e com sensores separados
+## Execução integrada
 
-A interface aprovada abre por padrão, sem exemplos históricos, botões de simulação, restauração de fixtures ou toolbar de teste. Instalação nova começa vazia; as pesagens confirmadas são persistidas em uma chave própria, sem importar ou apagar os dados da versão anterior.
+Requer Node compatível com Expo (ambiente: 22.17.1+), JDK 21, Maven 3.9+ e PostgreSQL 14+ (ou Docker Compose). Seguir [database/README.md](database/README.md) para criar um banco vazio com `01_schema.sql` e `02_carga_inicial.sql`. Essa carga inclui somente conta de avaliação, categorias e lixeiras; não cria histórico fictício. Para banco antigo, revisar a migração documentada antes de executar qualquer script.
 
-Em um terminal, na raiz do repositório:
+Terminal da API:
+
+```sh
+cd backend
+export JWT_SECRET="segredo-exclusivo-da-sua-demonstracao-local-com-32-caracteres"
+mvn spring-boot:run
+```
+
+Credenciais locais padrão do banco: `merenda`/`merenda`; URL `jdbc:postgresql://localhost:55439/merenda`. Configurações em [backend/README.md](backend/README.md). Swagger: `http://localhost:8080/swagger-ui.html`.
+
+Terminal do simulador, na raiz:
 
 ```sh
 node --experimental-strip-types iot/bridge.mjs
 ```
 
-Abra o simulador em `http://127.0.0.1:8095`. Em outro terminal:
+Abra `http://127.0.0.1:8095`. Terminal do app:
 
 ```sh
 cd mobile
 npm ci
-npm run web -- --port 8094
+EXPO_PUBLIC_DATA_MODE=api EXPO_PUBLIC_API_URL=http://localhost:8080 npm run web -- --port 8094
 ```
 
-Abra o app em `http://localhost:8094`. Login de demonstração: `demo` / `merenda-demo`. Entre na refeição e aguarde “Balança conectada”; no painel separado, escolha a leitura e toque em “Colocar na balança”. O app identifica, calcula, anima e permite confirmar manualmente. A ponte é um simulador local, não substitui a API/banco/segurança exigidos pelo enunciado.
+Abra `http://localhost:8094`. Login de avaliação: **`operador` / `merenda123`**, verificado por BCrypt na API. Entre numa refeição, aguarde “Balança conectada” e envie um cenário no painel separado. O app consulta identificação/tara/líquido na API; somente a confirmação grava no PostgreSQL. Cada novo ciclo soma uma contribuição; correção substitui um registro; conclusão é explícita.
 
-A sessão termina ao recarregar, mas as pesagens confirmadas permanecem. O Histórico começa sem pontos fictícios e cresce com os registros. Use o [guia de execução e gravação](docs/guia-simulador-gravacao.md) e veja as [evidências atuais](docs/evidencias/separate-simulator/README.md). Não há necessidade da flag de prévia; `EXPO_PUBLIC_LEGACY_APP=1` abre explicitamente o cliente anterior.
+API é o modo padrão, sem fallback para dados locais. Sessão/token ficam em memória; recarregar pede login e consulta novamente o banco. Histórico local preexistente não é enviado, apagado nem importado. A ponte Node continua sendo somente o simulador, separado da API acadêmica.
+
+Para executar a demonstração local anterior explicitamente:
+
+```sh
+cd mobile
+EXPO_PUBLIC_DATA_MODE=demo npm run web -- --port 8094
+```
+
+Nesse modo somente, login `demo` / `merenda-demo` e persistência AsyncStorage em chave própria. O [guia de gravação](docs/guia-simulador-gravacao.md) descreve os fluxos; o [contrato atual](.scratch/merenda/api-contract.md) documenta o HTTP.
+
+Para celular, configurar `EXPO_PUBLIC_API_URL` e `EXPO_PUBLIC_SIMULATOR_URL` com o IP do computador; não usar localhost no telefone. A ponte exige `SIMULATOR_HOST=0.0.0.0` para acesso LAN explícito. No navegador via IP, configurar também as origens em `CORS_ORIGENS` (API) e `SIMULATOR_ALLOWED_ORIGIN` (ponte). O app usa o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo; servidor revalida todas as escritas.
 
 ## Registro anterior: cliente legado
 
@@ -51,7 +72,7 @@ A documentação e as verificações finais estão consolidadas nas [evidências
 - PDF acadêmico final, incluindo o [relatório de implementação de Lucas](docs/relatorio-implementacao-lucas.md) como contribuição parcial.
 - TXT exigido para a entrega final.
 - Link público do pitch do grupo (limite de três minutos; o [roteiro de Lucas](docs/roteiro-demonstracao-lucas.md) cobre aproximadamente 45–60 segundos).
-- Backend/API e banco reais, implementação e revisão do colega, contrato conjunto e eventual integração. Não há resultado ou link de integração a declarar.
+- Revisão das alterações de integração pela equipe e consolidação das evidências no PDF final.
 - Verificação nativa pendente e revisão final do grupo.
 
 O pacote final previsto no enunciado também requer código e README de execução; confira o [enunciado](ENUNCIADO.md) e a [especificação do MVP](.scratch/merenda/spec.md). A organização de responsabilidades está em [guia da equipe](docs/guia-equipe.md).

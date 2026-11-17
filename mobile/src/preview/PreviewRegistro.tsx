@@ -3,8 +3,9 @@ import {StyleSheet,View} from 'react-native';
 import {useNavigation,usePreventRemove,useIsFocused} from '@react-navigation/native';
 import {useReducedMotion} from 'react-native-reanimated';
 import {useScaleSimulator} from '../iot/useScaleSimulator';
-import type {Leitura,Previa,RegistroPesagem,Servico,Sessao,WeighingDataAccess} from '../data/types';
+import type {Leitura,Previa,RegistroPesagem,Servico,Sessao,AppDataAccess} from '../data/types';
 import {individualRecords} from '../data/weighing';
+import {newWeighingCycle as nextCycle} from '../data/cycle';
 import {localServiceDay,requireCurrentServiceDay,READ_ONLY_DAY} from '../data/serviceDay';
 import {useServiceDay} from '../useServiceDay';
 import {identifierType} from '../typography';
@@ -15,12 +16,11 @@ import {Action,CATEGORIES,COLORS,ErrorNotice,Field,Header,Shell,categoryLabel,da
 
 type Phase='idle'|'identifying'|'weighing'|'ready'|'saved';
 const TIMING={identify:900};
-let cycleSequence=0;
-const nextCycle=()=>`ciclo-${Date.now()}-${++cycleSequence}`;
+
 
 
 export function PreviewRegistro({api,session,initialService,initialContext,onBack,onDetails}:{
- api:WeighingDataAccess;session:Sessao;initialService?:Servico;initialContext?:{data:string;tipoRefeicao:string};onBack:()=>void;onDetails:(id:number)=>void;
+ api:AppDataAccess;session:Sessao;initialService?:Servico;initialContext?:{data:string;tipoRefeicao:string};onBack:()=>void;onDetails:(id:number)=>void;
 }){
  const today=useServiceDay(),navigation=useNavigation(),reduced=useReducedMotion(),focused=useIsFocused();
  const [serviceDate]=useState(initialService?.data??initialContext?.data??localServiceDay());

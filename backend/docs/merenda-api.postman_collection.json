@@ -1,0 +1,218 @@
+{
+  "info": {
+    "name": "Merenda — integração individual",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Defina data como hoje em America/Sao_Paulo e ciclo novo para cada execução. Repetir o item 3 antes de excluir comprova replay. Testes manuais dependem de API e PostgreSQL; importar coleção não é evidência de execução."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "servicoId",
+      "value": ""
+    },
+    {
+      "key": "registroId",
+      "value": ""
+    },
+    {
+      "key": "data",
+      "value": "2026-11-17"
+    },
+    {
+      "key": "ciclo",
+      "value": "postman-1"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Login",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"operador\",\n  \"senha\": \"merenda123\"\n}"
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login válido\",()=>pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"token\",pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Avaliar sem gravar",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/leituras/avaliar",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoRfid\": \"RFID-SIM-001\",\n  \"pesoBrutoKg\": 4\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Prévia válida\",()=>pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Confirmar (repetir não duplica)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/pesagens",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": \"{{data}}\",\n  \"tipoRefeicao\": \"Almoço\",\n  \"cicloId\": \"{{ciclo}}\",\n  \"leitura\": {\n    \"codigoRfid\": \"RFID-SIM-001\",\n    \"pesoBrutoKg\": 4\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Confirmada\",()=>pm.response.to.have.status(200));",
+              "const s=pm.response.json();pm.collectionVariables.set(\"servicoId\",s.id);pm.collectionVariables.set(\"registroId\",s.registros[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Histórico",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/servicos",
+        "header": []
+      }
+    },
+    {
+      "name": "5. Detalhe",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/servicos/{{servicoId}}",
+        "header": []
+      }
+    },
+    {
+      "name": "6. Corrigir contribuição",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/pesagens",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": \"{{data}}\",\n  \"tipoRefeicao\": \"Almoço\",\n  \"cicloId\": \"{{ciclo}}-correcao\",\n  \"leitura\": {\n    \"codigoRfid\": \"RFID-SIM-001\",\n    \"pesoBrutoKg\": 3.5\n  },\n  \"substituirId\": \"{{registroId}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "7. Confirmar restos",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/pesagens",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": \"{{data}}\",\n  \"tipoRefeicao\": \"Almoço\",\n  \"cicloId\": \"{{ciclo}}-restos\",\n  \"leitura\": {\n    \"codigoRfid\": \"RFID-SIM-002\",\n    \"pesoBrutoKg\": 3.5\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "8. Concluir explicitamente",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/servicos/{{servicoId}}/conclusao",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Concluído\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().status).eq(\"COMPLETO\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Excluir serviço de hoje",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/servicos/{{servicoId}}",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Excluído\",()=>pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

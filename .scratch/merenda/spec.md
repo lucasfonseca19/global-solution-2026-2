@@ -1,10 +1,14 @@
 # MVP de medição do descarte da merenda
 
-Status: needs-info
+Status: implementação local para revisão da equipe
 
 Atualizado em 14/11/2026. Rascunho para revisão de Lucas e do outro integrante. Não autoriza implementação. As decisões refletem a conversa com Lucas; não pressupõem concordância prévia do colega.
 
 Fontes: [enunciado](../../ENUNCIADO.md), [contexto](../../CONTEXTO.md), [glossário](../../GLOSSARY.md) e [mapa de decisões](map.md).
+
+## Integração autorizada — 17/11/2026
+
+Após análise da contribuição do colega `51957f3`, Lucas autorizou a integração completa. Manter Java/Spring Boot/PostgreSQL, adequar às ADRs e conectar pela camada de dados do app. [Contrato vigente](api-contract.md), [plano](integration-plan.md), [evidências](../../docs/evidencias/backend-integration/README.md). Calendário operacional único `America/Sao_Paulo` no app e servidor, ciclo aleatório entre aparelhos, contribuição individual e conclusão explícita. API padrão; demo local somente por seleção explícita. Sem carga automática de histórico local/fictício. A equipe ainda deve revisar; runtime mobile nativo e pacote acadêmico final permanecem pendentes.
 
 ## App vazio e sensores separados — 17/11/2026
 

@@ -1,0 +1,41 @@
+const assert=require('node:assert/strict');
+const {randomUUID}=require('node:crypto');
+const fs=require('node:fs');
+const path=require('node:path');
+const base=process.env.QA_API_URL??'http://localhost:18080';
+const out=path.resolve(__dirname,'../docs/evidencias/backend-integration/api-postgres.json');
+(async()=>{
+ const evidence=[];let token;
+ async function req(route,method='GET',body,expected=200,extra={}){
+  const response=await fetch(base+route,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{}) ,...extra},...(body===undefined?{}:{body:JSON.stringify(body)})});
+  const data=response.status===204?undefined:await response.json();assert.equal(response.status,expected,`${method} ${route}: ${JSON.stringify(data)}`);return data;
+ }
+ const pass=(cenario,details)=>evidence.push({cenario,status:'PASS',...(details?{details}:{})});
+ await req('/servicos','GET',undefined,401);pass('Consulta sem token bloqueada');
+ ({token}=await req('/auth/login','POST',{login:'operador',senha:'merenda123'}));pass('Login BCrypt real em PostgreSQL');
+ const format=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
+ const today=format.format(new Date()),prefix=randomUUID();
+ const entry=(cycle,rfid,bruto)=>({data:today,tipoRefeicao:'Jantar',cicloId:prefix+cycle,leitura:{codigoRfid:rfid,pesoBrutoKg:bruto}});
+ const first=entry('a','RFID-SIM-001',4),second=entry('b','RFID-SIM-001',2),third=entry('c','RFID-SIM-002',3.5);
+ await Promise.all([first,second,third,first].map(body=>req('/pesagens','POST',body)));
+ let services=await req('/servicos');let service=services.find(s=>s.data===today&&s.tipoRefeicao==='Jantar');
+ assert.equal(service.totalKg,6);assert.equal(service.registros.length,3);assert.equal(service.status,'PENDENTE');pass('Concorrência real: 3+1+2=6 kg e replay simultâneo não duplica',{totalKg:service.totalKg,registros:service.registros.length});
+ await req('/pesagens','POST',{...first,leitura:{...first.leitura,pesoBrutoKg:5}},409);pass('Mesmo ciclo com payload diferente rejeitado');
+ const target=service.registros.find(r=>r.pesoLiquidoKg===3);
+ const correction={...entry('d','RFID-SIM-001',3.5),substituirId:target.id};
+ service=await req('/pesagens','POST',correction);assert.equal(service.totalKg,5.5);assert.equal(service.registros.length,3);pass('Correção substitui só 3 por 2,5 kg: total 5,5');
+ await req('/pesagens','POST',{...entry('e','RFID-SIM-002',3.5),substituirId:target.id},409);pass('Correção com lixeira diferente rejeitada');
+ service=await req(`/servicos/${service.id}/conclusao`,'PUT');assert.equal(service.status,'COMPLETO');
+ await req('/pesagens','POST',entry('f','RFID-SIM-001',4),409);pass('Conclusão explícita bloqueia nova contribuição');
+ service=await req('/pesagens','POST',correction);assert.equal(service.totalKg,5.5);assert.equal(service.status,'COMPLETO');pass('Replay de correção mantém total/conclusão');
+ const yesterday=format.format(new Date(Date.now()-86400000));await req('/pesagens','POST',{...entry('g','RFID-SIM-001',4),data:yesterday},409);pass('Data passada recusada pelo servidor');
+ await req('/leituras/avaliar','POST',{codigoRfid:'RFID-SIM-999',pesoBrutoKg:4},400);
+ await req('/leituras/avaliar','POST',{codigoRfid:'RFID-SIM-001',pesoBrutoKg:0.5},400);
+ assert.equal((await req(`/servicos/${service.id}`)).totalKg,5.5);pass('Leituras inválidas não alteram confirmado');
+ const cors=await fetch(base+'/pesagens',{method:'OPTIONS',headers:{Origin:'http://localhost:18094','Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'authorization,content-type'}});assert.equal(cors.status,200);assert.equal(cors.headers.get('access-control-allow-origin'),'http://localhost:18094');
+ const denied=await fetch(base+'/servicos',{headers:{Origin:'https://origem-nao-permitida.example',Authorization:`Bearer ${token}`}});assert.equal(denied.status,403);pass('CORS permite app local e rejeita origem externa');
+ const docs=await fetch(base+'/v3/api-docs');assert.equal(docs.status,200);assert.equal(Object.keys((await docs.json()).paths).length,6);pass('OpenAPI disponível: 7 operações em 6 caminhos');
+ await req(`/servicos/${service.id}`,'DELETE',undefined,204);await req('/pesagens','POST',first,409);
+ services=await req('/servicos');assert.equal(services.some(s=>s.id===service.id),false);assert.equal(services.some(s=>s.data===today&&s.tipoRefeicao==='Jantar'),false);pass('Exclusão seguida de replay não ressuscita serviço');
+ fs.writeFileSync(out,JSON.stringify({result:'PASS',fronteira:'HTTP real Java/PostgreSQL isolado',evidence},null,2));console.log(`PASS: ${evidence.length} verificações HTTP/PostgreSQL.`);
+})().catch(error=>{console.error(error);process.exitCode=1;});

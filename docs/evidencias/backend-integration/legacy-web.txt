@@ -1,0 +1,24 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test:e2e
+> playwright test
+
+[WebServer] npm warn Unknown env config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[WebServer] (node:32435) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:32495) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:32582) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/consulta.spec.ts:2:1 › login inválido, consulta, retorno e saída (3.7s)
+  ✓  2 e2e/consulta.spec.ts:36:1 › desktop mantém conteúdo legível e recarregar encerra sessão (1.9s)
+  ✓  3 e2e/correcao.spec.ts:7:1 › corrigir por detalhes persiste; sair, excluir e restaurar respeitam confirmação (3.0s)
+  ✓  4 e2e/correcao.spec.ts:50:1 › abrir detalhes descarta a correção anterior e preserva categoria já atualizada (1.8s)
+  ✓  5 e2e/correcao.spec.ts:67:1 › histórico anterior é só consulta e não oferece correção ou exclusão (1.4s)
+  ✓  6 e2e/registro.spec.ts:2:1 › registro: prévia, erros, confirmação, continuidade, zero e consulta (2.1s)
+
+  6 passed (17.6s)

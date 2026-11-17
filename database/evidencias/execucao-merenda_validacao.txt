@@ -1,0 +1,42 @@
+PostgreSQL 16.4 isolado; host=127.0.0.1 port=55439; banco=merenda_validacao
+
+EXECUTANDO 01_schema.sql
+OK
+
+EXECUTANDO 02_carga_inicial.sql
+OK
+
+EXECUTANDO evidencias/testes-constraints.sql
+OK
+NOTICE:  T1 PASS: serviço normalizado único
+NOTICE:  T2 PASS: mesma categoria contém contribuições 3+1=4
+NOTICE:  T3 PASS: contagem não conclui serviço
+NOTICE:  T4 PASS: bruto abaixo da tara rejeitado
+NOTICE:  T5 PASS: categoria incoerente rejeitada
+NOTICE:  T6 PASS: senha sem formato BCrypt rejeitada
+NOTICE:  T7 PASS: zero confirmado aceito
+NOTICE:  T8 PASS: ciclo global único
+NOTICE:  T9 PASS: correção preserva conclusão persistida
+NOTICE:  T10 PASS: exclusão remove contribuições e preserva ciclo/hash sem serviço
+NOTICE:  T11 PASS: replay após exclusão mantém ciclo reservado
+
+EXECUTANDO 04_fixture_opcional.sql
+OK
+
+EXECUTANDO 03_consultas.sql
+['id', 'data_servico', 'tipo_refeicao', 'sobra_kg', 'resto_prato_kg', 'total_kg', 'status']
+[(7, datetime.date(2026, 11, 12), 'Almoço', Decimal('3.000'), Decimal('2.000'), Decimal('5.000'), 'COMPLETO'), (8, datetime.date(2026, 11, 12), 'Jantar', Decimal('1.000'), None, Decimal('1.000'), 'PENDENTE'), (6, datetime.date(2026, 11, 11), 'Almoço', Decimal('0.000'), Decimal('1.700'), Decimal('1.700'), 'COMPLETO'), (5, datetime.date(2026, 11, 10), 'Almoço', Decimal('4.400'), Decimal('2.500'), Decimal('6.900'), 'COMPLETO'), (3, datetime.date(2026, 11, 9), 'Almoço', Decimal('3.200'), Decimal('1.800'), Decimal('5.000'), 'COMPLETO'), (4, datetime.date(2026, 11, 9), 'Jantar', Decimal('0.800'), Decimal('0.600'), Decimal('1.400'), 'COMPLETO')]
+['codigo', 'descricao', 'qtd_servicos_concluidos', 'qtd_pesagens', 'total_kg', 'media_kg_por_servico']
+[('SOBRA_DESCARTADA', 'Alimento preparado e não servido que será descartado', 5, Decimal('6'), Decimal('11.400'), Decimal('2.280')), ('RESTO_PRATO', 'Restos comestíveis devolvidos nos pratos', 5, Decimal('5'), Decimal('8.600'), Decimal('1.720'))]
+['tipo_refeicao', 'qtd_servicos', 'total_kg', 'media_kg_por_servico']
+[('Almoço', 4, Decimal('18.600'), Decimal('4.650')), ('Jantar', 1, Decimal('1.400'), Decimal('1.400'))]
+['data_servico', 'tipo_refeicao', 'total_kg']
+[(datetime.date(2026, 11, 10), 'Almoço', Decimal('6.900')), (datetime.date(2026, 11, 9), 'Almoço', Decimal('5.000')), (datetime.date(2026, 11, 12), 'Almoço', Decimal('5.000')), (datetime.date(2026, 11, 11), 'Almoço', Decimal('1.700')), (datetime.date(2026, 11, 9), 'Jantar', Decimal('1.400'))]
+['data_servico', 'tipo_refeicao', 'categorias_aguardando', 'status']
+[(datetime.date(2026, 11, 12), 'Jantar', 'RESTO_PRATO', 'PENDENTE')]
+['codigo_rfid', 'descricao', 'categoria', 'tara_kg', 'qtd_pesagens', 'media_bruto_kg']
+[('RFID-SIM-001', 'Lixeira da cozinha', 'SOBRA_DESCARTADA', Decimal('1.000'), 7, Decimal('2.771')), ('RFID-SIM-002', 'Lixeira de devolução dos pratos', 'RESTO_PRATO', Decimal('1.500'), 5, Decimal('3.220'))]
+['nome', 'servicos_registrados', 'pesagens_confirmadas', 'ultima_confirmacao']
+[('Operador de demonstração', 6, 12, datetime.datetime(2026, 11, 17, 14, 31, 22, 323286))]
+OK
+Serviços finais: 6

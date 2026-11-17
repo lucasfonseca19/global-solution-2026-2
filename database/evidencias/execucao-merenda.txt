@@ -1,0 +1,8 @@
+PostgreSQL 16.4 isolado; host=127.0.0.1 port=55439; banco=merenda
+
+EXECUTANDO 01_schema.sql
+OK
+
+EXECUTANDO 02_carga_inicial.sql
+OK
+Serviços finais: 0

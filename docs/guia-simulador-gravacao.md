@@ -1,6 +1,8 @@
 # App limpo e simulador: execução e gravação
 
-17/11/2026. Interface aprovada com Allo, Home e Histórico preservados. Primeiro acesso sem dados; confirmações persistidas localmente. As leituras RFID/balança e o login são demonstrativos. Esta ponte não é o backend acadêmico e não oferece autenticação real ou banco de dados relacional.
+17/11/2026 — atualização da integração: a execução padrão usa API Java e PostgreSQL. Inicie primeiro banco/API conforme o [README](../README.md); login `operador` / `merenda123`. Para o roteiro demonstrativo local antigo, iniciar o app com `EXPO_PUBLIC_DATA_MODE=demo` e usar `demo` / `merenda-demo`. Os passos de pesagem e o painel separado permanecem iguais. No modo integrado, os registros ficam no banco; não há fallback local. Ver [contrato HTTP](../.scratch/merenda/api-contract.md).
+
+Registro do modo local anterior: interface aprovada com Allo, Home e Histórico preservados. Primeiro acesso sem dados; confirmações persistidas localmente. As leituras RFID/balança e o login são demonstrativos. Esta ponte não é o backend acadêmico e não oferece autenticação real ou banco de dados relacional.
 
 ## Abrir as duas partes
 

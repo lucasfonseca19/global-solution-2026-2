@@ -1,6 +1,6 @@
 # 03 — Entregar API e segurança
 
-Status: needs-info
+Status: ready-for-human
 Responsável: colega
 Blocked by: escolha do backend, acordo do ticket 01 e banco do ticket 02 para verificação final
 
@@ -28,3 +28,7 @@ O colega pode propor a arquitetura antes do fechamento de 01/02. Não fixar JWT,
 ### 14/11/2026
 
 Divisão aceita pelo colega segundo relato de Lucas; escolhas técnicas e revisão do contrato ainda pendentes.
+
+## Atualização de integração — 17/11/2026
+
+Lucas aprovou importar e adequar a contribuição `51957f3`, preservando as ADRs atuais. Implementação técnica e verificações em [evidências de integração](../../../docs/evidencias/backend-integration/README.md) e [contrato vigente](../api-contract.md). Os critérios históricos de PUT completo por categoria/conclusão automática acima foram substituídos por contribuição individual, ciclo idempotente, correção por ID e conclusão explícita. API Java/Spring Boot e PostgreSQL foram mantidos. A equipe ainda deve revisar a alteração antes da entrega acadêmica; PDF/pitch e execução nativa permanecem separados. Não houve push.

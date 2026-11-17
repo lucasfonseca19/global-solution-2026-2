@@ -1,0 +1,7 @@
+PostgreSQL isolado: merenda_integration / porta 55439
+usuario: 1
+categoria_descarte: 2
+lixeira: 2
+servico_alimentacao: 0
+pesagem: 0
+ciclo_pesagem: 0

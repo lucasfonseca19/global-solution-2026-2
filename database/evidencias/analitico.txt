@@ -1,0 +1,4 @@
+PostgreSQL16.4 / merenda_validacao
+PASS: ALMÓÇO normaliza para almoco
+PASS: média de sobra por 5 serviços concluídos = 2.2800000000000000 kg; média incorreta por 6 pesagens = 1.9000000000000000 kg.
+A consulta 2 retorna 2.280 kg, conforme logs de execução.

@@ -1,5 +1,9 @@
 const {chromium,expect}=require('@playwright/test');const fs=require('node:fs');
-const out=require('node:path').resolve(__dirname,'../docs/evidencias/separate-simulator');
+const out=require('node:path').resolve(__dirname,process.env.QA_OUT??'../docs/evidencias/separate-simulator');
+fs.mkdirSync(out,{recursive:true});
+// Roteiro do modo local explícito EXPO_PUBLIC_DATA_MODE=demo.
+const appUrl=process.env.QA_APP_URL??'http://localhost:8094';
+const simUrl=process.env.QA_SIMULATOR_URL??'http://127.0.0.1:8095';
 (async()=>{
  const browser=await chromium.launch({channel:'chrome',headless:true});
  const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'America/Sao_Paulo'});
@@ -9,8 +13,8 @@ const out=require('node:path').resolve(__dirname,'../docs/evidencias/separate-si
  async function emit(key){await sim.selectOption('#scenario',key);await sim.getByRole('button',{name:'Colocar na balança',exact:true}).click();await expect(sim.getByText('Leitura enviada. Confira o resultado no app.',{exact:true})).toBeVisible();}
  async function ready(){await expect(app.getByText('Balança conectada',{exact:true})).toBeVisible();}
  async function read(key,label='Confirmar pesagem'){await ready();await emit(key);await expect(app.getByText('Identificando lixeira…',{exact:true})).toBeVisible();await expect(app.getByText('Pesando…',{exact:true})).toBeVisible();await expect(button(label)).toBeEnabled();}
- await sim.goto('http://127.0.0.1:8095');await emit('sobra');
- await app.goto('http://localhost:8094');await app.getByLabel('Login',{exact:true}).fill('demo');await app.getByLabel('Senha',{exact:true}).fill('incorreta');await button('Entrar').click();await expect(app.getByText('Login ou senha inválidos.',{exact:true})).toBeVisible();await login();
+ await sim.goto(simUrl);await emit('sobra');
+ await app.goto(appUrl);await app.getByLabel('Login',{exact:true}).fill('demo');await app.getByLabel('Senha',{exact:true}).fill('incorreta');await button('Entrar').click();await expect(app.getByText('Login ou senha inválidos.',{exact:true})).toBeVisible();await login();
  await app.screenshot({path:`${out}/home-vazia.png`,fullPage:true});await button('Histórico').click();await expect(app.getByText('0 registros',{exact:true})).toBeVisible();for(const name of ['Demonstração','Restaurar exemplos básicos'])await expect(button(name)).toHaveCount(0);await app.screenshot({path:`${out}/historico-vazio.png`,fullPage:true});await button('Hoje').click();
  await button('Almoço, Não iniciada, Pesar').click();await ready();await app.waitForTimeout(900);await expect(button('Confirmar pesagem')).toHaveCount(0);await expect(button('Simular pesagem')).toHaveCount(0);await expect(app.getByText(/Prévia interativa/)).toHaveCount(0);await app.screenshot({path:`${out}/pesagem-limpa.png`,fullPage:true});
  await ready();await emit('sobra');await expect(app.getByText('Identificando lixeira…',{exact:true})).toBeVisible();await button('Cancelar pesagem').click();await ready();
