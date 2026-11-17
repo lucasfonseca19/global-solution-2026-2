@@ -2,52 +2,60 @@
 
 ## Resumo
 
-Foi implementado um app demonstrativo para acompanhar o descarte de uma escola por serviço/data e tipo de refeição. O funcionário identifica a lixeira automaticamente pelo RFID simulado, confere o cálculo do peso líquido e confirma a pesagem. O escopo cobre sobra não servida destinada ao descarte e restos comestíveis dos pratos. Não mede produção, refeições servidas, percentuais ou redução de desperdício.
+A parte de Lucas entrega o **app mobile** (React Native/Expo) e a **simulação de IoT** do projeto Merenda, e foi **integrada ao backend e banco** do colega. O produto completo registra o descarte de alimentos na merenda escolar: o funcionário aproxima a lixeira (identificada por RFID simulado), pesa, confere o peso líquido (descontada a tara) e confirma; cada pesagem vira uma contribuição individual, e a conclusão do serviço é explícita.
 
-Os tickets 09, 10 e 11 foram concluídos e verificados; referência de integração no histórico local: commit `7b67860`. Esta consolidação documenta a parte já executada. O requisito de execução mobile nativa ainda está pendente: o app não iniciou em iOS/Android. Logo, esta documentação não declara o ticket 12 concluído.
+O escopo mede duas categorias — alimento preparado e não servido, e restos comestíveis devolvidos nos pratos — e consolida um histórico por refeição. Não mede produção, refeições servidas, percentuais nem redução de desperdício.
 
-## O que foi feito e decisões
+## O que foi feito
 
-- Quatro telas: Login demonstrativo, Histórico, Registro e Detalhes.
-- Adaptador local com exemplos de serviço completo (5 kg), pendente (3 kg parcial) e zero confirmado. Prévia calcula e valida sem gravar; confirmação cria/atualiza. A correção substitui a pesagem da categoria, preservando a outra.
-- RFID-SIM-001 identifica sobra e tara de 1 kg; RFID-SIM-002 identifica restos e tara de 1,5 kg. A simulação fornece peso bruto; o app/consumidor identifica a categoria, calcula líquido e bloqueia etiqueta desconhecida ou peso abaixo da tara.
-- Serviços persistem localmente com AsyncStorage 2.2.0 (compatível com Expo SDK 58; localStorage na web). Recarregar encerra a sessão, mas preserva serviços. Exclusão requer confirmação e remove também pesagens. Restaurar exemplos substitui o estado local após confirmação.
-- A CLI IoT e a UI são demonstrações independentes, com cenários e cálculo compartilhados. Não existe conexão de eventos entre elas.
-- Tecnologias registradas no lockfile: Expo 58.0.25, React 19.3.0, React Native 0.88.1, TypeScript 6.0.3, React Navigation native stack 7.21.0, Vitest 5.1.0 e Playwright 1.65.1. Node/npm das evidências: 22.17.1/10.9.2.
+- **App (5 telas):** Login, Hoje, Histórico, Pesagem e Detalhes, com abas nativas no celular e suporte web local. O app usa a API por padrão (sem fallback) e oferece um modo **Demonstração** autossuficiente para exibir o fluxo sem subir o backend.
+- **Pesagem por contribuição:** cada confirmação soma um registro individual; várias pesagens da mesma categoria somam. A correção substitui só o registro selecionado, preservando os demais e o estado concluído. A conclusão é explícita e exige as duas categorias (zero confirmado é válido).
+- **Somente o dia atual:** criação, correção e exclusão valem apenas para o dia corrente (fuso da escola `America/Sao_Paulo`, no app e no servidor). Histórico de outros dias é consulta.
+- **Simulação de IoT:** leitor RFID e balança simulados. O RFID (`RFID-SIM-001` sobra / `RFID-SIM-002` restos) identifica lixeira, categoria e tara; a balança fornece o peso bruto. A ponte (`iot/bridge.mjs`) emite os cenários; a CLI (`iot/cli.mjs`) demonstra a leitura isoladamente.
+- **Integração:** o app consome a API Java/Spring Boot por HTTP e grava no PostgreSQL. Sessão/token ficam em memória; recarregar pede login e consulta o banco.
 
-## Estrutura e evidência
+## Arquitetura
 
-- `mobile/src/`: telas, componentes visuais e tipos/adaptador de dados, fixtures e testes.
-- `iot/shared.ts`: tipos, cenários e regra de cálculo usados pela demonstração; `iot/cli.mjs` expõe a CLI sem persistência.
-- `docs/evidencias/09/`, `10/` e `11/`: logs reais, capturas e descrição dos ambientes; [plano de testes](plano-testes-lucas.md) mapeia IDs para testes/logs nomeados.
+| Parte | Responsável | Tecnologia | Onde |
+| --- | --- | --- | --- |
+| App mobile | Lucas | React Native / Expo (SDK 58) | `mobile/` |
+| Simulação IoT | Lucas | Node.js (bridge + CLI) | `iot/` |
+| API + banco + segurança | Colega (integrada) | Java 21 / Spring Boot + PostgreSQL | `backend/`, `database/` |
 
-A [conferência final](evidencias/12/README.md) registrou 15 testes Vitest do adaptador, dois testes Node da CLI e cinco fluxos Playwright na aplicação web com Chrome instalado, além de typecheck, compatibilidade Expo e exportação web. Após reinstalação por `npm ci`, testes, typecheck e fluxos web passaram novamente. Foram registrados três alertas moderados transitivos associados a Expo, `@expo/fingerprint` e `minimatch`; não foi usado `--force` para atualizar dependências fora do SDK.
+A interface de dados do app (`mobile/src/data/`) separa o adaptador HTTP (API) do adaptador local (demonstração), compartilhando as mesmas regras de cálculo e validação com a IoT (`iot/shared.ts`).
 
-## Limites e integração futura
+## Testes e evidências
 
-Login/credenciais e dados são fictícios. Não há autenticação segura, backend, API real, banco ou hardware. O contrato em `.scratch/merenda/api-contract.md` é provisório e ainda depende de revisão do colega. Não atribuímos ao colega implementação, tecnologia ou aprovação que não estejam confirmadas.
+| Camada | Testes | Comando |
+| --- | --- | --- |
+| API | 20 (JUnit, H2) | `cd backend && mvn test` |
+| App | 45 (Vitest) | `cd mobile && npm test` |
+| IoT | 4 (Node) | `node --test iot/bridge.test.mjs iot/cli.test.mjs` |
+| Banco (SQL real) | 11 constraints + 7 consultas | `psql` |
 
-Para conectar depois: revisar em conjunto o significado e os formatos de serviço, RFID, tara, leituras, estado pendente/zero, total e substituição; acordar rotas/payloads e erros; então trocar a implementação local na fronteira do adaptador por chamadas à API. Preservar prévia sem gravação, confirmação explícita, idempotência funcional da correção, exclusão após confirmação e os cenários de teste. O app atual não demonstra essa integração.
+Plano de testes em [`plano-testes-lucas.md`](plano-testes-lucas.md); evidências executadas em [`docs/evidencias/`](evidencias/) (integração, demonstração e navegação nativa) e na [`API`](../backend/docs/evidencias/README.md).
+
+## Segurança (parte do colega)
+
+Login com senha em **hash BCrypt** e token **JWT**; validação de entrada; proteção contra **SQL injection** (consultas parametrizadas) e **XSS**; **controle de acesso** (só `/auth/login` é público); **bloqueio de tentativas** de login; CORS restrito. Detalhes em [`backend/README.md`](../backend/README.md).
 
 ## Execução e verificação
 
-Na pasta `mobile`, instalar com `npm ci` e iniciar com `npm run web`. Comandos de verificação registrados: `npm test`, `npm run typecheck`, `npm run test:e2e` e `npm run build:web`. Comandos e limites estão em [mobile/README.md](../mobile/README.md); o passo a passo está no [guia de testes](guia-testes-lucas.md). O uso de um TMPDIR no SSD foi contorno local de espaço, não requisito para avaliadores.
+Passo a passo completo no [README](../README.md) e no [guia de testes](guia-testes-lucas.md). Resumo:
 
-A tentativa nativa falhou ao extrair Expo Go por `ENOSPC`; outras tentativas de mover o simulador ao SSD não estabeleceram ambiente executável. O arquivo `docs/evidencias/12/ios-bundle.txt` comprova apenas que o bundle iOS foi exportado. É necessário liberar espaço no disco interno e verificar em simulador ou celular; até lá, critério mobile permanece pendente. Ver [registro detalhado](evidencias/12/mobile-impedimento.txt).
+```sh
+cd database && docker compose up -d                       # banco
+cd backend && export JWT_SECRET="..." && mvn spring-boot:run   # API
+node --experimental-strip-types iot/bridge.mjs            # simulador
+cd mobile && npm ci && npm run web -- --port 8094         # app
+```
+
+Login de avaliação: `operador` / `merenda123`. Para ver o app sem subir o backend, use o botão **Demonstração** (ou `EXPO_PUBLIC_DATA_MODE=demo`, login `demo` / `merenda-demo`).
 
 ## Uso de IA e revisão humana
 
-Ferramentas de IA auxiliaram implementação, revisão e documentação; os seguintes papéis/modelos foram registrados para o trabalho:
-
-| Papel | Modelo/esforço informado | Atuação |
-| --- | --- | --- |
-| Implementação | gpt-6.1-sol / medium | Código e testes das entregas 09–11 |
-| Revisão | gpt-6.1-sol / high | Revisão técnica e de escopo |
-| Documentação | gpt-6-luna / high | Consolidação de READMEs, plano, guia e relatório |
-| Orquestração | gpt-6.1-sol / medium | Coordenação, integração e conferência das evidências |
-
-Lucas precisa revisar e compreender o código, os limites, os comandos e as decisões antes de incorporar este texto ao PDF acadêmico. Esta tabela descreve papéis e modelos informados para o trabalho; os logs não atestam autoria individual de cada linha de código.
+IA generativa (Codex e OpenCode, com revisão de subagentes) auxiliou planejamento, implementação, testes e documentação. Todo o material foi revisado e validado pelos integrantes antes da entrega. Lucas deve revisar e compreender o código, os limites e os comandos antes de incorporar este texto ao PDF acadêmico.
 
 ## Situação da entrega acadêmica
 
-Este relatório pode compor a seção da contribuição de Lucas no PDF. Ainda são materiais do grupo: PDF final, TXT exigido, link público do pitch de até três minutos, backend/API e banco reais e eventual integração. Não são inventados aqui nomes de responsáveis, links ou resultados dessas entregas. O [roteiro de Lucas](roteiro-demonstracao-lucas.md) dura cerca de 45–60 segundos e deve integrar a fala do grupo.
+Este relatório compõe a seção da contribuição de Lucas no PDF. Ainda são materiais do grupo: PDF final, `.txt` com integrantes/RM/link e o vídeo pitch (até 3 minutos). O [roteiro de Lucas](roteiro-demonstracao-lucas.md) cobre cerca de 45–60 segundos e deve integrar a fala do grupo.
