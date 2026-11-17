@@ -56,12 +56,6 @@ O Histórico não terá uma tendência de vários dias imediatamente: o app vazi
 
 Os serviços novos usam `merenda.servicos.aprovado.v1` no armazenamento local (web/AsyncStorage). A chave anterior `merenda.servicos.v1` não é importada ou apagada. Recarregar não limpa o app; para gravar uma tomada começando vazia sem apagar dados, usar um perfil/sessão de navegador isolado. Não há botão de teste oculto para restaurar exemplos.
 
-Cliente anterior apenas para compatibilidade/evidências históricas:
-
-```sh
-EXPO_PUBLIC_LEGACY_APP=1 npm run web -- --port 8093
-```
-
 ## Celular físico e limites
 
 A ponte usa HTTP simples, `fetch` e cursor, compatíveis com a arquitetura React Native; a validação desta rodada é web e exportação de bundle, não runtime nativo. `localhost` no telefone é o próprio telefone. Para testar em rede local, escolher o IP do computador e liberar a escuta explicitamente:

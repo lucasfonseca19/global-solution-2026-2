@@ -1,7 +1,7 @@
 import {expect,test} from 'vitest';
 import {createShowcaseData,DEMO_STORAGE_KEY} from './showcase';
-import {APP_STORAGE_KEY} from './approvedData';
 import {localServiceDay} from './serviceDay';
+const APP_STORAGE_KEY = 'merenda.servicos.aprovado.v1';
 test('demonstração inicia com histórico e serviço atual, persiste sem alterar dados anteriores',async()=>{
  const values=new Map([[APP_STORAGE_KEY,'dados anteriores'],['merenda.servicos.v1','legado']]);
  const storage={getItem:async(k:string)=>values.get(k)??null,setItem:async(k:string,v:string)=>{values.set(k,v);}};

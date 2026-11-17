@@ -41,7 +41,7 @@ API Java21/Spring Boot e PostgreSQL, sete operações com GET/POST/PUT/DELETE, c
 
 App usa `createAppData`/adaptador HTTP por padrão, sem fallback. Interface AppDataAccess separada das operações legadas. API recebe confirmação individual e conclusão; registros/ID preservados nas respostas. Token em memória, sem persistência; recarga pede login e consulta banco. AsyncStorage preexistente não é importado nem apagado.
 
-`EXPO_PUBLIC_DATA_MODE=demo` ativa explicitamente adaptador local vazio, login demo/merenda-demo e chave `merenda.servicos.aprovado.v1`. `EXPO_PUBLIC_LEGACY_APP=1` mantém cliente anterior e chave antiga. Não confundir essas demonstrações com API acadêmica.
+`EXPO_PUBLIC_DATA_MODE=demo` ativa explicitamente a demonstração local com exemplos fictícios, login `demo`/`merenda-demo` e chave `merenda.servicos.demonstracao.v1`. Não confundir essas demonstrações com a API acadêmica.
 
 ## Executar
 

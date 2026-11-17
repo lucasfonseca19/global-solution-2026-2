@@ -4,7 +4,10 @@ afterEach(()=>vi.useRealTimers());
 import {test,expect} from 'vitest';
 import {createDemoData} from './demo';
 const credentials={login:'demo',senha:'merenda-demo'};
-const input={data:'2026-11-15',tipoRefeicao:'Almoço',pesagens:[{codigoRfid:'RFID-SIM-001',pesoBrutoKg:4}]};
+const data='2026-11-15';
+const sobra={codigoRfid:'RFID-SIM-001',pesoBrutoKg:4};
+const restos={codigoRfid:'RFID-SIM-002',pesoBrutoKg:3.5};
+const input=(cicloId:string,tipoRefeicao='Almoço',leitura=sobra)=>({data,tipoRefeicao,cicloId,leitura});
 function storage() {
  let value: string|null=null;
  return {getItem:async()=>value,setItem:async(_key:string,v:string)=>{value=v;}};
@@ -12,14 +15,14 @@ function storage() {
 test('reabrir carrega serviços existentes antes de exemplos',async()=>{
  const disk=storage();
  const a=createDemoData([],disk); const {token}=await a.login(credentials);
- const s=await a.criar(token,input);
+ const s=await a.confirmarPesagem(token,input('a'));
  const b=createDemoData(undefined,disk); const session=await b.login(credentials);
  expect(await b.listar(session.token)).toEqual([s]);
 });
 test('excluir remove somente alvo e pesagens e persiste inclusive lista vazia',async()=>{
  const disk=storage(); const a=createDemoData([],disk); const {token}=await a.login(credentials);
- const s=await a.criar(token,input);
- const other=await a.criar(token,{...input,tipoRefeicao:'Jantar'});
+ const s=await a.confirmarPesagem(token,input('a'));
+ const other=await a.confirmarPesagem(token,input('b','Jantar',restos));
  await a.excluir(token,s.id);
  await expect(a.detalhar(token,s.id)).rejects.toMatchObject({codigo:'SERVICO_NAO_ENCONTRADO'});
  expect(await a.listar(token)).toEqual([other]);
@@ -27,21 +30,14 @@ test('excluir remove somente alvo e pesagens e persiste inclusive lista vazia',a
  const b=createDemoData(undefined,disk); const session=await b.login(credentials);
  expect(await b.listar(session.token)).toEqual([]);
 });
-test('restaurar substitui alterações pelos exemplos e sobrevive a reabrir',async()=>{
- const disk=storage(); const a=createDemoData([],disk); const {token}=await a.login(credentials);
- await a.criar(token,input); await a.restaurarExemplos(token);
- const b=createDemoData([],disk); const session=await b.login(credentials);
- expect((await b.listar(session.token)).map(s=>s.id)).toEqual([103,102,101]);
-});
-test('falhas de escrita não publicam criação, correção, exclusão ou restauração; fila se recupera',async()=>{
+test('falhas de escrita não publicam confirmação ou exclusão; fila se recupera',async()=>{
  const disk=storage(); const original=disk.setItem;
  const a=createDemoData([],disk); const {token}=await a.login(credentials);
- const s=await a.criar(token,input);
+ const s=await a.confirmarPesagem(token,input('a'));
  disk.setItem=async()=>{throw new Error('Armazenamento indisponível');};
  for(const operation of [
- ()=>a.criar(token,{...input,tipoRefeicao:'Jantar'}),
- ()=>a.atualizar(token,s.id,{...input,pesagens:[{codigoRfid:'RFID-SIM-001',pesoBrutoKg:8}]}),
- ()=>a.excluir(token,s.id),()=>a.restaurarExemplos(token)
+  ()=>a.confirmarPesagem(token,input('b','Jantar')),
+  ()=>a.excluir(token,s.id)
  ]) {
   await expect(operation()).rejects.toThrow('Armazenamento indisponível');
   expect(await a.listar(token)).toEqual([s]);
@@ -56,10 +52,10 @@ test('escritas simultâneas aguardam disco sem perder serviços',async()=>{
  let release!:()=>void;
  disk.setItem=async()=>new Promise<void>(resolve=>{release=resolve;});
  let done=false;
- const first=a.criar(token,input).then(s=>{done=true;return s;});
+ const first=a.confirmarPesagem(token,input('a')).then(s=>{done=true;return s;});
  await new Promise(resolve=>setTimeout(resolve,0));
  expect(done).toBe(false);
- const second=a.criar(token,{...input,tipoRefeicao:'Jantar'});
+ const second=a.confirmarPesagem(token,input('b','Jantar',restos));
  release(); await first;
  await new Promise(resolve=>setTimeout(resolve,0));
  release(); await second;

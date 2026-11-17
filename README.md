@@ -51,20 +51,6 @@ Nesse modo somente, login `demo` / `merenda-demo` e persistência AsyncStorage e
 
 Para celular, configurar `EXPO_PUBLIC_API_URL` e `EXPO_PUBLIC_SIMULATOR_URL` com o IP do computador; não usar localhost no telefone. A ponte exige `SIMULATOR_HOST=0.0.0.0` para acesso LAN explícito. No navegador via IP, configurar também as origens em `CORS_ORIGENS` (API) e `SIMULATOR_ALLOWED_ORIGIN` (ponte). O app usa o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo; servidor revalida todas as escritas.
 
-## Registro anterior: cliente legado
-
-Requer Node.js compatível com Expo (ambiente registrado: Node 22.17.1 e npm 10.9.2). Na raiz:
-
-```sh
-cd mobile
-npm ci
-EXPO_PUBLIC_LEGACY_APP=1 npm run web
-```
-
-Abra o endereço local indicado pelo Expo. Credenciais fictícias: usuário `demo`, senha `merenda-demo`. Os dados dos serviços ficam no armazenamento local do navegador. A sessão não é persistida: recarregar volta ao login, mantendo os serviços.
-
-O app tem quatro telas funcionais: Login, Histórico, Registro e Detalhes. O simulador pode ser usado pela interface de Registro ou pela CLI independente em [iot/README.md](iot/README.md). Passos e resultados esperados estão em [docs/guia-testes-lucas.md](docs/guia-testes-lucas.md).
-
 ## Evidências anteriores
 
 Os tickets 09, 10 e 11 foram concluídos e verificados; commit de referência: `7b67860`. Logs e capturas reais estão em [evidências 09](docs/evidencias/09/README.md), [evidências 10](docs/evidencias/10/README.md) e [evidências 11](docs/evidencias/11/README.md). Há testes unitários do adaptador e fluxos web executados com o Chrome já instalado; não é necessário baixar um navegador para a execução descrita.

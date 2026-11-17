@@ -1,5 +1,4 @@
-import { Platform, StyleSheet, Text as NativeText, type TextStyle, type StyleProp } from 'react-native';
-import type { ComponentProps } from 'react';
+import { Platform, StyleSheet, type TextStyle, type StyleProp } from 'react-native';
 
 export const ALLO_FAMILY = 'Allo Variable';
 
@@ -23,9 +22,4 @@ export function alloTextStyle(style: StyleProp<TextStyle>, defaultSize = 16): Te
   const size = explicit.fontSize ?? defaultSize;
   const numeric = explicit.fontVariant?.includes('tabular-nums');
   return { ...allo(size, numeric ? 35 : size >= 24 ? 55 : 40), ...explicit };
-}
-
-/** Tipografia compartilhada com a versão original, sem mudar seu fluxo. */
-export function AppText({ style, ...props }: ComponentProps<typeof NativeText>) {
-  return <NativeText {...props} style={alloTextStyle(style)} />;
 }

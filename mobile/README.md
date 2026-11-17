@@ -6,9 +6,9 @@ Sensores em `EXPO_PUBLIC_SIMULATOR_URL` (padrão `http://127.0.0.1:8095`). API e
 
 O botão **Demonstração** no login/Home/Histórico alterna dentro do mesmo app, preservando os dois conjuntos de dados. Abre sessão demonstrativa identificada, com exemplos no Histórico e controles internos de RFID/balança; **Voltar à API** pede login real. A escolha não é persistida após recarregar. Abas nativas no celular e componente de abas da biblioteca na web. Confirmações de exclusão/descarte nativas no celular. [Evidências](../docs/evidencias/native-navigation/README.md).
 
-`EXPO_PUBLIC_DATA_MODE=demo` ainda ativa explicitamente a demonstração local (login `demo` / `merenda-demo`, AsyncStorage próprio). `EXPO_PUBLIC_LEGACY_APP=1` preserva o cliente antigo. Não há fallback silencioso, migração de dados locais ou token persistido.
+`EXPO_PUBLIC_DATA_MODE=demo` ainda ativa explicitamente a demonstração local (login `demo` / `merenda-demo`, AsyncStorage próprio). Não há fallback silencioso, migração de dados locais ou token persistido.
 
-Ver [contrato](../.scratch/merenda/api-contract.md) e [evidências da integração](../docs/evidencias/backend-integration/README.md). `npm test`, `npm run typecheck`, `npm run test:e2e` (cliente legado) e `node integration-qa.cjs` (API/banco isolados e app/simulador ativos nas portas documentadas).
+Ver [contrato](../.scratch/merenda/api-contract.md) e [evidências da integração](../docs/evidencias/backend-integration/README.md). `npm test`, `npm run typecheck` e `node integration-qa.cjs` (API/banco isolados e app/simulador ativos nas portas documentadas).
 
 ---
 
@@ -55,18 +55,6 @@ Ambiente das evidências: Node 22.17.1 e npm 10.9.2. `npm ci` instala as versõe
 | Playwright | 1.65.1 |
 
 AsyncStorage 2.2.0 foi ajustado com `expo install` para compatibilidade com SDK 58.
-
-## Registro anterior: cliente legado
-
-A partir da raiz do repositório:
-
-```sh
-cd mobile
-npm ci
-EXPO_PUBLIC_LEGACY_APP=1 npm run web
-```
-
-Abra o endereço informado pelo Expo. Credenciais públicas de demonstração: usuário `demo`, senha `merenda-demo`. Não use dados pessoais. A senha é comparação fictícia no app; não é uma conta ou controle de segurança. Google Chrome já instalado foi usado nos fluxos Playwright; não é preciso baixar navegador para iniciar ou usar o app manualmente.
 
 ## Telas e persistência
 
