@@ -1,5 +1,5 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
-import {StyleSheet,View} from 'react-native';
+import {Alert,Platform,StyleSheet,View} from 'react-native';
 import {useNavigation,usePreventRemove,useIsFocused} from '@react-navigation/native';
 import {useReducedMotion} from 'react-native-reanimated';
 import {useScaleSimulator} from '../iot/useScaleSimulator';
@@ -42,6 +42,12 @@ export function PreviewRegistro({api,session,initialService,initialContext,onBac
   if(!operation.current)setExitAction(()=>()=>navigation.dispatch(data.action));
  });
  useEffect(()=>{if(allowExit&&exitAction)exitAction();},[allowExit,exitAction]);
+ useEffect(()=>{
+  if(exitAction&&Platform.OS!=='web'&&!allowExit)Alert.alert('Descartar a leitura e sair?','As pesagens confirmadas serão preservadas.',[
+   {text:'Continuar aqui',style:'cancel',onPress:()=>setExitAction(undefined)},
+   {text:'Descartar e sair',style:'destructive',onPress:()=>{clearReading();setAllowExit(true);}},
+  ]);
+ },[exitAction,allowExit]);
  const settle=useCallback(()=>setPhase(value=>value==='weighing'?'ready':value),[]);
  const records=service?individualRecords(service):[];
  const completed=service?.status==='COMPLETO';
@@ -85,7 +91,7 @@ export function PreviewRegistro({api,session,initialService,initialContext,onBac
  const status=phase==='identifying'?'Identificando lixeira…':phase==='weighing'?'Pesando…':phase==='ready'?'Peso estável':phase==='saved'?(correction?'Correção salva':'Pesagem registrada'):connection!=='connected'?(connection==='offline'?'Balança indisponível':'Conectando à balança…'):correction?'Recoloque a lixeira para corrigir':'Coloque a lixeira na balança';
  return <Shell>
   <Header onBack={onBack} title="Pesagem"/>
-  {exitAction?<View style={s.notice}><Text style={s.noticeText}>Descartar a leitura e sair? As pesagens confirmadas serão preservadas.</Text><Action label="Descartar e sair" onPress={()=>{clearReading();setAllowExit(true);}}/><Action label="Continuar aqui" variant="link" onPress={()=>setExitAction(undefined)}/></View>:null}
+  {exitAction&&Platform.OS==='web'?<View style={s.notice}><Text style={s.noticeText}>Descartar a leitura e sair? As pesagens confirmadas serão preservadas.</Text><Action label="Descartar e sair" onPress={()=>{clearReading();setAllowExit(true);}}/><Action label="Continuar aqui" variant="link" onPress={()=>setExitAction(undefined)}/></View>:null}
   {setup?<>
    <Text accessibilityRole="header" style={s.title}>Registrar descarte</Text>
    <View style={s.form}><Text style={s.muted}>{dateLabel(serviceDate)} · hoje</Text><Field label="Tipo de refeição" value={meal} onChangeText={setMeal} editable={!busy}/><Action label={busy?'Procurando serviço…':'Continuar'} disabled={busy} onPress={search}/></View>

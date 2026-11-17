@@ -1,0 +1,12 @@
+✔ ponte mantém somente leituras explícitas, cursor não repete e ignora eventos anteriores (33.014042ms)
+✔ painel separado, corpo inválido e origem externa (9.771792ms)
+✔ rejeita nomes herdados e inexistentes sem emitir leitura (182.603584ms)
+✔ emite somente código e peso de um cenário conhecido (58.08275ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 287.697834

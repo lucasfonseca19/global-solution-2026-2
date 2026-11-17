@@ -8,7 +8,7 @@ const simUrl=process.env.QA_SIMULATOR_URL??'http://127.0.0.1:8095';
  const browser=await chromium.launch({channel:'chrome',headless:true});
  const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'America/Sao_Paulo'});
  const app=await ctx.newPage(),sim=await ctx.newPage(),errors=[];for(const p of [app,sim])p.on('pageerror',e=>errors.push(e.message));
- const button=name=>app.getByRole('button',{name,exact:true});
+ const button=name=>app.getByRole(name==='Hoje'||name==='Histórico'?'tab':'button',{name,exact:true});
  async function login(){await app.getByLabel('Login',{exact:true}).fill('demo');await app.getByLabel('Senha',{exact:true}).fill('merenda-demo');await button('Entrar').click();}
  async function emit(key){await sim.selectOption('#scenario',key);await sim.getByRole('button',{name:'Colocar na balança',exact:true}).click();await expect(sim.getByText('Leitura enviada. Confira o resultado no app.',{exact:true})).toBeVisible();}
  async function ready(){await expect(app.getByText('Balança conectada',{exact:true})).toBeVisible();}

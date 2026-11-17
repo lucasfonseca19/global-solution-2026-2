@@ -5,6 +5,7 @@ import { Button } from '../rnr/button';
 import { Text } from '../rnr/text';
 import type { Categoria, Servico } from '../data/types';
 import { allo } from '../typography';
+import {ModeControl,ModeBadge} from './AppMode';
 
 export const COLORS = { ink:'#211b27', muted:'#706a77', faint:'#f7f5f8', line:'#eae6ee', accent:'#9226d5', soft:'#f7effc', danger:'#a12646' };
 export const CATEGORIES = ['SOBRA_DESCARTADA','RESTO_PRATO'] as const;
@@ -24,8 +25,8 @@ export function Chevron({back=false}: {back?:boolean}) {
  return <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[s.chevron,back?s.chevronBack:undefined]}/>;
 }
 
-export function Shell({children}: PropsWithChildren) {
- return <SafeAreaView style={s.safe}>
+export function Shell({children,tabbed=false}: PropsWithChildren<{tabbed?:boolean}>) {
+ return <SafeAreaView style={s.safe} edges={tabbed?['top']:['top','bottom']}>
   <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
    <View style={s.page}>{children}</View>
   </ScrollView>
@@ -36,7 +37,8 @@ export function Header({onBack,onLogout,title}: {onBack?:()=>void;onLogout?:()=>
  return <View style={s.header}>
   {onBack ? <Button variant="link" onPress={onBack} style={s.back} accessibilityLabel="Voltar"><Chevron back/><Text style={s.backText}>Voltar</Text></Button>
    : <Text style={s.brand}>merenda<Text style={s.brandDot}>.</Text></Text>}
-  {title ? <Text style={s.headerTitle}>{title}</Text> : null}
+  {title ? <View><Text style={s.headerTitle}>{title}</Text><ModeBadge/></View> : null}
+  {!onBack?<ModeControl/>:null}
   {onLogout ? <Button variant="link" onPress={onLogout} style={s.headerAction}><Text style={s.muted}>Sair</Text></Button> : null}
  </View>;
 }

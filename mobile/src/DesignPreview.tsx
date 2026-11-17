@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from 'react-native';
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { NavigationContainer, useIsFocused, type NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator, type NativeStackScreenProps } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAppData } from './data/appData';
+import {openAppMode,type DataMode,type ModeSession} from './data/mode';
+import {AppModeContext} from './preview/AppMode';
+import {MainTabs} from './navigation/MainTabs';
+import type {MainTabRoutes} from './navigation/MainTabs.types';
 import { individualRecords } from './data/weighing';
 import type { AppDataAccess, Sessao } from './data/types';
 import type { Servico } from './data/types';
@@ -11,30 +15,39 @@ import { Text } from './rnr/text';
 import { useServiceDay } from './useServiceDay';
 import { READ_ONLY_DAY } from './data/serviceDay';
 import { identifierType } from './typography';
-import { PreviewHome, HomeNavigation } from './preview/PreviewHome';
+import { PreviewHome } from './preview/PreviewHome';
 import { PreviewRegistro } from './preview/PreviewRegistro';
 import { PreviewHistory } from './preview/PreviewHistory';
 import { Action, CATEGORIES, COLORS, Chevron, ErrorNotice, Field, Header, Loading, Shell, Status, categoryLabel, dateLabel, errorMessage, kg, s } from './preview/PreviewUi';
 
-type Routes={Login:undefined;Home:undefined;Historico:undefined;Registro:{servico?:Servico;context?:{data:string;tipoRefeicao:string}}|undefined;Detalhes:{id:number}};
+type Routes={Login:undefined;Principal:NavigatorScreenParams<MainTabRoutes>|undefined;Registro:{servico?:Servico;context?:{data:string;tipoRefeicao:string}}|undefined;Detalhes:{id:number}};
 const Stack=createNativeStackNavigator<Routes>();
 
 /** Interface aprovada: API por padrão, demo explícita e sensores externos simulados. */
 export function DesignPreview() {
- const [api]=useState(()=>createAppData(AsyncStorage));
- const [session,setSession]=useState<Sessao>();
- return <>
-  <NavigationContainer>
+ const [state,setState]=useState<ModeSession>(()=>({mode:process.env.EXPO_PUBLIC_DATA_MODE==='demo'?'demo':'api',api:createAppData(AsyncStorage)}));
+ const {api,session,mode}=state;
+ const modeGeneration=useRef(0);
+ // Respostas de login iniciadas em outro adaptador não podem restaurar a sessão.
+ const setSession=(session:Sessao|undefined)=>setState(current=>current.api===api?{...current,session}:current);
+ async function changeMode(next:DataMode){
+  const version=++modeGeneration.current,nextState=await openAppMode(AsyncStorage,next);
+  if(version===modeGeneration.current)setState(nextState);
+ }
+ return <AppModeContext.Provider value={{mode,onChange:changeMode}}>
+  <NavigationContainer key={mode}>
    <Stack.Navigator screenOptions={{headerShown:false,animation:'none',contentStyle:{backgroundColor:'#fff'}}}>
     {session ? <>
-     <Stack.Screen name="Home">{props=><PreviewHome api={api} session={session} onHistory={()=>props.navigation.navigate('Historico')} onMeal={(data,tipoRefeicao,servico)=>servico?.status==='COMPLETO'?props.navigation.navigate('Detalhes',{id:servico.id}):props.navigation.navigate('Registro',{servico,context:{data,tipoRefeicao}})}/>}</Stack.Screen>
-     <Stack.Screen name="Historico">{props=><View style={{flex:1}}><History {...props} api={api} session={session} onLogout={()=>setSession(undefined)}/><HomeNavigation active="history" onHome={()=>props.navigation.popTo('Home')} onHistory={()=>{}}/></View>}</Stack.Screen>
+     <Stack.Screen name="Principal">{({navigation})=><MainTabs
+      home={()=><PreviewHome api={api} session={session} onMeal={(data,tipoRefeicao,servico)=>servico?.status==='COMPLETO'?navigation.navigate('Detalhes',{id:servico.id}):navigation.navigate('Registro',{servico,context:{data,tipoRefeicao}})}/>}
+      history={()=><History api={api} session={session} onLogout={()=>setSession(undefined)} onDetails={id=>navigation.navigate('Detalhes',{id})} onContinue={servico=>navigation.navigate('Registro',{servico})}/>}
+     />}</Stack.Screen>
      <Stack.Screen name="Registro">{props=><PreviewRegistro key={props.route.key} api={api} session={session} initialService={props.route.params?.servico} initialContext={props.route.params?.context} onBack={()=>props.navigation.goBack()} onDetails={id=>props.navigation.replace('Detalhes',{id})}/>}</Stack.Screen>
      <Stack.Screen name="Detalhes">{props=><Details {...props} api={api} session={session}/>}</Stack.Screen>
     </> : <Stack.Screen name="Login">{()=> <Login api={api} onLogin={setSession}/>}</Stack.Screen>}
    </Stack.Navigator>
   </NavigationContainer>
- </>;
+ </AppModeContext.Provider>;
 }
 
 function Login({api,onLogin}: {api:AppDataAccess;onLogin:(session:Sessao)=>void}) {
@@ -79,14 +92,14 @@ function useResource<T>(load:()=>Promise<T>,dependencies:unknown[]) {
  return {value,error,retry:()=>setAttempt(n=>n+1)};
 }
 
-function History({api,session,navigation,onLogout}: {api:AppDataAccess;session:Sessao;onLogout:()=>void}&NativeStackScreenProps<Routes,'Historico'>) {
+function History({api,session,onLogout,onDetails,onContinue}: {api:AppDataAccess;session:Sessao;onLogout:()=>void;onDetails:(id:number)=>void;onContinue:(service:Servico)=>void}) {
  const focused=useIsFocused();
  const {value,error,retry}=useResource(()=>api.listar(session.token),[api,session.token,focused]);
  const today=useServiceDay();
- return <Shell>
+ return <Shell tabbed>
   <Header onLogout={onLogout}/>
   <Text accessibilityRole="header" style={s.title}>Histórico</Text>
-  {error?<><ErrorNotice message={error}/><Action label="Tentar novamente" variant="secondary" onPress={retry}/></>:value===undefined?<Loading label="Carregando histórico…"/>:<PreviewHistory services={value} today={today} onDetails={id=>navigation.push('Detalhes',{id})} onContinue={servico=>navigation.push('Registro',{servico})}/>}
+  {error?<><ErrorNotice message={error}/><Action label="Tentar novamente" variant="secondary" onPress={retry}/></>:value===undefined?<Loading label="Carregando histórico…"/>:<PreviewHistory services={value} today={today} onDetails={onDetails} onContinue={onContinue}/>}
  </Shell>;
 }
 
@@ -97,14 +110,18 @@ function Details({api,session,route,navigation}: {api:AppDataAccess;session:Sess
  const [deleting,setDeleting]=useState(false);
  const [busy,setBusy]=useState(false);
  const [actionError,setActionError]=useState('');
+ function askRemove(){
+  if(Platform.OS==='web')setDeleting(true);
+  else Alert.alert('Excluir serviço?','O serviço e suas pesagens serão removidos. Esta ação não pode ser desfeita.',[{text:'Cancelar',style:'cancel'},{text:'Excluir serviço',style:'destructive',onPress:()=>void remove()}]);
+ }
  async function remove() {
   if(busy)return;
   setBusy(true);setActionError('');
-  try{await api.excluir(session.token,route.params.id);navigation.popTo('Historico');}
+  try{await api.excluir(session.token,route.params.id);navigation.popTo('Principal',{screen:'Historico'});}
   catch(e){setActionError(errorMessage(e));setBusy(false);}
  }
  return <Shell>
-  <Header onBack={()=>{if(!busy)navigation.popTo('Historico');}} title="Detalhes"/>
+  <Header onBack={()=>{if(!busy)navigation.popTo('Principal',{screen:'Historico'});}} title="Detalhes"/>
   {error ? <><ErrorNotice message={error}/><Action label="Tentar novamente" variant="secondary" onPress={retry}/></> : !service ? <Loading label="Carregando serviço…"/> : <>
    <View style={p.detailsHeading}><View><Text accessibilityRole="header" style={s.title}>{service.tipoRefeicao}</Text><Text style={s.intro}>{dateLabel(service.data)}</Text></View><Status complete={service.status==='COMPLETO'}/></View>
    <View style={p.detailsTotal}>
@@ -134,7 +151,7 @@ function Details({api,session,route,navigation}: {api:AppDataAccess;session:Sess
     <Text style={s.noticeText}>Excluir este serviço e suas pesagens? Esta ação não pode ser desfeita.</Text>
     <Action label={busy?'Excluindo…':'Excluir serviço'} variant="danger" disabled={busy} onPress={remove}/>
     <Action label="Cancelar" variant="link" disabled={busy} onPress={()=>setDeleting(false)}/>
-   </View> : <View style={p.deleteAction}><Action label="Excluir serviço" variant="link" onPress={()=>setDeleting(true)}/></View>:null}
+   </View> : <View style={p.deleteAction}><Action label="Excluir serviço" variant="link" onPress={askRemove}/></View>:null}
   </>}
  </Shell>;
 }

@@ -21,6 +21,14 @@ Ler ENUNCIADO.md, CONTEXTO.md, GLOSSARY.md, .scratch/merenda/spec.md, [ADR0001](
 - Sensores só em ciclo aguardando na pesagem ativa; reconexão não reaproveita eventos antigos. Transmitir não equivale a gravar.
 - Médias/comparações somente concluídos, sem produção pesada ou porcentagem da produção. Sem histórico fictício automático.
 
+## Atualização mobile — 17/11/2026
+
+Lucas abriu a Home no iPhone/Expo Go e enviou captura com layout inadequado da barra manual e das ações de refeição. Autorizou botão discreto de demonstração no mesmo app, abas nativas e considerar outros componentes do sistema. Implementação em [.scratch/merenda/mobile-native-plan.md](../.scratch/merenda/mobile-native-plan.md). `MainTabs.native.tsx` usa tabs do sistema com react-native-screens já incluído no SDK58; `MainTabs.tsx` usa abas da biblioteca na web. Alert nativo para exclusão/descarte. Pressable com estilos explícitos é isolado do CSSInterop, preservando os callbacks de estilo. Allo e identidade mantidas.
+
+Botão Demonstração no login/Home/Histórico abre sessão local identificada nas mesmas telas. Voltar à API pede login real; dados e tokens não se misturam. Não há troca durante pesagem. Modo não persiste ao recarregar. Respostas de login obsoletas são descartadas pela identidade do adaptador; geração protege mudanças concorrentes. Código/TypeScript/web/exportação verificados; a nova barra/alertas ainda precisam ser conferidos no iPhone. [Evidências](evidencias/native-navigation/README.md).
+
+API18080, Expo18094 e ponte18095 do teste físico foram mantidos ativos em 192.168.15.6. Banco exclusivo merenda_iphone preservado. Após mudança das dependências, Metro reiniciado mantendo URL/QR. Não parar esses serviços antes de Lucas terminar o teste.
+
 ## Estado implementado
 
 API Java21/Spring Boot e PostgreSQL, sete operações com GET/POST/PUT/DELETE, camadas, Swagger/Postman. Login BCrypt, JWT, validação, ORM parametrizado, erros genéricos e bloqueio de tentativas. JWT_SECRET obrigatório. Seis entidades, DER e sete consultas. Schema para banco vazio; migração não destrutiva revisável para entrega antiga; fixture histórica opcional. Não foi aplicada migração em banco pessoal.

@@ -6,6 +6,10 @@ Atualizado em 14/11/2026. Rascunho para revisão de Lucas e do outro integrante.
 
 Fontes: [enunciado](../../ENUNCIADO.md), [contexto](../../CONTEXTO.md), [glossário](../../GLOSSARY.md) e [mapa de decisões](map.md).
 
+## Demonstração e navegação mobile — 17/11/2026
+
+Lucas aprovou um botão discreto para acessar demonstração dentro do mesmo app e substituir a barra manual por navegação apropriada no celular. Mesmas telas/fluxo, dados locais e API separados; retorno à API exige login real. Troca somente fora da pesagem, sem migrar dados/token. Indicador de demonstração visível; opção de configuração anterior continua para reprodução. Abas do sistema em iOS/Android, web pela mesma biblioteca; confirmações de exclusão/descarte do sistema no celular. Preservar identidade e regras. Plano/evidências em mobile-native-plan.md e docs/evidencias/native-navigation/README.md. Não declarar a nova UI validada no celular antes do retorno de Lucas.
+
 ## Integração autorizada — 17/11/2026
 
 Após análise da contribuição do colega `51957f3`, Lucas autorizou a integração completa. Manter Java/Spring Boot/PostgreSQL, adequar às ADRs e conectar pela camada de dados do app. [Contrato vigente](api-contract.md), [plano](integration-plan.md), [evidências](../../docs/evidencias/backend-integration/README.md). Calendário operacional único `America/Sao_Paulo` no app e servidor, ciclo aleatório entre aparelhos, contribuição individual e conclusão explícita. API padrão; demo local somente por seleção explícita. Sem carga automática de histórico local/fictício. A equipe ainda deve revisar; runtime mobile nativo e pacote acadêmico final permanecem pendentes.

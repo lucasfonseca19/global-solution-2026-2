@@ -14,7 +14,7 @@ const apiUrl=process.env.QA_API_URL??'http://localhost:18080';
  const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'America/Sao_Paulo'});
  const app=await ctx.newPage(),sim=await ctx.newPage(),errors=[];
  app.on('pageerror',e=>errors.push(e.message));
- const button=name=>app.getByRole('button',{name,exact:true});
+ const button=name=>app.getByRole(name==='Hoje'||name==='Histórico'?'tab':'button',{name,exact:true});
  const pass=name=>evidence.push({cenario:name,status:'PASS'});
  async function login(password='merenda123'){
   await app.getByLabel('Login',{exact:true}).fill('operador');await app.getByLabel('Senha',{exact:true}).fill(password);await button('Entrar').click();

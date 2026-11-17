@@ -1,0 +1,53 @@
+PASS: Cancelar troca mantém login API
+PASS: Demonstração abre as mesmas telas sem login fictício manual
+PASS: Refeição e ação permanecem na mesma linha em 390px
+PASS: Abas Hoje/Histórico funcionam no navegador
+PASS: Retorno exige login real e não transferiu registro local para API
+PASS: Trocar de modo preserva a contribuição local
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByLabel('Login', { exact: true })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByLabel('Login', { exact: true }) with timeout 5000ms
+  - waiting for getByLabel('Login', { exact: true })
+
+    at captureRawStack (/Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile/node_modules/playwright-core/lib/coreBundle.js:9551:17)
+    at callMatcherAsStep (/Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile/node_modules/playwright/lib/matchers/expect.js:13342:57)
+    at Object.toBeVisible (/Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile/node_modules/playwright/lib/matchers/expect.js:13334:23)
+    at /Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile/native-navigation-qa.cjs:26:186 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByLabel('Login', { exact: true })\n" +
+      'Expected: visible\n' +
+      'Timeout: 5000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" getByLabel('Login', { exact: true }) with timeout 5000ms\n` +
+      "  - waiting for getByLabel('Login', { exact: true })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" getByLabel('Login', { exact: true }) with timeout 5000ms`,
+      "  - waiting for getByLabel('Login', { exact: true })"
+    ],
+    timeout: 5000,
+    ariaSnapshot: '- text: merenda.\n' +
+      '- button "Demonstração"\n' +
+      '- heading "Terça-feira" [level=1]\n' +
+      '- text: 17 de novembro\n' +
+      '- button "Almoço, Não iniciada, Pesar": Almoço ○ Não iniciada Pesar\n' +
+      '- button "Lanche da tarde, Não iniciada, Pesar": Lanche da tarde ○ Não iniciada Pesar\n' +
+      '- button "Jantar, Não iniciada, Pesar": Jantar ○ Não iniciada Pesar\n' +
+      '- tablist:\n' +
+      '  - tab "Hoje" [selected]\n' +
+      '  - tab "Histórico"'
+  }
+}

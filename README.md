@@ -34,6 +34,10 @@ EXPO_PUBLIC_DATA_MODE=api EXPO_PUBLIC_API_URL=http://localhost:8080 npm run web 
 
 Abra `http://localhost:8094`. Login de avaliação: **`operador` / `merenda123`**, verificado por BCrypt na API. Entre numa refeição, aguarde “Balança conectada” e envie um cenário no painel separado. O app consulta identificação/tara/líquido na API; somente a confirmação grava no PostgreSQL. Cada novo ciclo soma uma contribuição; correção substitui um registro; conclusão é explícita.
 
+O botão discreto **Demonstração**, no login/Home/Histórico, abre as mesmas telas com sessão e dados locais separados. Não é necessário reiniciar o Expo para alternar. O modo fica identificado; **Voltar à API** encerra a sessão local e pede login real. A escolha vale para a sessão do app; recarregar retorna ao modo de inicialização. A troca não é oferecida durante a pesagem.
+
+As abas Hoje/Histórico usam a barra do sistema em iOS/Android; na web, o navegador de abas da mesma biblioteca. Exclusão e descarte de leitura usam confirmações do sistema no celular. [Decisões e evidências](docs/evidencias/native-navigation/README.md).
+
 API é o modo padrão, sem fallback para dados locais. Sessão/token ficam em memória; recarregar pede login e consulta novamente o banco. Histórico local preexistente não é enviado, apagado nem importado. A ponte Node continua sendo somente o simulador, separado da API acadêmica.
 
 Para executar a demonstração local anterior explicitamente:

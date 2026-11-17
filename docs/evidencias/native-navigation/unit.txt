@@ -1,0 +1,13 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile
+
+
+ Test Files  11 passed (11)
+      Tests  51 passed (51)
+   Start at  15:04:40
+   Duration  280ms (import 54%, tests 26%, transform 14%, worker 6%)
