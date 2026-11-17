@@ -51,7 +51,7 @@ mvn spring-boot:run
 ```
 
 - Swagger: `http://localhost:8080/swagger-ui.html` · Collection Postman: [`backend/docs/merenda-api.postman_collection.json`](backend/docs/merenda-api.postman_collection.json).
-- **7 endpoints** cobrindo GET, POST, PUT e DELETE, com camadas Controller/Service/Repository separadas. Contrato em [`.scratch/merenda/api-contract.md`](.scratch/merenda/api-contract.md).
+- **7 endpoints** cobrindo GET, POST, PUT e DELETE, com camadas Controller/Service/Repository separadas.
 
 ### 3. App mobile
 
@@ -109,6 +109,6 @@ IA generativa (Codex e OpenCode, com revisão de subagentes) auxiliou no planeja
 
 ## Documentação de apoio
 
-- [Enunciado](ENUNCIADO.md) · [especificação do MVP](.scratch/merenda/spec.md) · [contrato da API](.scratch/merenda/api-contract.md)
+- [Enunciado](ENUNCIADO.md) · [glossário](GLOSSARY.md)
 - [Guia de testes](docs/guia-testes-lucas.md) · [plano de testes](docs/plano-testes-lucas.md) · [guia de gravação](docs/guia-simulador-gravacao.md)
 - [README do banco](database/README.md) · [README da API](backend/README.md) · [README do app](mobile/README.md) · [README da IoT](iot/README.md)

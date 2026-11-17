@@ -1,1 +1,0 @@
-PASS: app vazio, persistência e sensores separados.

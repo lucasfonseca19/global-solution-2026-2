@@ -34,4 +34,4 @@ Os testes web usaram porta18096/API18080 e ponte isolada18097; a regressão demo
 
 Reabrir o projeto no Expo Go pelo mesmo QR `exp://192.168.15.6:18094`. Metro foi reiniciado para carregar dependências novas. Entrar com operador/merenda123; verificar abas distribuídas e ícones nativos, ações Pesar ao lado das refeições e margens da área segura. Trocar para Demonstração, confirmar, consultar Histórico local e voltar à API. Conferir exclusão/descarte com diálogos do sistema durante o roteiro de pesagem. Se aparecer erro de módulo nativo, registrar a mensagem: não declarar compatibilidade somente por typecheck/export.
 
-Referências: [React Navigation native tabs](https://reactnavigation.org/docs/native-bottom-tab-navigator/), [regra de navegadores nativos](../../agents/mobile.md), [plano](../../../.scratch/merenda/mobile-native-plan.md). O restante do teste físico e o pacote acadêmico continuam pendentes.
+Referências: [React Navigation native tabs](https://reactnavigation.org/docs/native-bottom-tab-navigator/). O restante do teste físico e o pacote acadêmico continuam pendentes.

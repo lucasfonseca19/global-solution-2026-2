@@ -52,7 +52,7 @@ Importe [`docs/merenda-api.postman_collection.json`](docs/merenda-api.postman_co
 | DELETE | `/servicos/{id}` | Exclui serviço do dia e suas pesagens | 204 | 401, 404, 409 |
 | POST | `/leituras/avaliar` | Prévia da leitura RFID + balança, sem gravar | 200 | 400, 401 |
 
-Formato dos dados e exemplos: [contrato da API](../.scratch/merenda/api-contract.md). Todos os erros seguem o formato `{ "codigo": "...", "mensagem": "..." }`, com `detalhes` quando há erro de validação.
+Todos os erros seguem o formato `{ "codigo": "...", "mensagem": "..." }`, com `detalhes` quando há erro de validação.
 
 Cada chamada confirma uma contribuição, sem limite de uma por categoria. `registros` contém IDs string estáveis; `pesagens` projeta os pesos somados por categoria (categoria ausente é `null`). A projeção conserva o RFID/ID da última contribuição da categoria; a origem individual deve ser lida em `registros`. O status permanece `PENDENTE` até a conclusão explícita. Zero confirmado conta como presença de categoria.
 

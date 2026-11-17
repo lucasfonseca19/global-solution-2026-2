@@ -1,4 +1,0 @@
-$ npx expo install --check
-Dependencies are up to date
-
-Exit: 0

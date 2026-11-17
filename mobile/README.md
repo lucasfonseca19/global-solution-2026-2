@@ -1,87 +1,29 @@
-# App Merenda — execução atual
+# App Merenda — execução
 
-A interface aprovada usa API por padrão. Banco/API e instruções completas no [README da raiz](../README.md). `npm ci` e `npm run web -- --port 8094` abrem o app; API padrão `http://localhost:8080`, configurável por `EXPO_PUBLIC_API_URL`. Login real de avaliação `operador` / `merenda123`.
+App React Native/Expo (SDK 58) da interface aprovada: **Login, Hoje, Histórico, Pesagem e Detalhes**. Por padrão consome a API Java/Spring Boot; sem fallback para dados locais.
 
-Sensores em `EXPO_PUBLIC_SIMULATOR_URL` (padrão `http://127.0.0.1:8095`). API e ponte são processos separados. No celular, usar o IP do computador nas duas URLs e configurar acesso LAN/origens conforme o README. App e API usam o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo.
+Banco/API e instruções completas no [README da raiz](../README.md). `npm ci` e `npm run web -- --port 8094` abrem o app no navegador; API padrão `http://localhost:8080`, configurável por `EXPO_PUBLIC_API_URL`. Login real de avaliação: **`operador` / `merenda123`**.
 
-O botão **Demonstração** no login/Home/Histórico alterna dentro do mesmo app, preservando os dois conjuntos de dados. Abre sessão demonstrativa identificada, com exemplos no Histórico e controles internos de RFID/balança; **Voltar à API** pede login real. A escolha não é persistida após recarregar. Abas nativas no celular e componente de abas da biblioteca na web. Confirmações de exclusão/descarte nativas no celular. [Evidências](../docs/evidencias/native-navigation/README.md).
+## Sensores
 
-`EXPO_PUBLIC_DATA_MODE=demo` ainda ativa explicitamente a demonstração local (login `demo` / `merenda-demo`, AsyncStorage próprio). Não há fallback silencioso, migração de dados locais ou token persistido.
+Leituras RFID/balança vêm do simulador em `EXPO_PUBLIC_SIMULATOR_URL` (padrão `http://127.0.0.1:8095`). API e ponte são processos separados. No celular físico, usar o IP do computador nas duas URLs e configurar acesso LAN/origens conforme o README da raiz. App e API usam o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo.
 
-Ver [contrato](../.scratch/merenda/api-contract.md) e [evidências da integração](../docs/evidencias/backend-integration/README.md). `npm test`, `npm run typecheck` e `node integration-qa.cjs` (API/banco isolados e app/simulador ativos nas portas documentadas).
+## Demonstração local
 
----
+O botão **Demonstração** (no login/Home/Histórico) alterna dentro do mesmo app, preservando os dois conjuntos de dados: abre sessão demonstrativa identificada, com exemplos fictícios e controles internos de RFID/balança; **Voltar à API** encerra a sessão local e pede login real. A escolha não é persistida após recarregar.
 
-## Registro histórico da entrega demonstrativa
+`EXPO_PUBLIC_DATA_MODE=demo` também ativa a demonstração por variável de ambiente (login `demo` / `merenda-demo`, AsyncStorage em chave própria). Não há fallback silencioso, migração de dados locais ou token persistido.
 
-# Merenda — app de pesagem
-
-App React Native com Expo, cinco telas na interface aprovada e suporte web local. Login, consulta, registro, simulação, correção, exclusão e restauração de dados de exemplo funcionam com dados fictícios locais. Não há API, banco, autenticação ou segurança reais. O contrato em `.scratch/merenda/api-contract.md` é provisório para integração.
-
-## App atual: vazio e com sensores separados
-
-A interface aprovada abre por padrão, sem exemplos históricos, botões de simulação, restauração de fixtures ou toolbar de teste. Instalação nova começa vazia; as pesagens confirmadas são persistidas em uma chave própria, sem importar ou apagar os dados da versão anterior.
-
-Em um terminal, na raiz do repositório:
+## Verificação
 
 ```sh
-node --experimental-strip-types iot/bridge.mjs
+npm test            # 45 testes unitários (Vitest)
+npm run typecheck   # TypeScript
+npm run build:web   # exportação web
 ```
 
-Abra o simulador em `http://127.0.0.1:8095`. Em outro terminal:
+Evidências: [integração](../docs/evidencias/backend-integration/README.md), [demonstração](../docs/evidencias/complete-demo/README.md) e [navegação nativa](../docs/evidencias/native-navigation/README.md).
 
-```sh
-npm ci
-npm run web -- --port 8094
-```
+## Estrutura
 
-Abra o app em `http://localhost:8094`. Login de demonstração: `demo` / `merenda-demo`. Entre na refeição e aguarde “Balança conectada”; no painel separado, escolha a leitura e toque em “Colocar na balança”. O app identifica, calcula, anima e permite confirmar manualmente. A ponte é um simulador local, não substitui a API/banco/segurança exigidos pelo enunciado.
-
-A sessão termina ao recarregar, mas as pesagens confirmadas permanecem. O Histórico começa sem pontos fictícios e cresce com os registros. Use o [guia de execução e gravação](../docs/guia-simulador-gravacao.md) e veja as [evidências atuais](../docs/evidencias/separate-simulator/README.md). Não há necessidade da flag de prévia; `EXPO_PUBLIC_LEGACY_APP=1` abre explicitamente o cliente anterior.
-
-## Versões registradas
-
-Ambiente das evidências: Node 22.17.1 e npm 10.9.2. `npm ci` instala as versões exatas registradas em `package-lock.json` (lockfile v3). Versões principais travadas no manifesto/lockfile:
-
-| Pacote | Versão |
-| --- | --- |
-| Expo | 58.0.25 |
-| React | 19.3.0 |
-| React Native | 0.88.1 |
-| React Navigation native stack | 7.21.0 |
-| AsyncStorage | 2.2.0 |
-| TypeScript | 6.0.3 |
-| Vitest | 5.1.0 |
-| Playwright | 1.65.1 |
-
-AsyncStorage 2.2.0 foi ajustado com `expo install` para compatibilidade com SDK 58.
-
-## Telas e persistência
-
-- **Login:** entra com as credenciais de demonstração. A sessão não sobrevive ao reload.
-- **Histórico:** mostra serviços e totais; permite iniciar registro e restaurar exemplos após confirmação.
-- **Registro:** procura por data e tipo, simula leitura, mostra prévia sem gravar e confirma o peso líquido. RFID define automaticamente categoria e tara.
-- **Detalhes:** mostra categorias, pendências e total; permite corrigir pesagens e excluir o serviço após confirmação.
-
-Serviços são persistidos na chave `merenda.servicos.v1` (localStorage na web e AsyncStorage no nativo). A prévia e a sessão ficam em memória. Recarregar retorna ao login, sem apagar os serviços. Sair também preserva serviços. Restaurar exemplos substitui os registros locais pelos três exemplos iniciais; excluir remove o serviço e suas pesagens, sem recuperação. A lista vazia também é persistida.
-
-## Comandos de verificação registrados
-
-Após `npm ci`, os comandos que produziram as evidências foram:
-
-```sh
-npm test
-npm run typecheck
-npm run test:e2e
-npm run build:web
-```
-
-Playwright usa `channel: chrome`, com perfil isolado, e inicia o Expo na porta 8091. Os fluxos percorrem a aplicação web. Vitest testa o adaptador, incluindo armazenamento injetado. Execute esses comandos para reproduzir as verificações; resultados históricos e cenários estão nos READMEs de [ticket 09](../docs/evidencias/09/README.md), [ticket 10](../docs/evidencias/10/README.md) e [ticket 11](../docs/evidencias/11/README.md). A conferência final após `npm ci` passou com 15 testes do adaptador e cinco fluxos web; veja [evidências finais](../docs/evidencias/12/README.md). O build web não prova execução nativa.
-
-Para tentar execução nativa em ambiente disponível: `npm start` e abra no cliente Expo compatível com SDK 58; ou use `npm run ios` / `npm run android` com as ferramentas e dispositivos configurados. A execução nativa desta entrega permanece pendente por `ENOSPC` ao instalar Expo Go; veja [mobile-impedimento.txt](../docs/evidencias/12/mobile-impedimento.txt). O bundle iOS registrado foi compilado/exportado, mas o app não iniciou no simulador. TMPDIR no SSD foi apenas contorno local de espaço e não é necessário nos passos padrão.
-
-## Dados de auditoria e limites
-
-As verificações registraram três alertas moderados transitivos em dependências ligadas a Expo, `@expo/fingerprint` e `minimatch`. Não foi forçada atualização incompatível do SDK. Login, dados, RFID e balança são demonstrativos; sem backend, API, banco ou segurança real. A integração exige revisão do contrato com o colega.
-
-Estrutura: `src/data/` contém tipos, adaptador, fixtures e testes; `src/` contém telas e UI; `../iot/shared.ts` fornece cenários e cálculo compartilhados. Veja o [guia passo a passo](../docs/guia-testes-lucas.md) e o [plano de testes](../docs/plano-testes-lucas.md) para separar evidência automatizada e checagens manuais pendentes.
+`src/data/` (tipos, adaptador e testes), `src/preview/` (telas), `src/navigation/` (abas), `src/iot/` (balança simulada) e `../iot/shared.ts` (cenários e cálculo compartilhados).
