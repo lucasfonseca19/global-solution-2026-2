@@ -1,0 +1,7 @@
+PASS: Home com exemplos parciais e concluídos, identificados como demonstração
+PASS: Histórico fictício preenchido alimenta gráfico/média
+PASS: RFID desconhecido e peso abaixo da tara bloqueiam sem gravar
+PASS: Pesagem local calcula, confirma e conclui sem API ou ponte
+PASS: Correção local preserva demais registros e conclusão
+PASS: Registros de demonstração persistem sem recriar ou sobrescrever exemplos
+PASS: Nenhuma chamada à API/ponte indisponíveis e nenhum erro de página

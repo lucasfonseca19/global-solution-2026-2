@@ -1,7 +1,9 @@
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useContext,useEffect,useRef,useState} from 'react';
 import {Alert,Platform,StyleSheet,View} from 'react-native';
 import {useNavigation,usePreventRemove,useIsFocused} from '@react-navigation/native';
 import {useReducedMotion} from 'react-native-reanimated';
+import {AppModeContext} from './AppMode';
+import {cenarios} from '../../../iot/shared';
 import {useScaleSimulator} from '../iot/useScaleSimulator';
 import type {Leitura,Previa,RegistroPesagem,Servico,Sessao,AppDataAccess} from '../data/types';
 import {individualRecords} from '../data/weighing';
@@ -22,6 +24,8 @@ const TIMING={identify:900};
 export function PreviewRegistro({api,session,initialService,initialContext,onBack,onDetails}:{
  api:AppDataAccess;session:Sessao;initialService?:Servico;initialContext?:{data:string;tipoRefeicao:string};onBack:()=>void;onDetails:(id:number)=>void;
 }){
+ const demo=useContext(AppModeContext)?.mode==='demo';
+ const [moreScenarios,setMoreScenarios]=useState(false);
  const today=useServiceDay(),navigation=useNavigation(),reduced=useReducedMotion(),focused=useIsFocused();
  const [serviceDate]=useState(initialService?.data??initialContext?.data??localServiceDay());
  const [meal,setMeal]=useState(initialService?.tipoRefeicao??initialContext?.tipoRefeicao??'Almoço');
@@ -52,7 +56,8 @@ export function PreviewRegistro({api,session,initialService,initialContext,onBac
  const records=service?individualRecords(service):[];
  const completed=service?.status==='COMPLETO';
  const showingResult=completed&&!correction;
- const connection=useScaleSimulator(focused&&!setup&&serviceDate===today&&phase==='idle'&&!showingResult,reading=>void read(reading));
+ const sensorConnection=useScaleSimulator(!demo&&focused&&!setup&&serviceDate===today&&phase==='idle'&&!showingResult,reading=>void read(reading));
+ const connection=demo?'connected':sensorConnection;
  const locked=busy||phase==='identifying'||phase==='weighing';
  const canFinish=!!service&&!completed&&!pending&&CATEGORIES.every(c=>records.some(r=>r.categoria===c));
  function clearReading(){generation.current++;clearTimeout(timer.current);resolveDelay.current?.();resolveDelay.current=undefined;operation.current=false;setPreview(undefined);setPhase('idle');setCorrection(undefined);setDetails(false);setError('');setCycle(nextCycle());}
@@ -88,7 +93,7 @@ export function PreviewRegistro({api,session,initialService,initialContext,onBac
   catch(e){setError(errorMessage(e));}finally{operation.current=false;setBusy(false);}
  }
  if(serviceDate!==today)return <Shell><Header onBack={onBack} title="Registro"/><Text accessibilityRole="header" style={s.title}>Somente consulta</Text><Text style={s.intro}>{READ_ONLY_DAY}</Text>{service?<Action label="Ver detalhes" onPress={()=>onDetails(service.id)}/>:null}<Action label="Voltar ao início" variant="link" onPress={()=>{setAllowExit(true);onBack();}}/></Shell>;
- const status=phase==='identifying'?'Identificando lixeira…':phase==='weighing'?'Pesando…':phase==='ready'?'Peso estável':phase==='saved'?(correction?'Correção salva':'Pesagem registrada'):connection!=='connected'?(connection==='offline'?'Balança indisponível':'Conectando à balança…'):correction?'Recoloque a lixeira para corrigir':'Coloque a lixeira na balança';
+ const status=phase==='identifying'?'Identificando lixeira…':phase==='weighing'?'Pesando…':phase==='ready'?'Peso estável':phase==='saved'?(correction?'Correção salva':'Pesagem registrada'):connection!=='connected'?(connection==='offline'?'Balança indisponível':'Conectando à balança…'):correction?'Recoloque a lixeira para corrigir':demo?'Escolha uma leitura simulada':'Coloque a lixeira na balança';
  return <Shell>
   <Header onBack={onBack} title="Pesagem"/>
   {exitAction&&Platform.OS==='web'?<View style={s.notice}><Text style={s.noticeText}>Descartar a leitura e sair? As pesagens confirmadas serão preservadas.</Text><Action label="Descartar e sair" onPress={()=>{clearReading();setAllowExit(true);}}/><Action label="Continuar aqui" variant="link" onPress={()=>setExitAction(undefined)}/></View>:null}
@@ -98,18 +103,26 @@ export function PreviewRegistro({api,session,initialService,initialContext,onBac
    <ErrorNotice message={error}/>
   </>:<>
    <View style={p.context}><View style={p.contextCopy}><Text accessibilityRole="header" style={p.meal}>{meal}</Text><Text style={p.date}>{dateLabel(serviceDate)} · hoje</Text></View><Text style={p.badge}>{completed?'Concluído':'Em andamento'}</Text></View>
-   <View style={p.identity}>{preview&&!showingResult?<Text selectable style={p.identityText}><Text style={[p.identityText,identifierType]}>{preview.codigoRfid}</Text> · {preview.categoria==='SOBRA_DESCARTADA'?'Lixeira da cozinha':'Lixeira dos pratos'}</Text>:!showingResult&&phase==='idle'?<Text style={p.identityText}>{connection==='connected'?'Balança conectada':connection==='offline'?'Aguardando reconexão':'Aguardando conexão'}</Text>:null}</View>
+   <View style={p.identity}>{preview&&!showingResult?<Text selectable style={p.identityText}><Text style={[p.identityText,identifierType]}>{preview.codigoRfid}</Text> · {preview.categoria==='SOBRA_DESCARTADA'?'Lixeira da cozinha':'Lixeira dos pratos'}</Text>:!showingResult&&phase==='idle'?<Text style={p.identityText}>{connection==='connected'?(demo?'Sensores locais simulados':'Balança conectada'):connection==='offline'?'Aguardando reconexão':'Aguardando conexão'}</Text>:null}</View>
    {showingResult?<View style={p.result}><Text accessibilityRole="header" style={p.resultTitle}>Serviço concluído</Text><Text style={p.amount}>{kg(service.totalKg)}</Text><Text style={s.small}>de descarte monitorado</Text><Action label="Ver detalhes do serviço" variant="link" onPress={()=>onDetails(service.id)}/></View>:<>
     <View style={p.scale}><WeightMotion key={cycle} target={preview?.pesoLiquidoKg} onSettled={settle} color={COLORS.accent} style={p.amount}/></View>
     <Text style={p.stage} accessibilityLiveRegion="polite">{status}</Text>
     <View style={p.meta}>{preview?<><Button variant="link" style={p.detailToggle} onPress={()=>setDetails(!details)} accessibilityState={{expanded:details}}><Text style={s.small}>Detalhes do peso</Text></Button>{details?<Text style={p.calculation}>{categoryLabel(preview.categoria)}{'\n'}Bruto {kg(preview.pesoBrutoKg)} − tara {kg(preview.taraKg)}</Text>:null}</>:null}</View>
     <ErrorNotice message={error}/>
     <View style={p.action}>
-     {phase==='ready'?<Action label={busy?'Confirmando…':correction?'Salvar correção':'Confirmar pesagem'} disabled={busy} onPress={confirm}/>:phase==='saved'?<Action label={completed?'Voltar ao resultado':'Nova pesagem'} onPress={clearReading}/>:locked?<Action label={phase==='identifying'?'Identificando…':'Aguarde estabilizar'} disabled onPress={()=>{}}/>:<Text style={p.hint}>{connection!=='connected'?'Aguardando conexão.':correction?'Somente este registro será substituído.':'A identificação é automática.'}</Text>}
+     {phase==='ready'?<Action label={busy?'Confirmando…':correction?'Salvar correção':'Confirmar pesagem'} disabled={busy} onPress={confirm}/>:phase==='saved'?<Action label={completed?'Voltar ao resultado':'Nova pesagem'} onPress={clearReading}/>:locked?<Action label={phase==='identifying'?'Identificando…':'Aguarde estabilizar'} disabled onPress={()=>{}}/>:<Text style={p.hint}>{connection!=='connected'?'Aguardando conexão.':correction?'Somente este registro será substituído.':demo?'Use os controles de demonstração abaixo.':'A identificação é automática.'}</Text>}
      {pending?<Action label={phase==='ready'?'Descartar leitura':'Cancelar pesagem'} variant="link" disabled={busy} onPress={clearReading}/>:null}
     </View>
 
    </>}
+   {demo&&!showingResult?<View style={p.panel}>
+    <Text style={p.summaryTitle}>Simulação de RFID e balança</Text>
+    <Text style={s.small}>Leituras fictícias. Conferir e confirmar continua sendo necessário.</Text>
+    {(['sobra','restos'] as const).map(key=><Action key={key} label={key==='sobra'?'Cozinha · 3 kg':'Pratos · 2 kg'} variant="secondary" disabled={phase!=='idle'||busy} onPress={()=>void read(cenarios[key].leitura)}/>)}
+    <Action label={moreScenarios?'Ocultar outros cenários':'Outros cenários'} variant="link" disabled={locked} onPress={()=>setMoreScenarios(!moreScenarios)}/>
+    {moreScenarios?(['correcao','zeroSobra','zero','desconhecido','abaixo'] as const).map(key=><Action key={key} label={cenarios[key].nome} variant="secondary" disabled={phase!=='idle'||busy} onPress={()=>void read(cenarios[key].leitura)}/>):null}
+   </View>:null}
+
    <View style={p.summary}>
     <Button variant="ghost" style={p.summaryToggle} disabled={locked} onPress={()=>setExpanded(!expanded)} accessibilityLabel="Pesagens registradas" accessibilityState={{expanded}}><View style={p.summaryCopy}><Text style={p.summaryTitle}>Neste serviço</Text><Text style={s.small}>{records.length} {records.length===1?'pesagem':'pesagens'}</Text></View><Text style={p.total}>{kg(service?.totalKg??0)}</Text><Text style={s.muted}>{expanded?'−':'+'}</Text></Button>
     {expanded?records.length?records.map((record,index)=><View key={record.id} style={p.record}><View style={p.recordCopy}><Text style={p.recordName}>{categoryLabel(record.categoria)}</Text><Text style={p.recordId}>{record.codigoRfid} · registro {index+1}</Text></View><Text style={p.recordWeight}>{kg(record.pesoLiquidoKg)}</Text><Button variant="link" style={p.correct} disabled={locked||pending} accessibilityLabel={`Corrigir registro ${index+1}`} onPress={()=>correct(record)}><Text style={p.correctText}>Corrigir</Text></Button></View>):<Text style={p.hint}>Nenhuma pesagem registrada.</Text>:null}

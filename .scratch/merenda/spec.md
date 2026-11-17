@@ -6,6 +6,10 @@ Atualizado em 14/11/2026. Rascunho para revisão de Lucas e do outro integrante.
 
 Fontes: [enunciado](../../ENUNCIADO.md), [contexto](../../CONTEXTO.md), [glossário](../../GLOSSARY.md) e [mapa de decisões](map.md).
 
+## Correção da demonstração — 17/11/2026
+
+Lucas solicitou dados e simulação de pesagem no modo demo. Aprovado: exemplos fictícios identificados, históricos e atuais, em armazenamento novo e separado; controles locais de RFID/bruto somente nesse modo, sem depender de API/ponte. Reutilizar a mesma leitura, validação e confirmação manual. Modo API mantém início sem exemplos e sensores separados. Não sobrescrever/importar dados anteriores. Ver docs/evidencias/complete-demo/README.md.
+
 ## Demonstração e navegação mobile — 17/11/2026
 
 Lucas aprovou um botão discreto para acessar demonstração dentro do mesmo app e substituir a barra manual por navegação apropriada no celular. Mesmas telas/fluxo, dados locais e API separados; retorno à API exige login real. Troca somente fora da pesagem, sem migrar dados/token. Indicador de demonstração visível; opção de configuração anterior continua para reprodução. Abas do sistema em iOS/Android, web pela mesma biblioteca; confirmações de exclusão/descarte do sistema no celular. Preservar identidade e regras. Plano/evidências em mobile-native-plan.md e docs/evidencias/native-navigation/README.md. Não declarar a nova UI validada no celular antes do retorno de Lucas.

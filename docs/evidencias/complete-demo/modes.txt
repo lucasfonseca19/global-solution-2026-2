@@ -1,0 +1,8 @@
+PASS: Cancelar troca mantém login API
+PASS: Demonstração abre as mesmas telas sem login fictício manual
+PASS: Refeição e ação permanecem na mesma linha em 390px
+PASS: Abas Hoje/Histórico funcionam no navegador
+PASS: Retorno exige login real e não transferiu registro local para API
+PASS: Trocar de modo preserva a contribuição local
+PASS: Resposta de login antiga não autentica outro modo/sessão
+PASS: Sem erros de página

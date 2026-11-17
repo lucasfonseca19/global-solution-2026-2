@@ -10,7 +10,7 @@ export function ModeControl(){
  if(!context)return null;
  const demo=context.mode==='demo';
  const title=demo?'Voltar à API?':'Abrir demonstração?';
- const message=demo?'A sessão de demonstração será encerrada. Entre novamente para acessar os registros da escola. Os dados locais serão preservados.':'Você usará as mesmas telas com dados locais separados, sem alterar os registros da escola.';
+ const message=demo?'A sessão de demonstração será encerrada. Entre novamente para acessar os registros da escola. Os dados locais serão preservados.':'Você usará as mesmas telas com exemplos fictícios e sensores simulados dentro do app. Os registros da escola não serão alterados.';
  async function change(){
   if(busy)return;setBusy(true);setError('');
   try{await context!.onChange(demo?'api':'demo');setConfirm(false);}catch(e){setError(e instanceof Error?e.message:'Não foi possível trocar o modo.');}finally{setBusy(false);}

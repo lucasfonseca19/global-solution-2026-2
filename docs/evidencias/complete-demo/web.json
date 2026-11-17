@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "checks": [
+    {
+      "cenario": "Home com exemplos parciais e concluídos, identificados como demonstração",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Histórico fictício preenchido alimenta gráfico/média",
+      "status": "PASS"
+    },
+    {
+      "cenario": "RFID desconhecido e peso abaixo da tara bloqueiam sem gravar",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Pesagem local calcula, confirma e conclui sem API ou ponte",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Correção local preserva demais registros e conclusão",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Registros de demonstração persistem sem recriar ou sobrescrever exemplos",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Nenhuma chamada à API/ponte indisponíveis e nenhum erro de página",
+      "status": "PASS"
+    }
+  ],
+  "externalRequests": [],
+  "pageErrors": []
+}

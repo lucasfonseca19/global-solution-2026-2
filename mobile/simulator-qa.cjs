@@ -1,3 +1,4 @@
+// Roteiro histórico do modo vazio com ponte externa. Para a demonstração atual: complete-demo-qa.cjs.
 const {chromium,expect}=require('@playwright/test');const fs=require('node:fs');
 const out=require('node:path').resolve(__dirname,process.env.QA_OUT??'../docs/evidencias/separate-simulator');
 fs.mkdirSync(out,{recursive:true});

@@ -21,6 +21,12 @@ Ler ENUNCIADO.md, CONTEXTO.md, GLOSSARY.md, .scratch/merenda/spec.md, [ADR0001](
 - Sensores só em ciclo aguardando na pesagem ativa; reconexão não reaproveita eventos antigos. Transmitir não equivale a gravar.
 - Médias/comparações somente concluídos, sem produção pesada ou porcentagem da produção. Sem histórico fictício automático.
 
+## Demonstração completa — correção de 17/11/2026
+
+Lucas apontou que o modo de demonstração estava vazio e ainda dependia do painel externo. Corrigido: createShowcaseData usa chave própria `merenda.servicos.demonstracao.v1`, com seis almoços históricos concluídos, almoço atual parcial e jantar atual concluído, todos fictícios. Exemplos gerados apenas no primeiro acesso e depois persistidos. Chaves anteriores preservadas, sem migração ou sobrescrita. Modo API permanece sem exemplos e com ponte externa.
+
+No modo demo, PreviewRegistro desativa a escuta externa e oferece controles locais com os cenários compartilhados RFID/bruto. Mesma avaliação, animação, confirmação, correção e conclusão; zero/erros disponíveis em Outros cenários. [Evidências sem API/ponte](evidencias/complete-demo/README.md). Recarregar o Expo e tocar Demonstração para carregar o novo adaptador; Fast Refresh pode preservar o adaptador anterior em memória.
+
 ## Atualização mobile — 17/11/2026
 
 Lucas abriu a Home no iPhone/Expo Go e enviou captura com layout inadequado da barra manual e das ações de refeição. Autorizou botão discreto de demonstração no mesmo app, abas nativas e considerar outros componentes do sistema. Implementação em [.scratch/merenda/mobile-native-plan.md](../.scratch/merenda/mobile-native-plan.md). `MainTabs.native.tsx` usa tabs do sistema com react-native-screens já incluído no SDK58; `MainTabs.tsx` usa abas da biblioteca na web. Alert nativo para exclusão/descarte. Pressable com estilos explícitos é isolado do CSSInterop, preservando os callbacks de estilo. Allo e identidade mantidas.

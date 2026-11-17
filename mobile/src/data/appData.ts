@@ -1,4 +1,4 @@
-import {createApprovedData} from './approvedData';
+import {createShowcaseData} from './showcase';
 import {createHttpData} from './http';
 import {DataError,type AppDataAccess} from './types';
 import type {ServiceStorage} from './demo';
@@ -9,7 +9,7 @@ export function createAppData(storage:ServiceStorage,config:Config={
  mode:process.env.EXPO_PUBLIC_DATA_MODE,
  url:process.env.EXPO_PUBLIC_API_URL,
 }):AppDataAccess{
- if(config.mode==='demo')return createApprovedData(storage);
+ if(config.mode==='demo')return createShowcaseData(storage);
  if(config.mode&&config.mode!=='api')throw new DataError('CONFIGURACAO_INVALIDA','Modo de dados inválido. Use api ou demo.');
  return createHttpData(config.url??'http://localhost:8080',{fetcher:config.fetcher});
 }

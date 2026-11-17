@@ -4,7 +4,7 @@ A interface aprovada usa API por padrão. Banco/API e instruções completas no 
 
 Sensores em `EXPO_PUBLIC_SIMULATOR_URL` (padrão `http://127.0.0.1:8095`). API e ponte são processos separados. No celular, usar o IP do computador nas duas URLs e configurar acesso LAN/origens conforme o README. App e API usam o calendário da escola `America/Sao_Paulo`, independentemente do fuso do dispositivo.
 
-O botão **Demonstração** no login/Home/Histórico alterna dentro do mesmo app, preservando os dois conjuntos de dados. Abre sessão demonstrativa identificada; **Voltar à API** pede login real. A escolha não é persistida após recarregar. Abas nativas no celular e componente de abas da biblioteca na web. Confirmações de exclusão/descarte nativas no celular. [Evidências](../docs/evidencias/native-navigation/README.md).
+O botão **Demonstração** no login/Home/Histórico alterna dentro do mesmo app, preservando os dois conjuntos de dados. Abre sessão demonstrativa identificada, com exemplos no Histórico e controles internos de RFID/balança; **Voltar à API** pede login real. A escolha não é persistida após recarregar. Abas nativas no celular e componente de abas da biblioteca na web. Confirmações de exclusão/descarte nativas no celular. [Evidências](../docs/evidencias/native-navigation/README.md).
 
 `EXPO_PUBLIC_DATA_MODE=demo` ainda ativa explicitamente a demonstração local (login `demo` / `merenda-demo`, AsyncStorage próprio). `EXPO_PUBLIC_LEGACY_APP=1` preserva o cliente antigo. Não há fallback silencioso, migração de dados locais ou token persistido.
 

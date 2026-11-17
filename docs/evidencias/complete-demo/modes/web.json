@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "evidence": [
+    {
+      "cenario": "Cancelar troca mantém login API",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Demonstração abre as mesmas telas sem login fictício manual",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Refeição e ação permanecem na mesma linha em 390px",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Abas Hoje/Histórico funcionam no navegador",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Retorno exige login real e não transferiu registro local para API",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Trocar de modo preserva a contribuição local",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Resposta de login antiga não autentica outro modo/sessão",
+      "status": "PASS"
+    },
+    {
+      "cenario": "Sem erros de página",
+      "status": "PASS"
+    }
+  ],
+  "pageErrors": []
+}
