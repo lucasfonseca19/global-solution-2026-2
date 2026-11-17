@@ -1,0 +1,22 @@
+{
+  "result": "PASS",
+  "scenarios": [
+    "RFID inválido",
+    "tara inválida",
+    "identificação e estabilização",
+    "duplo clique",
+    "múltiplas pesagens",
+    "conclusão explícita",
+    "descarte e saída protegida",
+    "correção individual concluída",
+    "zero nas duas categorias",
+    "Home e Histórico",
+    "histórico somente consulta",
+    "cancelar identificação e tentar novamente",
+    "exclusão com confirmação",
+    "virada do dia",
+    "movimento reduzido",
+    "layout 320 e 1280 px"
+  ],
+  "pageErrors": []
+}

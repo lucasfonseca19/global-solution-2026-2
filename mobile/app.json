@@ -5,6 +5,14 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "web": { "bundler": "metro" }
+    "web": { "bundler": "metro" },
+    "plugins": [["expo-font", {
+      "android": { "fonts": [{
+        "fontFamily": "Allo Variable",
+        "path": "./assets/fonts/AlloVariable.ttf",
+        "fontDefinitions": [{ "weight": 400 }, { "weight": 500 }, { "weight": 600 }, { "weight": 700 }]
+      }] },
+      "ios": { "fonts": ["./assets/fonts/AlloVariable.ttf"] }
+    }]]
   }
 }

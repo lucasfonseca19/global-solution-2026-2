@@ -8,7 +8,8 @@ test('corrigir por detalhes persiste; sair, excluir e restaurar respeitam confir
  await page.goto('/'); await login(page);
  await page.getByRole('button',{name:/12\/11\/2026/}).click();
  await page.getByRole('button',{name:'Corrigir pesagens'}).click();
- await expect(page.getByLabel('Data do serviço')).toHaveValue('2026-11-12');
+ await expect(page.getByText('12/11/2026 · hoje',{exact:true})).toBeVisible();
+ await expect(page.getByRole('textbox',{name:'Data do serviço'})).toHaveCount(0);
  await page.getByRole('button',{name:'Abrir simulação'}).click();
  await page.getByRole('button',{name:'Simular: Pratos sem descarte'}).click();
  await expect(page.getByText('Esta confirmação substituirá o peso anterior desta categoria.')).toBeVisible();
@@ -35,11 +36,12 @@ test('corrigir por detalhes persiste; sair, excluir e restaurar respeitam confir
  await expect(page.getByRole('button',{name:/12\/11\/2026.*Total: 5,00 kg/})).toBeVisible();
  await page.reload(); await login(page);
  await expect(page.getByRole('button',{name:/12\/11\/2026.*Total: 5,00 kg/})).toBeVisible();
- await page.screenshot({path:'../docs/evidencias/11/historico-restaurado.png',fullPage:true});
+ await page.screenshot({path:'test-results/historico-restaurado-dia-atual.png',fullPage:true});
 });
 
 // Cada teste começa com armazenamento próprio vazio; recargas dentro do teste preservam dados.
 test.beforeEach(async ({page}) => {
+ await page.clock.setFixedTime(new Date(2026,10,12,12));
  await page.goto('/');
  await page.evaluate(() => localStorage.clear());
  await page.reload();
@@ -60,4 +62,13 @@ test('abrir detalhes descarta a correção anterior e preserva categoria já atu
  await page.getByRole('button',{name:'Simular: Lixeira da cozinha'}).click();
  await page.getByRole('button',{name:'Atualizar pesagem'}).click();
  await expect(page.getByText('Total confirmado: 3,00 kg',{exact:true})).toBeVisible();
+});
+
+test('histórico anterior é só consulta e não oferece correção ou exclusão',async({page})=>{
+ await page.clock.setFixedTime(new Date(2026,10,15,12));
+ await page.goto('/');await login(page);
+ await page.getByRole('button',{name:/13\/11\/2026/}).click();
+ await expect(page.getByText(/Este registro está disponível apenas para consulta/)).toBeVisible();
+ await expect(page.getByRole('button',{name:'Corrigir pesagens',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Excluir serviço',exact:true})).toHaveCount(0);
 });

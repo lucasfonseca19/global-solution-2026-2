@@ -3,6 +3,8 @@ export type Leitura = { codigoRfid: string; pesoBrutoKg: number };
 export const cenarios: Record<string, { nome: string; leitura: Leitura }> = {
  sobra: { nome: 'Lixeira da cozinha', leitura: { codigoRfid: 'RFID-SIM-001', pesoBrutoKg: 4 } },
  restos: { nome: 'Lixeira dos pratos', leitura: { codigoRfid: 'RFID-SIM-002', pesoBrutoKg: 3.5 } },
+ zeroSobra: { nome: 'Cozinha sem descarte', leitura: { codigoRfid: 'RFID-SIM-001', pesoBrutoKg: 1 } },
+ correcao: { nome: 'Cozinha com 2,50 kg', leitura: { codigoRfid: 'RFID-SIM-001', pesoBrutoKg: 3.5 } },
  zero: { nome: 'Pratos sem descarte', leitura: { codigoRfid: 'RFID-SIM-002', pesoBrutoKg: 1.5 } },
  desconhecido: { nome: 'Etiqueta desconhecida', leitura: { codigoRfid: 'RFID-SIM-999', pesoBrutoKg: 4 } },
  abaixo: { nome: 'Peso abaixo da tara', leitura: { codigoRfid: 'RFID-SIM-001', pesoBrutoKg: 0.5 } },

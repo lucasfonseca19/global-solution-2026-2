@@ -1,0 +1,14 @@
+import {afterEach,beforeEach,expect,test,vi} from 'vitest';
+import {createDemoData} from './demo';
+import {exemplos} from './fixtures';
+import {localServiceDay} from './serviceDay';
+const credentials={login:'demo',senha:'merenda-demo'};
+const body={data:'2026-11-15',tipoRefeicao:'Almoço',pesagens:[{codigoRfid:'RFID-SIM-001',pesoBrutoKg:4}]};
+beforeEach(()=>{vi.useFakeTimers();vi.setSystemTime(new Date(2026,10,15,12));});afterEach(()=>vi.useRealTimers());
+async function setup(){const api=createDemoData();const {token}=await api.login(credentials);return {api,token};}
+test('usa o calendário local, incluindo início e fim do dia',()=>{expect(localServiceDay(new Date(2026,10,15,0,0))).toBe('2026-11-15');expect(localServiceDay(new Date(2026,10,15,23,59))).toBe('2026-11-15');});
+test('permite confirmar, corrigir e excluir no mesmo dia',async()=>{const {api,token}=await setup();const s=await api.criar(token,body);expect((await api.atualizar(token,s.id,{...body,pesagens:[{...body.pesagens[0],pesoBrutoKg:5}]})).totalKg).toBe(4);await api.excluir(token,s.id);await expect(api.detalhar(token,s.id)).rejects.toMatchObject({codigo:'SERVICO_NAO_ENCONTRADO'});});
+test('bloqueia criar no passado e futuro sem gravar',async()=>{const {api,token}=await setup();for(const data of ['2026-11-14','2026-11-16'])await expect(api.criar(token,{...body,data})).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});expect(await api.listar(token)).toHaveLength(exemplos.length);});
+test('bloqueia correção e exclusão de históricos, até com data de hoje no payload',async()=>{const {api,token}=await setup();const before=await api.detalhar(token,101);await expect(api.atualizar(token,101,{...body,data:'2026-11-12'})).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});await expect(api.atualizar(token,101,body)).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});await expect(api.excluir(token,101)).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});expect(await api.detalhar(token,101)).toEqual(before);});
+test('bloqueia alterar data de um serviço atual para outro dia',async()=>{const {api,token}=await setup();const s=await api.criar(token,body);await expect(api.atualizar(token,s.id,{...body,data:'2026-11-16'})).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});expect(await api.detalhar(token,s.id)).toEqual(s);});
+test('revalida o relógio ao confirmar, corrigir ou excluir depois da meia-noite',async()=>{const {api,token}=await setup();const s=await api.criar(token,body);vi.setSystemTime(new Date(2026,10,16,0,0));await expect(api.atualizar(token,s.id,body)).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});await expect(api.excluir(token,s.id)).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});await expect(api.criar(token,{...body,tipoRefeicao:'Jantar'})).rejects.toMatchObject({codigo:'DIA_ENCERRADO'});expect(await api.detalhar(token,s.id)).toEqual(s);expect((await api.criar(token,{...body,data:'2026-11-16'})).data).toBe('2026-11-16');});

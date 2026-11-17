@@ -6,6 +6,20 @@ Atualizado em 14/11/2026. Rascunho para revisão de Lucas e do outro integrante.
 
 Fontes: [enunciado](../../ENUNCIADO.md), [contexto](../../CONTEXTO.md), [glossário](../../GLOSSARY.md) e [mapa de decisões](map.md).
 
+## App vazio e sensores separados — 17/11/2026
+
+Lucas confirmou separar as ferramentas de demonstração da interface de operação. O app aprovado abre por padrão, sem exemplos iniciais e sem controles de cenário/restauração/toolbar. As pesagens confirmadas persistem em chave dedicada e alimentam Home/Histórico. O simulador local separado envia RFID/peso bruto; apenas um ciclo aguardando na tela ativa aceita novas leituras, sem reproduzir eventos anteriores ao entrar/retomar. Na web, alternar a aba para operar o simulador não interrompe essa escuta. Cliente anterior fica explicitamente em `EXPO_PUBLIC_LEGACY_APP=1` para preservar dados/trabalho/evidências. Ver [guia atual](../../docs/guia-simulador-gravacao.md). A ponte de sensores não implementa a API acadêmica ou banco/segurança.
+
+## Revisão vigente: pesagens individuais — 17/11/2026
+
+Esta seção e a [ADR 0001](../../docs/adr/0001-pesagens-individuais-conclusao-explicita.md) substituem os trechos antigos de último peso por categoria e conclusão automática abaixo. Lucas aprovou e autorizou aplicar o protótipo 03 na prévia React Native. Cada pesagem individual confirmada soma uma contribuição; correção substitui somente um registro; a conclusão é explícita e exige ambas as categorias, aceitando zero confirmado. Prévia pendente deve ser confirmada ou descartada. Cada novo ciclo é iniciado explicitamente, e repetição do mesmo ciclo não soma novamente. Correção no mesmo dia preserva o estado concluído. Histórico de outros dias continua somente consulta.
+
+Implementação local na prévia, sem push. O contrato real e a entrega acadêmica geral continuam pendentes. Ver [cobertura e limites](../../docs/ux/cobertura-enunciado-pesagem.md).
+
+## Pesagens somente no dia atual — 17/11/2026
+
+Nova regra aprovada por Lucas: data fixa no dia atual; criação, correção e exclusão somente para serviços desse dia. Histórico de outros dias, inclusive pendentes, fica apenas para consulta. Ver [decisão](../../docs/adr/0002-pesagens-somente-no-dia-atual.md). Esta regra substitui permissões históricas de editar a data ou modificar registros antigos. Implementação na worktree da prévia; backend real ainda pendente.
+
 ## Objetivo e limites aprovados
 
 Medir o descarte monitorado de uma escola, por serviço de alimentação identificado pela data e tipo de refeição. Separar sobra não servida destinada ao descarte de restos comestíveis dos pratos. Mostrar quilogramas de cada categoria e o total do serviço, para permitir acompanhar o descarte ao longo dos serviços.

@@ -1,6 +1,27 @@
-# Merenda — app demonstrativo (tickets 09 a 11)
+# Merenda — app de pesagem
 
-App React Native com Expo, quatro telas e suporte web local. Login, consulta, registro, simulação, correção, exclusão e restauração de dados de exemplo funcionam com dados fictícios locais. Não há API, banco, autenticação ou segurança reais. O contrato em `.scratch/merenda/api-contract.md` é provisório para integração.
+App React Native com Expo, cinco telas na interface aprovada e suporte web local. Login, consulta, registro, simulação, correção, exclusão e restauração de dados de exemplo funcionam com dados fictícios locais. Não há API, banco, autenticação ou segurança reais. O contrato em `.scratch/merenda/api-contract.md` é provisório para integração.
+
+## App atual: vazio e com sensores separados
+
+A interface aprovada abre por padrão, sem exemplos históricos, botões de simulação, restauração de fixtures ou toolbar de teste. Instalação nova começa vazia; as pesagens confirmadas são persistidas em uma chave própria, sem importar ou apagar os dados da versão anterior.
+
+Em um terminal, na raiz do repositório:
+
+```sh
+node --experimental-strip-types iot/bridge.mjs
+```
+
+Abra o simulador em `http://127.0.0.1:8095`. Em outro terminal:
+
+```sh
+npm ci
+npm run web -- --port 8094
+```
+
+Abra o app em `http://localhost:8094`. Login de demonstração: `demo` / `merenda-demo`. Entre na refeição e aguarde “Balança conectada”; no painel separado, escolha a leitura e toque em “Colocar na balança”. O app identifica, calcula, anima e permite confirmar manualmente. A ponte é um simulador local, não substitui a API/banco/segurança exigidos pelo enunciado.
+
+A sessão termina ao recarregar, mas as pesagens confirmadas permanecem. O Histórico começa sem pontos fictícios e cresce com os registros. Use o [guia de execução e gravação](../docs/guia-simulador-gravacao.md) e veja as [evidências atuais](../docs/evidencias/separate-simulator/README.md). Não há necessidade da flag de prévia; `EXPO_PUBLIC_LEGACY_APP=1` abre explicitamente o cliente anterior.
 
 ## Versões registradas
 
@@ -19,14 +40,14 @@ Ambiente das evidências: Node 22.17.1 e npm 10.9.2. `npm ci` instala as versõe
 
 AsyncStorage 2.2.0 foi ajustado com `expo install` para compatibilidade com SDK 58.
 
-## Iniciar no navegador
+## Registro anterior: cliente legado
 
 A partir da raiz do repositório:
 
 ```sh
 cd mobile
 npm ci
-npm run web
+EXPO_PUBLIC_LEGACY_APP=1 npm run web
 ```
 
 Abra o endereço informado pelo Expo. Credenciais públicas de demonstração: usuário `demo`, senha `merenda-demo`. Não use dados pessoais. A senha é comparação fictícia no app; não é uma conta ou controle de segurança. Google Chrome já instalado foi usado nos fluxos Playwright; não é preciso baixar navegador para iniciar ou usar o app manualmente.

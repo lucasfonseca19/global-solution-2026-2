@@ -17,3 +17,11 @@ node --experimental-strip-types iot/cli.mjs avaliar abaixo
 O teste automatizado da CLI, já registrado nas evidências do ticket 10, pode ser executado na raiz com `node --test iot/cli.test.mjs`. Logs reais de cenários e códigos de saída: [docs/evidencias/10/cli.txt](../docs/evidencias/10/cli.txt), conferidos na [documentação do ticket 10](../docs/evidencias/10/README.md).
 
 `shared.ts` contém cenários e cálculo utilizados pelo app e pela CLI. A CLI não grava dados e não se conecta ao app: são demonstrações independentes com regras coerentes. O contrato técnico e a integração dependem de revisão conjunta com o colega. Não há sensor físico ou backend implementado.
+
+## Simulador separado conectado ao app — 17/11/2026
+
+Na raiz, `node --experimental-strip-types iot/bridge.mjs` abre o painel em `http://127.0.0.1:8095`. Ele envia cenário RFID/bruto; o app aprovado consome a leitura enquanto aguarda uma lixeira, aplica a tara e pede confirmação. O app já não possui botões de simulação nem exemplos pré-carregados.
+
+A ponte local usa HTTP/cursor, sem dependências adicionais. GET `/events` estabelece uma posição inicial sem reproduzir eventos anteriores; consultas seguintes carregam somente eventos posteriores. Cada reinício tem identidade própria. A retenção em memória é limitada a 100 eventos; a ponte não salva pesagens. POST `/readings` aceita apenas cenários conhecidos de `shared.ts`, incluindo erros que o app deve rejeitar. O painel não comprova que o app gravou: a confirmação ocorre no app.
+
+Testes: `node --experimental-strip-types --test iot/bridge.test.mjs iot/cli.test.mjs`. A CLI antiga permanece independente; painel/ponte formam o caminho integrado de demonstração. Isso não implementa a API acadêmica em Java/ASP.NET nem substitui banco/segurança. Execução em celular físico precisa de IP/rede e verificação própria; veja [guia e roteiro](../docs/guia-simulador-gravacao.md).

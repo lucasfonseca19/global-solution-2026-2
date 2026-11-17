@@ -11,6 +11,12 @@ export type Pesagem = {
   pesoBrutoKg: number;
   pesoLiquidoKg: number;
 };
+export type RegistroPesagem = Previa & { id: string };
+export type ConfirmacaoPesagem = { data: string; tipoRefeicao: string; cicloId: string; leitura: Leitura; substituirId?: string };
+export interface WeighingDataAccess extends DataAccess {
+  confirmarPesagem(token: string, entrada: ConfirmacaoPesagem): Promise<Servico>;
+  concluirServico(token: string, id: number): Promise<Servico>;
+}
 export type Servico = {
   id: number;
   data: string;
@@ -18,6 +24,9 @@ export type Servico = {
   status: "PENDENTE" | "COMPLETO";
   pesagens: Record<Categoria, Pesagem | null>;
   totalKg: number;
+  /** Contribuições individuais; ausente nos exemplos e clientes legados. */
+  registros?: RegistroPesagem[];
+  ciclosConfirmados?: string[];
 };
 export type Sessao = { token: string; usuario: { id: number; nome: string } };
 /** Fronteira assíncrona do adaptador demonstrativo; contrato provisório. */

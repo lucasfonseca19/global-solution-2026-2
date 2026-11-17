@@ -1,0 +1,46 @@
+npm warn Unknown user config "timeout". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> merenda-mobile@1.0.0 test
+> vitest run --reporter=verbose
+
+
+ RUN  v5.1.0 /Users/lucas/.t3/worktrees/global-solution-2026-2/t3-5b5fb2b8/mobile
+
+ ✓ src/data/registro.test.ts > prévia identifica e calcula sem criar serviço 3ms
+ ✓ src/data/registro.test.ts > confirmar cria pendente, PUT completo conclui e correção substitui preservando sobra 1ms
+ ✓ src/data/registro.test.ts > salvar revalida e rejeita atomicamente RFID, peso, duplicação e data inválida 1ms
+ ✓ src/data/registro.test.ts > zero confirmado completa serviço e PUT omisso deixa categoria pendente 0ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > compara médias por serviço, exclui parciais e outras refeições e mantém lacunas 11ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > inclui zero confirmado sem tratar falta de informação como zero 0ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > não divide por zero e representa aumento em kg quando a base era zero 0ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > não inventa média ou tendência quando não há dados 0ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > usa janelas contíguas de calendário, ignora futuros e aceita variação de caixa 0ms
+ ✓ src/preview/historyModel.test.ts > Histórico por refeição e período > compara médias apesar de números diferentes de serviços e identifica estabilidade 0ms
+ ✓ src/data/weighing.test.ts > soma pesagens, repete ciclo uma vez e conclui explicitamente 8ms
+ ✓ src/data/weighing.test.ts > exige ambas as categorias; zero é confirmação válida 1ms
+ ✓ src/data/weighing.test.ts > corrige um registro sem apagar outros nem reabrir; replay antigo não duplica 1ms
+ ✓ src/data/weighing.test.ts > revalida RFID, tara, autenticação, data e identidade sem mutação parcial 1ms
+ ✓ src/data/weighing.test.ts > falha de escrita não publica; repetir ciclo após recarregar não duplica 1ms
+ ✓ src/data/serviceDay.test.ts > usa o calendário local, incluindo início e fim do dia 2ms
+ ✓ src/data/serviceDay.test.ts > permite confirmar, corrigir e excluir no mesmo dia 2ms
+ ✓ src/data/serviceDay.test.ts > bloqueia criar no passado e futuro sem gravar 8ms
+ ✓ src/data/serviceDay.test.ts > bloqueia correção e exclusão de históricos, até com data de hoje no payload 1ms
+ ✓ src/data/serviceDay.test.ts > bloqueia alterar data de um serviço atual para outro dia 0ms
+ ✓ src/data/serviceDay.test.ts > revalida o relógio ao confirmar, corrigir ou excluir depois da meia-noite 0ms
+ ✓ src/data/adapter.test.ts > login fictício retorna usuário sem senha 3ms
+ ✓ src/data/adapter.test.ts > credenciais incorretas são rejeitadas com mensagem genérica 1ms
+ ✓ src/data/adapter.test.ts > consulta retorna exemplos completos, pendentes e zero confirmado sem confundi-los 10ms
+ ✓ src/data/adapter.test.ts > consulta exige sessão e serviço inexistente tem erro explícito 0ms
+ ✓ src/data/adapter.test.ts > respostas não permitem alterar os exemplos e lista vazia é válida 0ms
+ ✓ src/data/persistence.test.ts > reabrir carrega serviços existentes antes de exemplos 3ms
+ ✓ src/data/persistence.test.ts > excluir remove somente alvo e pesagens e persiste inclusive lista vazia 1ms
+ ✓ src/data/persistence.test.ts > restaurar substitui alterações pelos exemplos e sobrevive a reabrir 8ms
+ ✓ src/data/persistence.test.ts > falhas de escrita não publicam criação, correção, exclusão ou restauração; fila se recupera 1ms
+ ✓ src/data/persistence.test.ts > escritas simultâneas aguardam disco sem perder serviços 3ms
+ ✓ src/data/persistence.test.ts > falha de leitura não substitui dados existentes por exemplos e permite tentar novamente 0ms
+
+ Test Files  6 passed (6)
+      Tests  32 passed (32)
+   Start at  12:03:16
+   Duration  131ms (tests 43%, import 26%, transform 22%, worker 9%)
+

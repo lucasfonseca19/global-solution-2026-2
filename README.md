@@ -1,22 +1,46 @@
 # Global Solution 2026/2 — descarte da merenda
 
-MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. A parte de Lucas tem um app demonstrativo React Native/Expo (web local), persistência local e simulador independente de RFID e balança. A API, o banco e a segurança real não fazem parte desta implementação; o contrato entre as partes permanece provisório.
+Para a próxima sessão de backend: [passagem atual para integração](docs/continuidade-integracao.md).
 
-## Executar localmente
+MVP acadêmico para registrar o descarte de alimento não servido e restos comestíveis dos pratos. A parte de Lucas tem um app demonstrativo React Native/Expo (web local), persistência local e simulador separado de RFID e balança conectado ao app, além da CLI independente. A API, o banco e a segurança real não fazem parte desta implementação; o contrato entre as partes permanece provisório.
+
+## App atual: vazio e com sensores separados
+
+A interface aprovada abre por padrão, sem exemplos históricos, botões de simulação, restauração de fixtures ou toolbar de teste. Instalação nova começa vazia; as pesagens confirmadas são persistidas em uma chave própria, sem importar ou apagar os dados da versão anterior.
+
+Em um terminal, na raiz do repositório:
+
+```sh
+node --experimental-strip-types iot/bridge.mjs
+```
+
+Abra o simulador em `http://127.0.0.1:8095`. Em outro terminal:
+
+```sh
+cd mobile
+npm ci
+npm run web -- --port 8094
+```
+
+Abra o app em `http://localhost:8094`. Login de demonstração: `demo` / `merenda-demo`. Entre na refeição e aguarde “Balança conectada”; no painel separado, escolha a leitura e toque em “Colocar na balança”. O app identifica, calcula, anima e permite confirmar manualmente. A ponte é um simulador local, não substitui a API/banco/segurança exigidos pelo enunciado.
+
+A sessão termina ao recarregar, mas as pesagens confirmadas permanecem. O Histórico começa sem pontos fictícios e cresce com os registros. Use o [guia de execução e gravação](docs/guia-simulador-gravacao.md) e veja as [evidências atuais](docs/evidencias/separate-simulator/README.md). Não há necessidade da flag de prévia; `EXPO_PUBLIC_LEGACY_APP=1` abre explicitamente o cliente anterior.
+
+## Registro anterior: cliente legado
 
 Requer Node.js compatível com Expo (ambiente registrado: Node 22.17.1 e npm 10.9.2). Na raiz:
 
 ```sh
 cd mobile
 npm ci
-npm run web
+EXPO_PUBLIC_LEGACY_APP=1 npm run web
 ```
 
 Abra o endereço local indicado pelo Expo. Credenciais fictícias: usuário `demo`, senha `merenda-demo`. Os dados dos serviços ficam no armazenamento local do navegador. A sessão não é persistida: recarregar volta ao login, mantendo os serviços.
 
 O app tem quatro telas funcionais: Login, Histórico, Registro e Detalhes. O simulador pode ser usado pela interface de Registro ou pela CLI independente em [iot/README.md](iot/README.md). Passos e resultados esperados estão em [docs/guia-testes-lucas.md](docs/guia-testes-lucas.md).
 
-## O que está comprovado
+## Evidências anteriores
 
 Os tickets 09, 10 e 11 foram concluídos e verificados; commit de referência: `7b67860`. Logs e capturas reais estão em [evidências 09](docs/evidencias/09/README.md), [evidências 10](docs/evidencias/10/README.md) e [evidências 11](docs/evidencias/11/README.md). Há testes unitários do adaptador e fluxos web executados com o Chrome já instalado; não é necessário baixar um navegador para a execução descrita.
 

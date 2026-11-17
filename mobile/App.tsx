@@ -1,3 +1,10 @@
+import "./global.css";
+import {useServiceDay} from "./src/useServiceDay";
+import {READ_ONLY_DAY} from "./src/data/serviceDay";
+import { useFonts } from 'expo-font';
+import { fontSources } from './src/fontSources';
+import { AppText as Text, ALLO_FAMILY } from './src/typography';
+import { DesignPreview } from "./src/DesignPreview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Page, ErrorText, styles, peso, data, message } from "./src/ui";
 import { Registro } from "./src/Registro";
@@ -8,7 +15,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  Text,
+  Text as NativeText,
   TextInput,
   View,
 } from "react-native";
@@ -221,6 +228,7 @@ function Details({
   Routes,
   "Detalhes"
 >) {
+  const today=useServiceDay();
   const [deleting, setDeleting] = useState(false);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState("");
@@ -299,14 +307,14 @@ function Details({
               </View>
             );
           })}
-          <Button title="Corrigir pesagens" disabled={busy || deleting} onPress={() => navigation.navigate("Registro", {servico: s})} />
+          {s.data===today?<Button title="Corrigir pesagens" disabled={busy || deleting} onPress={() => navigation.navigate("Registro", {servico: s})} />:<Text style={styles.text}>{READ_ONLY_DAY}</Text>}
           {actionError ? <ErrorText text={actionError} /> : null}
-          {deleting ? <View style={styles.notice}>
+          {s.data===today ? deleting ? <View style={styles.notice}>
             <Text style={styles.strong}>Excluir este serviço e suas pesagens?</Text>
             <Text style={styles.text}>Esta ação não pode ser desfeita.</Text>
             <Button title="Cancelar" disabled={busy} onPress={() => setDeleting(false)} />
             <Button title="Confirmar exclusão" disabled={busy} onPress={remove} />
-          </View> : <Button secondary title="Excluir serviço" onPress={() => setDeleting(true)} />}
+          </View> : <Button secondary title="Excluir serviço" onPress={() => setDeleting(true)} />:null}
         </>
       )}
       <Button title="Voltar ao histórico" disabled={busy} onPress={() => navigation.popTo("Historico")} />
@@ -314,6 +322,14 @@ function Details({
   );
 }
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts(fontSources);
+  if (!fontsLoaded && !fontError) return <View style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}}><ActivityIndicator accessibilityLabel="Carregando interface" color="#9226d5" /></View>;
+  return <View style={{flex:1}}>
+    {fontError ? <NativeText accessibilityRole="alert" style={{padding:12,color:'#a12646',fontSize:14}}>A fonte não carregou. Exibindo a fonte do sistema.</NativeText> : null}
+    {process.env.EXPO_PUBLIC_LEGACY_APP === "1" ? <NormalApp /> : <SafeAreaProvider><DesignPreview /></SafeAreaProvider>}
+  </View>;
+}
+function NormalApp() {
   const [api] = useState<DataAccess>(() => createDemoData(undefined, AsyncStorage));
   const [session, setSession] = useState<Sessao>();
   function logout() {
@@ -328,6 +344,7 @@ export default function App() {
             animation: "none",
             headerStyle: { backgroundColor: "#f6f7f2" },
             headerTintColor: "#183d30",
+            headerTitleStyle: { fontFamily: ALLO_FAMILY, fontSize: 18, fontWeight: '600' },
             contentStyle: { backgroundColor: "#f6f7f2" },
           }}
         >

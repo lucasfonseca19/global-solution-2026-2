@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Pressable, ScrollView, Text, View, StyleSheet } from "react-native";
+import { Pressable, ScrollView, View, StyleSheet } from "react-native";
+import { AppText as Text, allo } from './typography';
 const kg = new Intl.NumberFormat("pt-BR", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
@@ -94,6 +95,7 @@ export const styles = StyleSheet.create({
     borderCurve: "continuous",
   },
   input: {
+    ...allo(16),
     minHeight: 48,
     padding: 12,
     fontSize: 16,

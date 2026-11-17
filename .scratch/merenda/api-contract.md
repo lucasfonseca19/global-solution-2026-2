@@ -1,5 +1,9 @@
 # Contrato mínimo entre app, API e simulador
 
+**Revisão funcional de 17/11:** o PUT de categorias e a conclusão automática descritos neste rascunho não representam o novo fluxo. O adaptador da prévia tem confirmação individual com ID/ciclo e conclusão explícita; ainda é necessário definir as rotas e a representação de API/banco reais. Exigir ambas categorias (zero válido), idempotência de ciclo, correção individual preservando conclusão e validação temporal. Ver [ADR 0001](../../docs/adr/0001-pesagens-individuais-conclusao-explicita.md).
+
+
+**Regra vigente em 17/11:** serviços de outros dias são somente consulta; criar, corrigir e excluir apenas no dia atual. Validar data original e payload, sem permitir mover registro antigo para hoje. A integração precisa definir data/fuso confiáveis no servidor. Ver [ADR](../../docs/adr/0002-pesagens-somente-no-dia-atual.md).
 Status: needs-info
 
 Rascunho de 12/11/2026, para revisão de Lucas e do colega responsável pelo backend. Não autoriza implementação. Os nomes de rotas, campos e códigos abaixo são propostas, não decisões já aprovadas pelo grupo.

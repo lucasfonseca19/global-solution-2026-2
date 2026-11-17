@@ -1,3 +1,6 @@
+import {beforeEach,afterEach,vi} from 'vitest';
+beforeEach(()=>{vi.useFakeTimers({toFake:['Date']});vi.setSystemTime(new Date(2026,10,15,12));});
+afterEach(()=>vi.useRealTimers());
 import {test,expect} from 'vitest';
 import {createDemoData} from './demo';
 const credentials={login:'demo',senha:'merenda-demo'};
@@ -16,7 +19,7 @@ test('reabrir carrega serviços existentes antes de exemplos',async()=>{
 test('excluir remove somente alvo e pesagens e persiste inclusive lista vazia',async()=>{
  const disk=storage(); const a=createDemoData([],disk); const {token}=await a.login(credentials);
  const s=await a.criar(token,input);
- const other=await a.criar(token,{...input,data:'2026-11-16'});
+ const other=await a.criar(token,{...input,tipoRefeicao:'Jantar'});
  await a.excluir(token,s.id);
  await expect(a.detalhar(token,s.id)).rejects.toMatchObject({codigo:'SERVICO_NAO_ENCONTRADO'});
  expect(await a.listar(token)).toEqual([other]);
@@ -36,7 +39,7 @@ test('falhas de escrita não publicam criação, correção, exclusão ou restau
  const s=await a.criar(token,input);
  disk.setItem=async()=>{throw new Error('Armazenamento indisponível');};
  for(const operation of [
- ()=>a.criar(token,{...input,data:'2026-11-16'}),
+ ()=>a.criar(token,{...input,tipoRefeicao:'Jantar'}),
  ()=>a.atualizar(token,s.id,{...input,pesagens:[{codigoRfid:'RFID-SIM-001',pesoBrutoKg:8}]}),
  ()=>a.excluir(token,s.id),()=>a.restaurarExemplos(token)
  ]) {
@@ -56,7 +59,7 @@ test('escritas simultâneas aguardam disco sem perder serviços',async()=>{
  const first=a.criar(token,input).then(s=>{done=true;return s;});
  await new Promise(resolve=>setTimeout(resolve,0));
  expect(done).toBe(false);
- const second=a.criar(token,{...input,data:'2026-11-16'});
+ const second=a.criar(token,{...input,tipoRefeicao:'Jantar'});
  release(); await first;
  await new Promise(resolve=>setTimeout(resolve,0));
  release(); await second;

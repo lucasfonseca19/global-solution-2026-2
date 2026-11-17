@@ -5,7 +5,8 @@ test('registro: prévia, erros, confirmação, continuidade, zero e consulta', a
  await page.getByLabel('Senha',{exact:true}).fill('merenda-demo');
  await page.getByRole('button',{name:'Entrar na demonstração'}).click();
  await page.getByRole('button',{name:'Registrar descarte',exact:true}).click();
- await page.getByLabel('Data do serviço').fill('2026-11-15');
+ await expect(page.getByText('15/11/2026 · hoje',{exact:true})).toBeVisible();
+ await expect(page.getByRole('textbox',{name:'Data do serviço'})).toHaveCount(0);
  await page.getByRole('button',{name:'Procurar serviço'}).click();
  await expect(page.getByText('Novo serviço.',{exact:false})).toBeVisible();
  await expect(page.getByRole('button',{name:'Simular: Lixeira da cozinha'})).toHaveCount(0);
@@ -28,9 +29,9 @@ test('registro: prévia, erros, confirmação, continuidade, zero e consulta', a
  await expect(page.getByText('Total confirmado: 5,00 kg',{exact:true})).toBeVisible();
  await page.screenshot({path:'test-results/registro-completo.png',fullPage:true});
  await page.getByRole('button',{name:'Simular: Pratos sem descarte'}).click();
- await page.getByLabel('Data do serviço').fill('2026-11-16');
+ await page.getByLabel('Tipo de refeição',{exact:true}).fill('Jantar');
  await expect(page.getByRole('button',{name:'Confirmar pesagem'})).toHaveCount(0);
- await page.getByLabel('Data do serviço').fill('2026-11-15');
+ await page.getByLabel('Tipo de refeição',{exact:true}).fill('Almoço');
  await page.getByRole('button',{name:'Procurar serviço'}).click();
  await page.getByRole('button',{name:'Simular: Pratos sem descarte'}).click();
  await page.getByRole('button',{name:'Atualizar pesagem'}).click();
@@ -43,6 +44,7 @@ test('registro: prévia, erros, confirmação, continuidade, zero e consulta', a
 
 // Cada teste começa com armazenamento próprio vazio; recargas dentro do teste preservam dados.
 test.beforeEach(async ({page}) => {
+ await page.clock.setFixedTime(new Date(2026,10,15,12));
  await page.goto('/');
  await page.evaluate(() => localStorage.clear());
  await page.reload();

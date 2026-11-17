@@ -1,0 +1,27 @@
+const {chromium,expect}=require('@playwright/test');
+const fs=require('node:fs');
+(async()=>{
+ const b=await chromium.launch({channel:'chrome',headless:true});
+ const p=await b.newPage({viewport:{width:390,height:844}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://localhost:8094');await p.getByRole('button',{name:'Entrar',exact:true}).click();await p.getByRole('button',{name:'Histórico',exact:true}).click();
+ await expect(p.getByRole('heading',{name:'Histórico',exact:true})).toBeVisible();await expect(p.getByTestId('history-x-axis').getByText(/^\d{2}\/\d{2}$/)).toHaveCount(7);await expect(p.getByTestId('history-trend')).toContainText('menos descarte');await expect(p.getByRole('button',{name:'Ocultar cálculo',exact:true})).toHaveCount(0);
+ await p.evaluate(()=>document.fonts.ready);await p.waitForTimeout(250);
+ await p.screenshot({path:'../docs/evidencias/history-preview/mobile-390.png',fullPage:true});
+ const evidence={average:await p.getByTestId('history-average').innerText(),trend:await p.getByTestId('history-trend').getAttribute('aria-label')};
+ await p.setViewportSize({width:320,height:740});await p.waitForTimeout(200);await p.screenshot({path:'../docs/evidencias/history-preview/mobile-320.png',fullPage:true});
+ expect(await p.getByTestId('history-trend').evaluate(el=>el.getBoundingClientRect().right<=innerWidth)).toBe(true);
+ await p.setViewportSize({width:1280,height:900});await p.waitForTimeout(200);await p.screenshot({path:'../docs/evidencias/history-preview/desktop-1280.png',fullPage:true});
+ await p.setViewportSize({width:390,height:844});await p.getByRole('button',{name:'Ver cálculo',exact:true}).click();await expect(p.getByText(/Média = kg confirmados/)).toBeVisible();await p.getByRole('button',{name:'Ocultar cálculo',exact:true}).click();
+ await p.getByRole('button',{name:'30 dias',exact:true}).click();await expect(p.getByTestId('history-x-axis').getByText(/^\d{2}\/\d{2}$/)).toHaveCount(3);await expect(p.getByRole('button',{name:'Ver mais registros',exact:true})).toBeVisible();
+ const before=await p.getByRole('button',{name:/^Almoço,.*concluída/}).count();await p.getByRole('button',{name:'Ver mais registros',exact:true}).click();expect(await p.getByRole('button',{name:/^Almoço,.*concluída/}).count()).toBeGreaterThan(before);
+ await p.getByRole('button',{name:/^Refeição:/}).click();await p.getByRole('button',{name:'Jantar',exact:true}).click();await expect(p.getByTestId('history-trend')).toContainText('mais descarte');
+ evidence.increase=await p.getByTestId('history-trend').getAttribute('aria-label');
+ await p.getByRole('button',{name:/Consultar ponto/}).first().focus();await p.keyboard.press('Enter');await expect(p.getByRole('button',{name:/Abrir detalhes de Jantar/})).toBeVisible();
+ await p.screenshot({path:'../docs/evidencias/history-preview/increase-selected.png',fullPage:true});await p.getByRole('button',{name:/Abrir detalhes de Jantar/}).click();await expect(p.getByRole('heading',{name:'Jantar',exact:true})).toBeVisible();await p.getByRole('button',{name:'Voltar',exact:true}).click();
+ await p.getByRole('button',{name:'Demonstração',exact:true}).click();await p.getByRole('button',{name:'Restaurar exemplos básicos',exact:true}).click();await p.getByRole('button',{name:'Restaurar exemplos básicos',exact:true}).click();
+ await expect(p.getByTestId('history-trend')).toHaveCount(0);await p.getByRole('button',{name:/^Refeição:/}).click();await p.getByRole('button',{name:'Jantar',exact:true}).click();await expect(p.getByText('Nenhuma pesagem concluída',{exact:true})).toBeVisible();await expect(p.getByTestId('history-average')).toHaveText('—');
+ await p.screenshot({path:'../docs/evidencias/history-preview/empty.png',fullPage:true});
+ await p.getByRole('button',{name:'Hoje',exact:true}).click();await p.getByRole('button',{name:'Lanche da tarde, Não iniciada, Pesar',exact:true}).click();await p.getByRole('button',{name:'Simular pesagem',exact:true}).click();await p.getByRole('button',{name:'Colocar lixeira de sobras',exact:true}).click();await p.getByRole('button',{name:'Confirmar pesagem',exact:true}).click();await p.getByRole('button',{name:'Voltar',exact:true}).click();await p.getByRole('button',{name:'Histórico',exact:true}).click();
+ await p.getByRole('button',{name:/^Refeição:/}).click();await p.getByRole('button',{name:'Lanche da tarde',exact:true}).click();await expect(p.getByTestId('history-average')).toHaveText('—');await p.getByRole('button',{name:/^Lanche da tarde,.*em andamento/}).click();await expect(p.getByRole('button',{name:'Simular pesagem',exact:true})).toBeVisible();
+ expect(errors).toEqual([]);evidence.pageErrors=errors;evidence.result='PASS filtros, cálculo recolhido, alta/queda, pontos por teclado, detalhes, expansão, vazio, parciais excluídos e retomada.';fs.writeFileSync('../docs/evidencias/history-preview/qa.json',JSON.stringify(evidence,null,2)+'\n');console.log(evidence.result);await b.close();
+})().catch(e=>{console.error(e);process.exit(1)});

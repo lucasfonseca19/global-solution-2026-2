@@ -12,6 +12,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npx expo start --web --port 8091",
+    env: {EXPO_PUBLIC_LEGACY_APP: "1"},
     url: "http://127.0.0.1:8091",
     reuseExistingServer: false,
     timeout: 120000,

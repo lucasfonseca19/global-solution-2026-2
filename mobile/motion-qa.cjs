@@ -1,0 +1,27 @@
+const { chromium }=require('@playwright/test');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({channel:'chrome',headless:true});
+ const page=await browser.newPage({viewport:{width:390,height:1000}});
+ const result={};
+ const button=t=>page.getByRole('button',{name:t,exact:true});
+ const input=()=>page.getByTestId('animated-weight');
+ const read=async t=>{if(await button('Simular leitura').isVisible())await button('Simular leitura').click();await button(t).click();};
+ const finish=async()=>{await page.getByText('Leitura estabilizada',{exact:true}).waitFor();};
+ const confirm=async()=>{await page.getByRole('button',{name:/^(Confirmar|Atualizar) pesagem$/}).click();await page.getByText('Pesagem confirmada.',{exact:true}).waitFor();};
+ await page.goto('http://localhost:8093');
+ await read('Lixeira da cozinha');await page.waitForTimeout(350);
+ result.intermediate=await input().inputValue();assert.notEqual(result.intermediate,'3,00 kg');assert.notEqual(result.intermediate,'0,00 kg');assert.equal(await button('Pesando…').isDisabled(),true);
+ await input().evaluate(e=>{window.__motionInput=e});
+ await page.getByRole('button',{name:'Direção B: cozinha, areia e oliva'}).click();
+ assert.equal(await input().evaluate(e=>e===window.__motionInput),true);result.abPreservesMotionInstance=true;
+ await finish();assert.equal(await input().inputValue(),'3,00 kg');assert.equal(await page.getByText('Aguardando pesagem',{exact:true}).count(),2);await confirm();
+ await read('Lixeira dos pratos');await finish();assert.equal(await input().inputValue(),'2,00 kg');await confirm();assert.equal(await page.getByText('5,00 kg',{exact:true}).count(),1);result.total=5;
+ await read('Pratos sem descarte');await finish();assert.equal(await input().inputValue(),'0,00 kg');await button('Cancelar leitura').click();result.zero=true;
+ await read('Lixeira da cozinha');await button('Cancelar leitura').click();await page.waitForTimeout(1600);assert.equal(await input().count(),0);assert.equal(await button('Confirmar pesagem').isDisabled(),true);result.cancel=true;
+ await read('Lixeira da cozinha');await read('Etiqueta desconhecida');await page.waitForTimeout(1600);assert.equal(await input().count(),0);await page.getByRole('alert').filter({hasText:'Lixeira não reconhecida'}).waitFor();result.obsolete=true;
+ await read('Peso abaixo da tara');await page.getByRole('alert').filter({hasText:'Peso bruto menor'}).waitFor();assert.equal(await page.getByText('5,00 kg',{exact:true}).count(),1);result.errorsPreserveSaved=true;
+ await page.close();
+ const reduced=await browser.newPage({reducedMotion:'reduce',viewport:{width:390,height:1000}});await reduced.goto('http://localhost:8093');await reduced.getByRole('button',{name:'Simular leitura',exact:true}).click();const start=Date.now();await reduced.getByRole('button',{name:'Lixeira da cozinha',exact:true}).click();await reduced.getByText('Leitura estabilizada',{exact:true}).waitFor();result.reducedMs=Date.now()-start;assert.ok(result.reducedMs<1000);assert.equal(await reduced.getByTestId('animated-weight').inputValue(),'3,00 kg');
+ console.log(JSON.stringify(result,null,2));await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

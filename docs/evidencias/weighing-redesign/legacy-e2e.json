@@ -1,0 +1,36 @@
+{
+  "stats": {
+    "startTime": "2026-11-17T14:55:46.879Z",
+    "duration": 16325.725,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "login inválido, consulta, retorno e saída",
+      "ok": true
+    },
+    {
+      "title": "desktop mantém conteúdo legível e recarregar encerra sessão",
+      "ok": true
+    },
+    {
+      "title": "corrigir por detalhes persiste; sair, excluir e restaurar respeitam confirmação",
+      "ok": true
+    },
+    {
+      "title": "abrir detalhes descarta a correção anterior e preserva categoria já atualizada",
+      "ok": true
+    },
+    {
+      "title": "histórico anterior é só consulta e não oferece correção ou exclusão",
+      "ok": true
+    },
+    {
+      "title": "registro: prévia, erros, confirmação, continuidade, zero e consulta",
+      "ok": true
+    }
+  ]
+}

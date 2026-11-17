@@ -1,3 +1,6 @@
+import {beforeEach,afterEach,vi} from 'vitest';
+beforeEach(()=>{vi.useFakeTimers({toFake:['Date']});vi.setSystemTime(new Date(2026,10,15,12));});
+afterEach(()=>vi.useRealTimers());
 import { test, expect } from 'vitest';
 import { createDemoData } from './demo';
 const sobra = { codigoRfid: 'RFID-SIM-001', pesoBrutoKg: 4 };
